@@ -9,6 +9,7 @@ const config = {
   },
   sourceRoot: 'src',
   outputRoot: 'dist',
+  baseUrl: '',
   plugins: {
     babel: {
       sourceMap: true,
