@@ -1,29 +1,28 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text } from '@tarojs/components'
+import { View, Text, Button } from '@tarojs/components'
 import './index.less'
+import { withStore, initStore } from '../../store';
 
-export default class Index extends Component {
+initStore();
+class Index extends Component {
 
   config = {
     navigationBarTitleText: '首页'
   }
 
-  componentWillMount () { }
-
-  componentDidMount () { }
-
-  componentWillUnmount () { }
-
-  componentDidShow () { }
-
-  componentDidHide () { }
-
+  handleLinkTo = ()=>{
+    Taro.redirectTo({
+      url: '/pages/form/index'
+    })    
+  }
   render () {
     return (
       <View className='index'>
-        <Text>Hello world!</Text>
+        <Text>购电小工具</Text>
+        <Button onClick={this.handleLinkTo}>下一步</Button>
       </View>
     )
   }
 }
 
+export default withStore(Index)
