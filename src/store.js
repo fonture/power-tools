@@ -1,22 +1,23 @@
 import Taro, { Component } from '@tarojs/taro'
 
 let store = null;
-
+let method = {
+    getStore(key) {
+        return JSON.parse(JSON.stringify(store[key]))
+    },
+    setStore(key, value) {
+        store[key] = value;
+    }
+}
 class Store {
     data = {}
     result = {}
-    getStore = key => {
-        return JSON.parse(JSON.stringify(this[key]))
-    }
-    setStore = (key, value) => {
-        this[key] = value;
-    }
 }
 
 export const withStore = (Comp) => {
     return class Hcmp extends Component {
         render() {
-            return <Comp store={store} {...this.props} />
+            return <Comp store={method} {...this.props} />
         }
     }
 }
