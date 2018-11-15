@@ -10,12 +10,12 @@ class Index extends Component {
     navigationBarTitleText: '首页'
   }
 
-  handleLinkTo = ()=>{
-    Taro.redirectTo({
+  handleLinkTo = () => {
+    Taro.navigateTo({
       url: '/pages/form/index'
-    })    
+    })
   }
-  render () {
+  render() {
     return (
       <View className='index'>
         <Text>购电小工具</Text>

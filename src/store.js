@@ -5,18 +5,18 @@ let store = null;
 class Store {
     data = {}
     result = {}
-    setData = newData => {
-        this.data = newData;
+    getStore = key => {
+        return JSON.parse(JSON.stringify(this[key]))
     }
-    setResult = newResult => {
-        this.result = newResult;
+    setStore = (key, value) => {
+        this[key] = value;
     }
 }
 
 export const withStore = (Comp) => {
     return class Hcmp extends Component {
         render() {
-            return <Comp store={store} {...this.props}/>
+            return <Comp store={store} {...this.props} />
         }
     }
 }

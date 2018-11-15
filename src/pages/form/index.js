@@ -11,17 +11,17 @@ class Form extends Component {
     state = {
         name: '',
     }
-    handleChange = (e)=> {
+    handleChange = (e) => {
         this.setState({
             value: e.target.value
         })
     }
     handleClick = () => {
-        const { setData } = this.props.store;
-        setData({
+        const { setStore } = this.props.store;
+        setStore('data', {
             name: this.state.value
         })
-        Taro.redirectTo({
+        Taro.navigateTo({
             url: '/pages/result/index'
         })
     }
@@ -29,7 +29,7 @@ class Form extends Component {
         return (
             <View className='form'>
                 <Text onClick={this.handleLinkTo}>表单页</Text>
-                <Input onChange={this.handleChange} placeholder="请输入"/>
+                <Input onChange={this.handleChange} placeholder="请输入" />
                 <Button onClick={this.handleClick}>生成</Button>
             </View>
         )

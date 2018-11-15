@@ -9,16 +9,16 @@ class Result extends Component {
     }
 
     handleLinkTo() {
-        Taro.redirectTo({
+        Taro.navigateTo({
             url: '/pages/index/index'
         })
     }
     render() {
-        console.log(this.props.store);
+        let data = this.props.store.getStore('data');
         return (
             <View className='index'>
                 <Text onClick={this.handleLinkTo}>结果页</Text>
-                <Text>hello,{this.props.store.data.name}</Text>
+                <Text>hello,{data.name}</Text>
             </View>
         )
     }
