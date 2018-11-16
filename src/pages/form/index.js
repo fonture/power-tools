@@ -17,6 +17,7 @@ class Form extends Component {
         })
     }
     handleClick = () => {
+        console.log('click');
         const { setStore } = this.props.store;
         setStore('data', {
             name: this.state.value
