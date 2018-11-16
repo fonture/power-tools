@@ -1,12 +1,12 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text } from '@tarojs/components'
+import { View, Button } from '@tarojs/components'
 import reduxHelper from '../../utils/reduxHelper'
 import { connect } from '@tarojs/redux'
 import './index.less'
 
 const mapStateToProps = (store) => {
   const { count } = store
-  if ( count && JSON.stringify(count) !== '{}') {
+  if (count && JSON.stringify(count) !== '{}') {
     return {
       count: count.value
     }
@@ -20,22 +20,28 @@ export default class Index extends Component {
     navigationBarTitleText: '首页'
   }
 
-  componentWillMount () { }
-
-  componentDidMount () { 
-    reduxHelper('count', {value: '22'})
+  state = {
+    editions: [
+      {
+        title: '简单版',
+        edition: 'simple'
+      },
+      {
+        title: '高级版',
+        edition: 'higher'
+      }
+    ]
   }
 
-  componentWillUnmount () { }
-
-  componentDidShow () { }
-
-  componentDidHide () { }
-
-  render () {
+  render() {
     return (
       <View className='index'>
-        <Text>Hello world! {this.props.count}</Text>
+        <h3 className="title">购电小工具</h3>
+        {
+          this.state.editions.map(item => <Button onClick={() => {
+            Taro.redirectTo({ url: `pages/form/index?edition=${item.edition}` })
+          }}>{item.title}</Button>)
+        }
       </View>
     )
   }
