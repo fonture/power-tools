@@ -33,8 +33,10 @@ export default class Form extends Component {
             this.setState({ step: this.state.step + 1 });
     }
     render() {
+        const { edition } = this.$router.params
         return (
             <View className='form'>
+                <h3>{edition}版</h3>
                 <h3 className="title">第{this.state.step}步</h3>
                 <Button onClick={this.preStep}>上一步</Button>
                 <Button onClick={this.nextStep}>下一步</Button>
