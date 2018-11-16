@@ -1,28 +1,43 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text, Button } from '@tarojs/components'
+import { View, Text } from '@tarojs/components'
+import reduxHelper from '../../utils/reduxHelper'
+import { connect } from '@tarojs/redux'
 import './index.less'
-import { withStore, initStore } from '../../store';
 
-initStore();
-class Index extends Component {
+const mapStateToProps = (store) => {
+  const { count } = store
+  if ( count && JSON.stringify(count) !== '{}') {
+    return {
+      count: count.value
+    }
+  }
+}
+
+@connect(mapStateToProps)
+export default class Index extends Component {
 
   config = {
     navigationBarTitleText: '首页'
   }
 
-  handleLinkTo = () => {
-    Taro.navigateTo({
-      url: '/pages/form/index'
-    })
+  componentWillMount () { }
+
+  componentDidMount () { 
+    reduxHelper('count', {value: '22'})
   }
-  render() {
+
+  componentWillUnmount () { }
+
+  componentDidShow () { }
+
+  componentDidHide () { }
+
+  render () {
     return (
       <View className='index'>
-        <Text>购电小工具</Text>
-        <Button onClick={this.handleLinkTo}>下一步</Button>
+        <Text>Hello world! {this.props.count}</Text>
       </View>
     )
   }
 }
 
-export default withStore(Index)
