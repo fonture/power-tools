@@ -20,7 +20,7 @@ export default class Form extends Component {
     }
     render() {
         return (
-            <View className='form'>
+            <View className='result page'>
                 <h3 className="title">不建议参与市场化交易</h3>
                 <Button onClick={this.tryAgain}>再试一次</Button>
                 <Button onClick={this.generateReport}>生成报告</Button>

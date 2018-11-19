@@ -5,41 +5,7 @@ import inject from '../../utils/inject'
 import './index.less'
 import { extend } from 'nerv-utils';
 
-<<<<<<< HEAD
-const mapStateToProps = (store) => {
-    const { count } = store
-    if (count && JSON.stringify(count) !== '{}') {
-        return {
-            count: count.value
-        }
-    }
-}
-
-class Content extends Component {
-    state = {
-        Comp: null
-    }
-    async componentWillReceiveProps(next) {
-        const Comp = await import(`./Step${next.step}`);
-        this.setState({ Comp: Comp.default });
-    }
-    async componentWillMount() {
-        const Comp = await import(`./Step${this.props.step}`);
-        this.setState({ Comp: Comp.default });
-    }
-    render() {
-        const { Comp } = this.state;
-        return (
-            <View>
-                <Comp />
-            </View>
-        )
-    }
-}
-@connect(mapStateToProps)
-=======
 @inject('count')
->>>>>>> 940571e32a49d7d9608b3c68fffe9f58eb8ed1f1
 export default class Form extends Component {
 
     config = {
@@ -66,7 +32,7 @@ export default class Form extends Component {
     render() {
         const { edition } = this.$router.params
         return (
-            <View className='form'>
+            <View className='form page'>
                 <h3>{edition}版</h3>
                 <h3 className="title">第{this.state.step}步</h3>
                 <Content step={this.state.step} />

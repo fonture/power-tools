@@ -35,7 +35,7 @@ export default class Index extends Component {
 
   render() {
     return (
-      <View className='index'>
+      <View className='index page'>
         <h3 className="title">购电小工具</h3>
         {
           this.state.editions.map(item => <Button onClick={() => {
