@@ -6,7 +6,8 @@ import inject from '../../utils/inject'
 import { AtList, AtListItem, AtDivider } from 'taro-ui';
 import './index.less'
 
-const image = require('../../assets/cry.jpg');
+const cryImage = require('../../assets/cry.png');
+const smlieImage = require('../../assets/smile.png');
 @inject()
 export default class Form extends Component {
 
@@ -24,7 +25,7 @@ export default class Form extends Component {
             <View className='result page'>
                 <View className='result-wrp'>
                     <Text>根据您提供的数据，分析结果为</Text>
-                    <img src={image} />
+                    <img src={smlieImage} />
                     <h3>参与市场化交易很划算！</h3>
                     <AtDivider />
                     <AtList hasBorder={false}>
