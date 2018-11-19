@@ -1,6 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text } from '@tarojs/components'
+import { View, Text, ScrollView } from '@tarojs/components'
 import Button from '../../components/Button';
+import Proportion from '../../components/Proportion';
 import reduxHelper from '../../utils/reduxHelper'
 import inject from '../../utils/inject'
 import { AtList, AtListItem, AtDivider } from 'taro-ui';
@@ -22,33 +23,50 @@ export default class Form extends Component {
     }
     render() {
         return (
-            <View className='result page'>
+            <ScrollView className='result page'>
                 <View className='result-wrp'>
-                    <Text>根据您提供的数据，分析结果为</Text>
-                    <img src={smlieImage} />
-                    <h3>参与市场化交易很划算！</h3>
+                    <View>
+                        <Text>根据您提供的数据，分析结果为</Text>
+                        <img src={smlieImage} />
+                        <h3>参与市场化交易很划算！</h3>
+                    </View>
                     <AtDivider />
-                    <AtList hasBorder={false}>
-                        <AtListItem
-                            extraText="0.01204元"
-                            title='平均每度电节约'
-                            hasBorder={false}
-                        />
-                        <AtListItem
-                            extraText="241021元"
-                            title='预计节约年度电费'
-                            hasBorder={false}
-                        />
-                        <AtListItem
-                            extraText="50万千瓦时"
-                            title='购电量增加'
-                            hasBorder={false}
-                        />
-                    </AtList>
+                    <View>
+                        <AtList hasBorder={false}>
+                            <AtListItem
+                                extraText="0.01204元"
+                                title='平均每度电节约'
+                                hasBorder={false}
+                            />
+                            <AtListItem
+                                extraText="241021元"
+                                title='预计节约年度电费'
+                                hasBorder={false}
+                            />
+                            <AtListItem
+                                extraText="50万千瓦时"
+                                title='购电量增加'
+                                hasBorder={false}
+                            />
+                        </AtList>
+                    </View>
+                    <AtDivider />
+                    <View>
+                        <Text>
+                            用户属于电压等级为1-10千伏的大工业用电用户，当前没有参与市场化交易，年度用电均价为0.01231元/千瓦时。
+                            如果参与市场化交易，购买常规直购电，预估购电均价为0.21541元/千瓦时，平均每度电预计将亏损0.01204元。根据预估的购电量情况，年度电费预计亏损241021元。
+                        </Text>
+                    </View>
+                    <AtDivider />
+                    <View>
+                        <h3>用电峰平谷比例</h3>
+                        <Proportion data={[67, 22, 11]}/>
+                    </View>
+                    <AtDivider />
                 </View>
                 <Button onClick={this.tryAgain} type="secondary">再试一次</Button>
                 <Button onClick={this.generateReport} type="primary">生成报告</Button>
-            </View>
+            </ScrollView>
         )
     }
 }
