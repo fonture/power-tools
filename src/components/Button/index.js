@@ -7,13 +7,11 @@ export default class Btn extends Component {
         addGlobalClass: true
     }
     render() {
-        console.log('render');
-        const {type, children, onClick} = this.props;
+        const { type, children, onClick } = this.props;
         return (
-            <AtButton 
-            onClick={onClick}
-            className={type}
-            type={type}
+            <AtButton
+                onClick={onClick}
+                type={type}
             >{children}</AtButton>
         )
     }
