@@ -20,11 +20,11 @@ class Content extends Component {
     }
     async componentWillReceiveProps(next) {
         const Comp = await import(`./Step${next.step}`);
-        this.setState({Comp:Comp.default});
+        this.setState({ Comp: Comp.default });
     }
     async componentWillMount() {
         const Comp = await import(`./Step${this.props.step}`);
-        this.setState({Comp:Comp.default});
+        this.setState({ Comp: Comp.default });
     }
     render() {
         const { Comp } = this.state;
