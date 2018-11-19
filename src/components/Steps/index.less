@@ -13,48 +13,48 @@
         flex-direction: column;
         align-items: center;
         /*input自定义样式*/
-        input[type=checkbox]{
+        .checkbox-container{
             position: relative;
+            box-sizing: content-box;
             width: 20px;
             height: 20px;
             border: 2px solid #D8E4E4;
             border-radius: 50%;
             -webkit-appearance:none;
             background-color:transparent;
-            font-size:inherit;
-            color:inherit;
             line-height: 20px;
-            &:checked::before{
+            .checked{
                 content: '✓';
                 position: absolute;
-                box-sizing: border-box;
-                top: -2px;
-                left: -2px;
-                width: 20px;
-                height: 20px;
-                font-size: 12px;
+                top: 0;
+                left: 0;
+                width: 150%;
+                height: 100%;
+                font-size: 30px;
                 text-align: center;
-                line-height: 20px;
                 color: #28EA76;
             }
-            &.current{
-                &:checked::before{
-                    content: '';
-                    top: 3px;
-                    left: 2px;
+        }
+        &.current{
+            .checkbox-container{
+                .checked{
+                    position: absolute;
                     width: 12px;
                     height: 12px;
+                    top: 50%;
+                    left: 50%;
+                    margin-top: -6px;
+                    margin-left: -6px;
                     border-radius: 50%;
                     background: #1BDCE3;
-                }     
-            }
+                }
+            }         
         }
     }
     /*横线样式*/
     hr{
-        height: 1px;
-        width: 30%;
-        border-width: 1px;
-        border-style: solid;
+        width: 20%;
+        border-top-width: 1px;
+        border-top-style: solid;
     }
 }
