@@ -1,0 +1,60 @@
+.flex-wrap{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    background: #262828;
+    height: 40pt;
+    padding-left: 15pt;
+    padding-right: 15pt;
+    .flex-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        /*input自定义样式*/
+        input[type=checkbox]{
+            position: relative;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #D8E4E4;
+            border-radius: 50%;
+            -webkit-appearance:none;
+            background-color:transparent;
+            font-size:inherit;
+            color:inherit;
+            line-height: 20px;
+            &:checked::before{
+                content: '✓';
+                position: absolute;
+                box-sizing: border-box;
+                top: -2px;
+                left: -2px;
+                width: 20px;
+                height: 20px;
+                font-size: 12px;
+                text-align: center;
+                line-height: 20px;
+                color: #28EA76;
+            }
+            &.current{
+                &:checked::before{
+                    content: '';
+                    top: 3px;
+                    left: 2px;
+                    width: 12px;
+                    height: 12px;
+                    border-radius: 50%;
+                    background: #1BDCE3;
+                }     
+            }
+        }
+    }
+    /*横线样式*/
+    hr{
+        height: 1px;
+        width: 30%;
+        border-width: 1px;
+        border-style: solid;
+    }
+}

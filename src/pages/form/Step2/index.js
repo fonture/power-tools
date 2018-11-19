@@ -1,10 +1,18 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
+import Steps from '../../../components/steps'
 
 export default class Step2 extends Component {
     render() {
-        return (<View>
-            <Text>用电成本</Text>
-        </View>)
+        const items = [
+            '第一步',
+            '第二步',
+            '第三步'
+        ]
+        return (
+            <View>
+                <Steps current={2} items={items}/>
+            </View>
+        )
     }
 }

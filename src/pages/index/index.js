@@ -39,6 +39,7 @@ export default class Index extends Component {
         <h3 className="title">购电小工具</h3>
         {
           this.state.editions.map(item => <Button onClick={() => {
+            reduxHelper('version', { value: item.edition })
             Taro.redirectTo({ url: `pages/form/index?edition=${item.edition}` })
           }}>{item.title}</Button>)
         }
