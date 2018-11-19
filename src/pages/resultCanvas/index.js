@@ -4,7 +4,7 @@ import Button from '../../components/Button';
 import Proportion from '../../components/Proportion';
 import reduxHelper from '../../utils/reduxHelper'
 import inject from '../../utils/inject'
-import { AtList, AtListItem, AtDivider, AtCurtain } from 'taro-ui';
+import { AtList, AtListItem, AtDivider, AtButton } from 'taro-ui';
 import html2canvas from 'html2canvas';
 import './index.less'
 
@@ -15,23 +15,21 @@ export default class Form extends Component {
     config = {
         navigationBarTitleText: '结果页'
     }
-    state = {
-        isOpened: false
-    }
     onClose = () => {
-        this.setState({
-            isOpened: false
-        })
+        Taro.redirectTo({ url: 'pages/result/index' })
     }
-    tryAgain = () => {
-        Taro.redirectTo({ url: 'pages/index/index' })
-    }
-    generateReport = () => {
-        Taro.redirectTo({ url: 'pages/resultCanvas/index' })
+    componentDidMount() {
+        let resultWrp = document.getElementsByClassName('result-wrp')[0];
+        html2canvas(resultWrp).then(canvas => {
+            resultWrp.style.padding = 0;
+            resultWrp.innerHTML = '';
+            resultWrp.appendChild(canvas);
+        });
     }
     render() {
         return (
-            <View className='result page'>
+            <ScrollView className='result page'>
+                <AtButton className="close" onClick={this.onClose}>x</AtButton>
                 <View className='result-wrp'>
                     <View>
                         <Text>根据您提供的数据，分析结果为</Text>
@@ -58,10 +56,21 @@ export default class Form extends Component {
                             />
                         </AtList>
                     </View>
+                    <AtDivider />
+                    <View>
+                        <Text>
+                            用户属于电压等级为1-10千伏的大工业用电用户，当前没有参与市场化交易，年度用电均价为0.01231元/千瓦时。
+                            如果参与市场化交易，购买常规直购电，预估购电均价为0.21541元/千瓦时，平均每度电预计将亏损0.01204元。根据预估的购电量情况，年度电费预计亏损241021元。
+                        </Text>
+                    </View>
+                    <AtDivider />
+                    <View>
+                        <h3>用电峰平谷比例</h3>
+                        <Proportion data={[67, 22, 11]} />
+                    </View>
+                    <AtDivider />
                 </View>
-                <Button onClick={this.tryAgain} type="secondary">再试一次</Button>
-                <Button onClick={this.generateReport} type="primary">生成报告</Button>
-            </View>
+            </ScrollView>
         )
     }
 }

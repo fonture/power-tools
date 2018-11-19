@@ -20,7 +20,8 @@ class App extends Component {
     pages: [
       'pages/index/index',
       'pages/form/index',
-      'pages/result/index'
+      'pages/result/index',
+      'pages/resultCanvas/index'
     ],
     window: {
       backgroundTextStyle: 'light',
