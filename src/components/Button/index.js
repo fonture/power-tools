@@ -12,6 +12,7 @@ export default class Btn extends Component {
             <AtButton
                 onClick={onClick}
                 type={type}
+                className="stepBtn"
             >{children}</AtButton>
         )
     }
