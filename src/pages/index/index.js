@@ -1,7 +1,8 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Button } from '@tarojs/components'
+import { View, Image } from '@tarojs/components'
 import reduxHelper from '../../utils/reduxHelper'
 import { connect } from '@tarojs/redux'
+
 import './index.less'
 
 const mapStateToProps = (store) => {
@@ -21,27 +22,49 @@ export default class Index extends Component {
   }
 
   state = {
-    editions: [
-      {
-        title: '简单版',
-        edition: 'simple'
-      },
-      {
-        title: '高级版',
-        edition: 'higher'
-      }
-    ]
+    activeNode: null,
+  }
+  editions= [
+    {
+      title: '简单版',
+      edition: 'simple',
+      img: require('../../assets/simple.png'),
+    },
+    {
+      title: '高级版',
+      edition: 'higher',
+      img: require('../../assets/higher.png'),
+    }
+  ]
+  changeVersion = (edition) => {
+    this.setState({
+      activeNode: edition,
+    }, () => {
+      setTimeout(() => {
+        reduxHelper('version', { value: edition })
+        Taro.redirectTo({ url: `pages/form/index?edition=${edition}` })
+      }, 2000);
+    })
   }
 
   render() {
+    const { activeNode } = this.state;
     return (
-      <View className='index page'>
-        <h3 className="title">购电小工具</h3>
+      <View className={`index page ${activeNode === null ? '': 'active'}`}>
         {
-          this.state.editions.map(item => <Button onClick={() => {
-            reduxHelper('version', { value: item.edition })
-            Taro.redirectTo({ url: `pages/form/index?edition=${item.edition}` })
-          }}>{item.title}</Button>)
+          this.editions.map(item =>
+          <View
+            key={item.edition}
+            onClick={this.changeVersion.bind(this,item.edition)}
+            className={`BoxAvatar ${item.edition === activeNode ? 'acHide' : ''}`}
+          >
+            <Image
+              src={item.img}
+              mode='aspectFill'
+              className='indexAtAvatar'
+            />
+          </View>
+          )
         }
       </View>
     )
