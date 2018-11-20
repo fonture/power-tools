@@ -19,12 +19,12 @@ export default class Form extends Component {
         Taro.redirectTo({ url: 'pages/result/index' })
     }
     componentDidMount() {
-        let resultWrp = document.getElementsByClassName('result-wrp')[0];
-        html2canvas(resultWrp).then(canvas => {
-            resultWrp.style.padding = 0;
-            resultWrp.innerHTML = '';
-            resultWrp.appendChild(canvas);
-        });
+        // let resultWrp = document.getElementsByClassName('result-wrp')[0];
+        // html2canvas(resultWrp).then(canvas => {
+        //     resultWrp.style.padding = 0;
+        //     resultWrp.innerHTML = '';
+        //     resultWrp.appendChild(canvas);
+        // });
     }
     render() {
         return (
@@ -68,9 +68,9 @@ export default class Form extends Component {
                         </Text>
                     </View>
                     <AtDivider />
-                    <View>
-                        <h3>用电峰平谷比例</h3>
-                        <Proportion data={[67, 22, 11]} />
+                    <View style={{paddingBottom:'20px'}}>
+                        <h3 style={{marginBottom:'60px'}}>用电峰平谷比例</h3>
+                        <Proportion data={[67, 22, 11]}/>
                     </View>
                     <AtDivider />
                 </View>
