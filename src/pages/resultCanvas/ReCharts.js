@@ -63,10 +63,10 @@ class Charts extends Component {
     render() {
         return (
             <View>
-                <div ref={this.refEl} style={{width:'100%',height:'300px'}}/>
-                <View className="legend at-row" style={{textAlign:'center'}}>
-                    <View className="at-col at-col-5 at-col__offset-1"><span style={{background:'#3dcca6'}}></span>实际电量</View>
-                    <View className="at-col at-col-5 at-col__offset-1"><span style={{background:'#4a9df2'}}></span>预测电量</View>
+                <div ref={this.refEl} style={{ width: '100%', height: '300px' }} />
+                <View className="legend at-row" style={{ textAlign: 'center' }}>
+                    <View className="at-col at-col-5 at-col__offset-1"><span style={{ background: '#3dcca6' }}></span>实际电量</View>
+                    <View className="at-col at-col-5 at-col__offset-1"><span style={{ background: '#4a9df2' }}></span>预测电量</View>
                 </View>
             </View>
         )
@@ -75,7 +75,7 @@ class Charts extends Component {
 
 export default class ReCharts extends Component {
 
-    getOption = ()=>{
+    getOption = () => {
         return {
             title: {
                 text: '年度购电量曲线',
@@ -93,7 +93,7 @@ export default class ReCharts extends Component {
             xAxis: {
                 type: 'category',
                 boundaryGap: false,
-                data: ['1月','4月','7月','10月'],
+                data: ['1月', '4月', '7月', '10月'],
                 axisTick: {
                     show: false
                 }
@@ -106,23 +106,23 @@ export default class ReCharts extends Component {
             },
             series: [
                 {
-                    name:'实际电量',
-                    type:'line',
+                    name: '实际电量',
+                    type: 'line',
                     stack: '总量',
-                    data:[120, 132, 101, 134,],
+                    data: [120, 132, 101, 134,],
                     lineStyle: {
                         color: '#3dcca6',
                         width: 3
                     },
                     itemStyle: {
-                        opacity: 0                        
+                        opacity: 0
                     }
                 },
                 {
-                    name:'预计电量',
-                    type:'line',
+                    name: '预计电量',
+                    type: 'line',
                     stack: '总量',
-                    data:[220, 182, 191, 234, 290],
+                    data: [220, 182, 191, 234, 290],
                     lineStyle: {
                         color: '#4a9df2',
                         width: 3
@@ -137,7 +137,7 @@ export default class ReCharts extends Component {
     render() {
         const option = this.getOption();
         return (
-            <Charts option={option}/>
+            <Charts option={option} />
         )
     }
 }
