@@ -1,10 +1,10 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text, ScrollView } from '@tarojs/components'
-import Button from '../../components/Button';
 import Proportion from '../../components/Proportion';
 import reduxHelper from '../../utils/reduxHelper'
 import inject from '../../utils/inject'
-import { AtList, AtListItem, AtDivider, AtButton, AtIcon } from 'taro-ui';
+import { AtList, AtListItem, AtDivider, AtIcon } from 'taro-ui';
+import ReCharts from './ReCharts';
 import html2canvas from 'html2canvas';
 import './index.less'
 
@@ -68,11 +68,14 @@ export default class Form extends Component {
                         </Text>
                     </View>
                     <AtDivider />
-                    <View style={{paddingBottom:'20px'}}>
-                        <h3 style={{marginBottom:'60px'}}>用电峰平谷比例</h3>
-                        <Proportion data={[67, 22, 11]}/>
+                    <View style={{ paddingBottom: '20px' }}>
+                        <h3 style={{ marginBottom: '60px' }}>用电峰平谷比例</h3>
+                        <Proportion data={[67, 22, 11]} />
                     </View>
                     <AtDivider />
+                    <View>
+                        <ReCharts />
+                    </View>
                 </View>
             </ScrollView>
         )
