@@ -1,10 +1,10 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text, ScrollView } from '@tarojs/components'
-import Button from '../../components/Button';
 import Proportion from '../../components/Proportion';
 import reduxHelper from '../../utils/reduxHelper'
 import inject from '../../utils/inject'
-import { AtList, AtListItem, AtDivider, AtButton } from 'taro-ui';
+import { AtList, AtListItem, AtDivider, AtIcon } from 'taro-ui';
+import ReCharts from './ReCharts';
 import html2canvas from 'html2canvas';
 import './index.less'
 
@@ -29,7 +29,11 @@ export default class Form extends Component {
     render() {
         return (
             <ScrollView className='result page'>
-                <AtButton className="close" onClick={this.onClose}>x</AtButton>
+                <AtIcon className="close"
+                    onClick={this.onClose}
+                    value='close-circle'
+                    size='30'
+                    color='#1bdce3'>×</AtIcon>
                 <View className='result-wrp'>
                     <View>
                         <Text>根据您提供的数据，分析结果为</Text>
@@ -64,11 +68,14 @@ export default class Form extends Component {
                         </Text>
                     </View>
                     <AtDivider />
-                    <View>
-                        <h3>用电峰平谷比例</h3>
+                    <View style={{ paddingBottom: '20px' }}>
+                        <h3 style={{ marginBottom: '60px' }}>用电峰平谷比例</h3>
                         <Proportion data={[67, 22, 11]} />
                     </View>
                     <AtDivider />
+                    <View>
+                        <ReCharts />
+                    </View>
                 </View>
             </ScrollView>
         )

@@ -21,7 +21,7 @@ export default class Proportion extends Component {
             title: getTitle(index)
         }))
         return (
-            <View className='at-row'>
+            <View className='proportion at-row'>
                 {
                     data && data.map((item, index) => <View className='at-col at-col-auto' style={{ flexGrow: item.range }} key={index}>{item.title}({item.range}%)</View>)
                 }

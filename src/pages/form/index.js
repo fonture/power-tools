@@ -1,9 +1,9 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Button, Text } from '@tarojs/components'
+import { View } from '@tarojs/components'
 import reduxHelper from '../../utils/reduxHelper'
 import inject from '../../utils/inject'
 import Steps from '../../components/steps'
-
+import Button from '../../components/Button'
 import './index.less'
 import { extend } from 'nerv-utils';
 
@@ -38,8 +38,8 @@ export default class Form extends Component {
             <View className='form page'>
                 <Steps current={stepInfo.current} items={stepInfo.items}/>
                 <Content step={this.state.step} />
-                <Button onClick={this.preStep}>上一步</Button>
-                <Button onClick={this.nextStep}>下一步</Button>
+                <Button onClick={this.preStep} type="secondary">上一步</Button>
+                <Button onClick={this.nextStep} type="primary">下一步</Button>
             </View>
         )
     }
