@@ -1,10 +1,70 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
-
+import {
+    AtList,
+    AtListItem,
+    AtInput,
+    AtCheckbox
+} from 'taro-ui'
+import './index.less'
 export default class Step3 extends Component {
+    checkboxOption = [
+        {
+            value: 'list1',
+            label: '参与全水电交易品种',
+        }
+    ]
     render() {
-        return (<View>
-            <Text>购电计算</Text>
-        </View>)
+        return (
+            <View>
+                <View className="card">
+                    <AtList>
+                        <AtListItem
+                            title='预计年度购电量：'
+                            extraText={
+                                <AtInput
+                                    type="number"
+                                    className="power-input"
+                                    title="万千瓦时"
+                                    border={false} />
+                            }
+                        />
+                        <AtListItem
+                            title='签约水电价格：'
+                            hasBorder={false}
+                            extraText={
+                                <AtInput
+                                    type="number"
+                                    className="power-input"
+                                    title="万千瓦时"
+                                    border={false} />
+                            }
+                        />
+                    </AtList>
+                </View>
+                <View className="card">
+                    <AtList>
+                        <AtListItem
+                            title={
+                                <AtCheckbox
+                                options={this.checkboxOption}
+                              />
+                            }
+                        />
+                        <AtListItem
+                            title='购电均夹：'
+                            hasBorder={false}
+                            extraText={
+                                <AtInput
+                                    disabled
+                                    type="number"
+                                    className="power-input"
+                                    title="元/千瓦时"
+                                    border={false} />
+                            }
+                        />
+                    </AtList>
+                </View>
+            </View>)
     }
 }

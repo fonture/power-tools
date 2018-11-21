@@ -8,10 +8,9 @@ class Charts extends Component {
 
     el = null;
 
-    async componentDidMount() {
-        console.log(this.el);
+    componentDidMount() {
         // 初始化图表
-        await this.initChart(this.el);
+        this.initChart(this.el);
         // 将传入的配置(包含数据)注入
         this.setOption(this.props.option);
     }
@@ -27,16 +26,10 @@ class Charts extends Component {
     initChart = el => {
         // renderer 用于配置渲染方式 可以是 svg 或者 canvas
         const renderer = 'canvas';
-
-        return new Promise(resolve => {
-            setTimeout(() => {
-                this.chart = echarts.init(el, null, {
-                    renderer,
-                    width: 'auto',
-                    height: 'auto'
-                });
-                resolve();
-            }, 0);
+        this.chart = echarts.init(el, null, {
+            renderer,
+            width: 'auto',
+            height: 'auto'
         });
     };
     setOption = option => {
@@ -81,6 +74,7 @@ export default class ReCharts extends Component {
                 text: '年度购电量曲线',
                 left: 'center'
             },
+            animation: false,
             tooltip: {
                 trigger: 'axis'
             },
