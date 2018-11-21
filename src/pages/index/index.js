@@ -43,20 +43,35 @@ export default class Index extends Component {
       setTimeout(() => {
         reduxHelper('version', { value: edition })
         Taro.redirectTo({ url: `pages/form/index?edition=${edition}` })
-      }, 2000);
+        // 为显示loading 设置了延迟跳转。
+      }, 1000);
     })
+  }
+  setClassName = (edition) =>{
+    const { activeNode } = this.state;
+    let className = '';
+    if(activeNode === null) {
+      className = ''
+    } else {
+      if(activeNode === edition){
+        className = 'acHide'
+      } else {
+        className = 'acShow'
+      }
+    }
+    return className;
   }
 
   render() {
     const { activeNode } = this.state;
     return (
-      <View className={`index page ${activeNode === null ? '': 'active'}`}>
+      <View className='index page'>
         {
           this.editions.map(item =>
           <View
             key={item.edition}
             onClick={this.changeVersion.bind(this,item.edition)}
-            className={`BoxAvatar ${item.edition === activeNode ? 'acHide' : ''}`}
+            className={`BoxAvatar ${item.edition} ${activeNode === null ? '' : item.edition === activeNode ? 'acShow' : 'acHide'}`}
           >
             <Image
               src={item.img}

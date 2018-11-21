@@ -13,7 +13,7 @@
     align-content: center;
     .BoxAvatar{
 	    flex: 0 1 auto;
-        position: relative;
+        position: absolute;
         margin: 25px auto;
         cursor: pointer;
         width: 272px;
@@ -21,9 +21,27 @@
         background-size: 100%;
         background-repeat: no-repeat;
         background-image: ~"url(../../assets/loading_bg.png)";
+        left: 239px;
+        &.simple{
+            top: 258px;
+        }
+        &.higher{
+            top: 630px;
+        }
+        &.acShow{
+            // 可能不是很居中，是设计图背景是包含了头部的，具体情况需要根据手机显示情况进行调整。
+            top: 344px;
+            transition: top 0.3s ease-in 0.3s;
+            animation: RotateBox 5s linear 0.3s infinite;
+            .indexAtAvatar{
+                animation: ReverseBox 5s linear 0.3s infinite;
+            }
+        }
         &.acHide{
-            animation: animationFrames linear 0.3s;
-            animation-fill-mode:forwards;
+            // animation: animationFrames linear 0.3s;
+            // animation-fill-mode:linear;
+            // transform: scale(0);
+            animation: hideBox 0.3s ease-in forwards;
         }
     }
     .indexAtAvatar{
@@ -38,14 +56,38 @@
         }
     }
 }
-
-@keyframes animationFrames{
+@keyframes hideBox {
     0% {
-      opacity:1;
+        transform: rotate(1);
+        opacity: 1;
     }
     100% {
-      opacity:0;
-      display: none;
+        transform: rotate(0);
+        opacity: 0;
     }
-  }
+}
+
+@keyframes RotateBox{
+    0% {
+        transform: rotate(0deg)
+    }
+    50%{
+        transform: rotate(180deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes ReverseBox {
+    0% {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(-180deg);
+    }
+    100% {
+        transform: rotate(-360deg)
+    }
+}
 
