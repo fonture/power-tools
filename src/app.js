@@ -31,7 +31,9 @@ class App extends Component {
     }
   }
 
-  componentDidMount() { }
+  componentDidMount() {
+    document.getElementById('app').style.height = window.innerHeight + 'px';
+  }
 
   componentDidShow() { }
 

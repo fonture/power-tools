@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View } from '@tarojs/components'
+import { View, ScrollView } from '@tarojs/components'
 import reduxHelper from '../../utils/reduxHelper'
 import inject from '../../utils/inject'
 import Steps from '../../components/steps'
@@ -35,12 +35,12 @@ export default class Form extends Component {
         const { edition } = this.$router.params
         const { stepInfo } = this.props
         return (
-            <View className='form page'>
+            <ScrollView className='form page'>
                 <Steps current={stepInfo.current} items={stepInfo.items}/>
                 <Content step={this.state.step} />
                 <Button onClick={this.preStep} type="secondary">上一步</Button>
                 <Button onClick={this.nextStep} type="primary">下一步</Button>
-            </View>
+            </ScrollView>
         )
     }
 }
