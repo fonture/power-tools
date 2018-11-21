@@ -52,7 +52,7 @@ export default class Step3 extends Component {
                             }
                         />
                         <AtListItem
-                            title='购电均夹：'
+                            title='购电均价：'
                             hasBorder={false}
                             extraText={
                                 <AtInput
