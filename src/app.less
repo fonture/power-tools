@@ -25,7 +25,22 @@
                     border: none;
                     box-shadow: 0 4px 22px -4px rgba(0,0,0,0.19);
                     .at-card-header{
-                        border-color: #DCDCDC
+                        border: none;
+                        &::after{
+                            content: '';
+                            position: absolute;
+                            transform-origin: center;
+                            box-sizing: border-box;
+                            pointer-events: none;
+                            top: -50%;
+                            left: -50%;
+                            right: -50%;
+                            bottom: -50%;
+                            border: 0 solid #d6e4ef;
+                            transform: scale(0.5);
+                            border-top-width: 1PX;
+                            border-bottom-width: 1PX;
+                        }
                     }
                 }
                 .at-list{
@@ -52,6 +67,7 @@
                             line-height: 1;
                             .item-extra__info{
                                 max-width: 100%;
+                                font-size: 28px;
                                 .at-input{
                                     padding: 0;
                                     margin: 0 auto;

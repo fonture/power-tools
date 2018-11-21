@@ -93,7 +93,7 @@ export default class Partake extends Component {
                 {/* 选择输入方式 */}
                 <View className="card">
                     <AtList className="input-method">
-                        <AtListItem title="输入方式" arrow='right' extraText={this.state.method} onClick={this.onToggleInputMethod} />
+                        <AtListItem title="输入方式" arrow='right' hasBorder={false} extraText={this.state.method} onClick={this.onToggleInputMethod} />
                     </AtList>
                 </View>
 
@@ -138,7 +138,7 @@ export default class Partake extends Component {
                                             value={sum}
                                             border={false} />
                                     } />
-                                    <AtListItem title="用电均价" extraText={
+                                    <AtListItem title="用电均价" hasBorder={false} extraText={
                                         <AtInput
                                             disabled
                                             type="number"
@@ -162,6 +162,7 @@ export default class Partake extends Component {
                                     }
                                 />
                                 <AtListItem title="用电均价"
+                                    hasBorder={false}
                                     extraText={
                                         <AtInput
                                             type="number"
