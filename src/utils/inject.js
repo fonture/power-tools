@@ -3,15 +3,16 @@
  * @Date: 2018-11-19 09:09:13 
  * @Description: 封装react-redux的connect方法
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-19 10:15:20
+ * @Last Modified time: 2018-11-22 16:51:33
  */
 import { connect } from '@tarojs/redux'
-export default argName => comp => {
+export default (...args) => comp => {
     const mapStateToProps = store => {
-        const arg = store[argName]
-        return { 
-            [argName]: arg || {}
-        }
+        const props = {}
+        args.forEach(element => {
+            props[element] = store[element] || {}
+        })
+        return props
     }
     return connect(mapStateToProps)(comp)
 }

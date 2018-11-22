@@ -1,13 +1,13 @@
 import Taro from '@tarojs/taro';
 import config from '../../config';
-
-const { baseUrl, noConsole } = config;
+const { baseUrl, noConsole } = config(Object.assign);
 const request_data = {};
 
 export default (options = { method: 'GET', data: {} }) => {
   if (!noConsole) {
     console.log(`${new Date().toLocaleString()}【 M=${options.url} 】P=${JSON.stringify(options.data)}`);
   }
+
   return Taro.request({
     url: baseUrl + options.url,
     data: {
@@ -18,6 +18,7 @@ export default (options = { method: 'GET', data: {} }) => {
       'Content-Type': 'application/json',
     },
     method: options.method.toUpperCase(),
+    dataType: 'json',
   }).then((res) => {
     const { statusCode, data } = res;
     if (statusCode >= 200 && statusCode < 300) {

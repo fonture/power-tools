@@ -19,19 +19,6 @@ export default class BuyPowerCost extends Component {
         signedPrice: 0, 
         averagePrice: 0
     }
-    componentDidMount() {
-        // Taro.request({
-        //     url: 'http://localhost:8080/test',
-        //     method: 'GET',
-        //     data: {
-        //       foo: 'foo',
-        //       bar: 10
-        //     },
-        //     header: {
-        //       'content-type': 'application/json'
-        //     }
-        //   }).then(res => console.log(res.data))
-    }
     /**
      * @description 点击输入方式时显示底部活动页
      */

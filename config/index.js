@@ -9,7 +9,7 @@ const config = {
   },
   sourceRoot: 'src',
   outputRoot: 'dist',
-  baseUrl: '',
+  baseUrl: 'http://172.16.11.28:6010',
   plugins: {
     babel: {
       sourceMap: true,

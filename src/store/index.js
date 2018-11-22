@@ -3,7 +3,7 @@
  * @Date: 2018-11-15 09:04:57 
  * @Description: redux数据仓库
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-15 13:39:21
+ * @Last Modified time: 2018-11-22 17:25:08
  */
 import { createStore, applyMiddleware } from 'redux'
 import thunkMiddleware from 'redux-thunk'
@@ -19,8 +19,8 @@ const reducers = rootReducer()
 
 let store = {}
 
-export default function configStore () {
-  store = createStore(reducers, applyMiddleware(...middlewares))
+export default function configStore (initialState = {}) {
+  store = createStore(reducers, initialState, applyMiddleware(...middlewares))
   store.asyncReducers = {}
   return store
 }
