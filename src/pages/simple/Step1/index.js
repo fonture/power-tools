@@ -76,7 +76,6 @@ export default class Step1 extends Component {
         const list2Obj = objArr[key]['voltageLevelVOList'];
         const list2Keys = Object.keys(list2Obj);
         const listArr2 = list2Keys.map(item=>list2Obj[item]['voltageName'])
-        console.log([listArr1, listArr2])
         return [listArr1, listArr2];
     }
 

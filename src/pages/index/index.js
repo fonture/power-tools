@@ -5,6 +5,7 @@ import { connect } from '@tarojs/redux'
 
 import reduxHelper from '../../utils/reduxHelper'
 import './index.less'
+import request from '../../utils/request';
 
 
 const mapStateToProps = (store) => {
@@ -21,6 +22,17 @@ export default class Index extends Component {
 
   config = {
     navigationBarTitleText: '首页'
+  }
+  async componentDidMount(){
+    // 请求火电价格
+    const {data} = await request({
+      method: 'get',
+      url: '/wechat/kit/thermal/price',
+    });
+    reduxHelper('firePrice', data.thermalPrice);
+    this.setState({
+      firePrice: data.thermalPrice,
+    })
   }
   state = {
     activeNode: null,
@@ -66,7 +78,8 @@ export default class Index extends Component {
   handleSubmit = (e)=> {
     //  注意，只是点击按钮，有可能会触发不了表单提交
     //  且，小程序有可能无法通过 e.detail.value 获取值，需要设置sate取值，taro和taro ui的 bug
-    console.log(e.detail.value);
+    console.log(e.detail.value.value);
+    reduxHelper('firePrice', e.detail.value)
     this.handleClose();
   }
   handleClose = ()=>{
@@ -81,7 +94,7 @@ export default class Index extends Component {
   }
 
   render() {
-    const { activeNode, modelVis } = this.state;
+    const { activeNode, modelVis, firePrice = 0.4025 } = this.state;
     return (
       <View className='index page'>
         {
@@ -119,7 +132,7 @@ export default class Index extends Component {
                 name='value'
                 title='火电价格'
                 type='number'
-                placeholder='默认火电价格0.4025'
+                placeholder={`默认火电价格${firePrice}`}
               />
               <AtButton formType='submit' width='100px' className='sumitButton'>确定</AtButton>
             </AtForm>
