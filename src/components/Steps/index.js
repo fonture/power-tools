@@ -3,7 +3,7 @@
  * @Date: 2018-11-19 11:03:54 
  * @Description: 表单顶部步骤条
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-22 10:55:51
+ * @Last Modified time: 2018-11-22 11:18:11
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text, Input } from '@tarojs/components'
@@ -18,13 +18,6 @@ export default class Steps extends Component {
                 items.map((item, index) => {
                     return [
                         <View className="flex-item">
-                            {/* <Input 
-                                type="checkbox" 
-                                className={index === current ? 'current' : ''} 
-                                checked={index <= current ? true : false}
-                                style={{borderColor: index < current ? '#636465' : '#D8E4E4'}} 
-                                disabled
-                            /> */}
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" className={index < current ? 'active' : (index === current ? 'current' : '')} >
                                 <circle className="outerCircle" cx="10" cy="10" r="8" />
                                 {
