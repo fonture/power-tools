@@ -18,6 +18,7 @@ export default class Step1 extends Component {
         sorts: [[],[]],
     }
     componentDidMount() {
+        this.props.didMount(this._rendered.dom);
         this.initPicker();
     }
     resorts = [

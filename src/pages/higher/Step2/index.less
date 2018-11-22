@@ -1,0 +1,15 @@
+/*列表右侧附加信息的内容太长会显示省略号，需要手动修改*/
+.at-list__item .item-extra__info {
+    text-overflow: initial;
+    max-width: 100%;
+}
+.at-list__item-extra {
+    flex: 1;
+}
+.at-list__item::after {
+    left: 0;
+}
+.at-list__item:active{
+    background: transparent;
+}
+

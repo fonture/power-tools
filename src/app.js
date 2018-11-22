@@ -19,7 +19,8 @@ class App extends Component {
   config = {
     pages: [
       'pages/index/index',
-      'pages/form/index',
+      'pages/simple/index',
+      'pages/higher/index',
       'pages/result/index',
       'pages/resultCanvas/index'
     ],
@@ -31,7 +32,9 @@ class App extends Component {
     }
   }
 
-  componentDidMount() { }
+  componentDidMount() {
+    document.getElementById('app').style.height = window.innerHeight + 'px';
+  }
 
   componentDidShow() { }
 

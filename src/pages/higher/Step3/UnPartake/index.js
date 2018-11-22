@@ -1,13 +1,13 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text } from '@tarojs/components'
+import { View } from '@tarojs/components'
 import {
     AtList,
     AtListItem,
     AtInput,
     AtCheckbox
 } from 'taro-ui'
-import './index.less'
-export default class Step3 extends Component {
+
+export default class UnPartake extends Component {
     checkboxOption = [
         {
             value: 'list1',
@@ -66,5 +66,5 @@ export default class Step3 extends Component {
                     </AtList>
                 </View>
             </View>)
-    }
+    }    
 }

@@ -22,7 +22,6 @@ export default class Index extends Component {
   config = {
     navigationBarTitleText: '首页'
   }
-
   state = {
     activeNode: null,
     modelVis: false,
@@ -45,7 +44,7 @@ export default class Index extends Component {
     }, () => {
       setTimeout(() => {
         reduxHelper('version', { value: edition })
-        Taro.redirectTo({ url: `pages/form/index?edition=${edition}` })
+        Taro.redirectTo({ url: `pages/${edition}/index` })
         // 为显示loading 设置了延迟跳转。
       }, 1000);
     })

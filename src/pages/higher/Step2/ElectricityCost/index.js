@@ -11,7 +11,7 @@ import {
 import PowerProportion from './PowerProportion'
 import './index.less'
 
-export default class Step2 extends Component {
+export default class ElectricityCost extends Component {
     state = {
         isOpened: false,
         method: '用电量',
@@ -20,7 +20,8 @@ export default class Step2 extends Component {
         low: 0,
         highPrice: 0.8234,
         mediumPrice: 0.5234,
-        lowPrice: 0.3324
+        lowPrice: 0.3324,
+        basePrice: 0.0324
     }
     componentDidMount() {
         // Taro.request({
@@ -66,11 +67,18 @@ export default class Step2 extends Component {
             })
         }
     }
+    /**
+     * @description 当点击整行时，将光标聚焦到该行的输入框
+     * @param {Object} e 事件对象
+     */
+    onListClick = (e) => {
+        e.currentTarget.getElementsByTagName('input')[0].focus()
+    }
     render() {
-        const { high, medium, low, highPrice, mediumPrice, lowPrice, method} = this.state
+        const { high, medium, low, highPrice, mediumPrice, lowPrice, method, basePrice} = this.state
         const sum = high + medium + low
         const price = high * highPrice + medium * mediumPrice + low * lowPrice
-        const percent = sum ? (price / sum).toFixed(4) : 0
+        const percent = sum ? (price / sum + basePrice).toFixed(4) : 0
         const items = [
             {
                 percent: sum && (high * 100 / sum).toFixed(2) + '%', 
@@ -87,7 +95,7 @@ export default class Step2 extends Component {
             }
         ]
         return (
-            <View className="power-cost">
+            <View className="electricity-cost">
 
                 {/* 选择输入方式 */}
                 <AtList className="input-method">
@@ -129,18 +137,18 @@ export default class Step2 extends Component {
                         </AtList>
                     </View>
                     : <AtList className="power-input-self">
-                        <AtListItem title="年度用电量" 
+                        <AtListItem title="年度用电量"  onClick={this.onListClick}
                             extraText={
-                                <View className="at-row at-row__justify--center">
-                                    <AtInput type="number" className="power-input" />
+                                <View className="at-row at-row__justify--center at-row__align--center">
+                                    <AtInput type="number" className="power-input" border={false}/>
                                     <div className="power-result-unit">万千瓦时</div>
                                 </View>
                             } 
                         />
-                        <AtListItem title="用电均价" 
+                        <AtListItem title="用电均价"  onClick={this.onListClick}
                             extraText={
-                                <View className="at-row at-row__justify--center">
-                                    <AtInput type="number" className="power-input" />
+                                <View className="at-row at-row__justify--center at-row__align--center">
+                                    <AtInput type="number" className="power-input" border={false}/>
                                     <div className="power-result-unit">元/千瓦时</div>
                                 </View>
                             } 
