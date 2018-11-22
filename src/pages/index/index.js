@@ -1,9 +1,11 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
-import reduxHelper from '../../utils/reduxHelper'
+import { AtModal, AtButton, AtForm, AtInput, AtModalContent } from "taro-ui"
 import { connect } from '@tarojs/redux'
 
+import reduxHelper from '../../utils/reduxHelper'
 import './index.less'
+
 
 const mapStateToProps = (store) => {
   const { count } = store
@@ -22,6 +24,7 @@ export default class Index extends Component {
   }
   state = {
     activeNode: null,
+    modelVis: false,
   }
   editions= [
     {
@@ -42,20 +45,51 @@ export default class Index extends Component {
       setTimeout(() => {
         reduxHelper('version', { value: edition })
         Taro.redirectTo({ url: `pages/${edition}/index` })
+        // 为显示loading 设置了延迟跳转。
       }, 1000);
+    })
+  }
+  setClassName = (edition) =>{
+    const { activeNode } = this.state;
+    let className = '';
+    if(activeNode === null) {
+      className = ''
+    } else {
+      if(activeNode === edition){
+        className = 'acHide'
+      } else {
+        className = 'acShow'
+      }
+    }
+    return className;
+  }
+  handleSubmit = (e)=> {
+    //  注意，只是点击按钮，有可能会触发不了表单提交
+    //  且，小程序有可能无法通过 e.detail.value 获取值，需要设置sate取值，taro和taro ui的 bug
+    console.log(e.detail.value);
+    this.handleClose();
+  }
+  handleClose = ()=>{
+    this.setState({
+      modelVis: false,
+    })
+  }
+  showModel = () => {
+    this.setState({
+      modelVis: true,
     })
   }
 
   render() {
-    const { activeNode } = this.state;
+    const { activeNode, modelVis } = this.state;
     return (
-      <View className={`index page ${activeNode === null ? '': 'active'}`}>
+      <View className='index page'>
         {
           this.editions.map(item =>
           <View
             key={item.edition}
             onClick={this.changeVersion.bind(this,item.edition)}
-            className={`BoxAvatar ${item.edition === activeNode ? 'acHide' : ''}`}
+            className={`BoxAvatar ${item.edition} ${activeNode === null ? '' : item.edition === activeNode ? 'acShow' : 'acHide'}`}
           >
             <Image
               src={item.img}
@@ -65,6 +99,32 @@ export default class Index extends Component {
           </View>
           )
         }
+        <Image
+          src={require('../../assets/fire.png')}
+          className='frieImage'
+          onClick={this.showModel}
+        />
+        <AtModal
+          isOpened={modelVis}
+          onClose={this.handleClose}
+          onCancel={this.handleClose}
+          onConfirm={this.handleClose}
+        >
+          <AtModalContent>
+            <AtForm
+              onSubmit={this.handleSubmit}
+              className='formBoder'
+            >
+              <AtInput
+                name='value'
+                title='火电价格'
+                type='number'
+                placeholder='默认火电价格0.4025'
+              />
+              <AtButton formType='submit' width='100px' className='sumitButton'>确定</AtButton>
+            </AtForm>
+          </AtModalContent>
+        </AtModal>
       </View>
     )
   }

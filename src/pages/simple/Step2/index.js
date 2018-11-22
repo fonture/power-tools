@@ -14,7 +14,7 @@ export default class Step2 extends Component {
         join: true
     }
     async componentDidMount() {
-        this.props.didMount(this._rendered.dom)
+        this.props.onDidMount(this._rendered.dom);
         const result = await request({
             method: 'GET',
             url: '/wechat/kit/catalogueprice/year',
