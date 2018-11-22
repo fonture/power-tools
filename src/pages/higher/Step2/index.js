@@ -24,7 +24,7 @@ export default class Step2 extends Component {
 }
 
 Step2.defaultProps = {
-    join: true
+    join: false
 }
 
 Step2.propTypes = {

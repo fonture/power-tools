@@ -67,9 +67,12 @@ export default class ElectricityCost extends Component {
             })
         }
     }
+    /**
+     * @description 点击每一个列表项时将光标聚集到该行的输入框中
+     * @param {Object} e 事件对象
+     */
     onListClick = (e) => {
-        debugger
-        e.preventDefault()
+        e.currentTarget.getElementsByTagName('input')[0].focus()
     }
     render() {
         const { high, medium, low, highPrice, mediumPrice, lowPrice, method, basePrice} = this.state

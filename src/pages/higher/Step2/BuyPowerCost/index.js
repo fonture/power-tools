@@ -92,8 +92,12 @@ export default class BuyPowerCost extends Component {
             checkedList: value
         }, this.onChangeValue)
     }
+    /**
+     * @description 当点击整行时，将光标聚焦到该行的输入框
+     * @param {Object} e 事件对象
+     */
     onListClick = (e) => {
-        debugger
+        e.currentTarget.getElementsByTagName('input')[0].focus()
     }
     render() {
         const { method, yearPower, deviationCost, signedPrice, averagePrice} = this.state
@@ -121,7 +125,9 @@ export default class BuyPowerCost extends Component {
                     // 年度用电量
                     ? <View>
                         <AtList className="power-input-list">
-                            <AtListItem title="年度用电量" onClick={this.onListClick}
+                            <AtListItem 
+                                title="年度用电量" 
+                                onClick={this.onListClick} 
                                 extraText={
                                     <View className="at-row at-row__justify--center at-row__align--center">
                                         <AtInput type="number" className="power-input" border={false} value={yearPower ? yearPower : ''} onChange={this.onChangeValue.bind(this, 'yearPower')}/>
@@ -129,7 +135,9 @@ export default class BuyPowerCost extends Component {
                                     </View>
                                 } 
                             />
-                            <AtListItem title="年度偏差考核费用" onClick={this.onListClick}
+                            <AtListItem 
+                                title="年度偏差考核费用" 
+                                onClick={this.onListClick} 
                                 extraText={
                                     <View className="at-row at-row__justify--center at-row__align--center">
                                         <AtInput type="number" className="power-input" border={false} value={deviationCost ? deviationCost : ''} onChange={this.onChangeValue.bind(this, 'deviationCost')}/>
@@ -137,7 +145,9 @@ export default class BuyPowerCost extends Component {
                                     </View>
                                 } 
                             />
-                            <AtListItem title="签约水电价格" onClick={this.onListClick}
+                            <AtListItem 
+                                title="签约水电价格" 
+                                onClick={this.onListClick} 
                                 extraText={
                                     <View className="at-row at-row__justify--center at-row__align--center">
                                         <AtInput type="number" className="power-input" border={false} value={signedPrice ? signedPrice : ''} onChange={this.onChangeValue.bind(this, 'signedPrice')}/>
