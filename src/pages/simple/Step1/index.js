@@ -1,9 +1,10 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Picker } from '@tarojs/components'
 import { AtList, AtListItem, AtActionSheet, AtActionSheetItem  } from 'taro-ui';
+import reduxHelper from '../../../utils/reduxHelper';
 
 
-import './index.less'
+// import './index.less'
 
 
 export default class Step1 extends Component {
@@ -20,6 +21,10 @@ export default class Step1 extends Component {
     componentDidMount() {
         this.props.didMount(this._rendered.dom);
         this.initPicker();
+    }
+    componentWillUnmount(){
+        const { address, sort, mart } = this.state;
+        reduxHelper('baseMessage', {address, sort, mart})
     }
     resorts = [
         {
