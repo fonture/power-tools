@@ -41,8 +41,8 @@ export default class Index extends Component {
     }, () => {
       setTimeout(() => {
         reduxHelper('version', { value: edition })
-        Taro.redirectTo({ url: `pages/form/index?edition=${edition}` })
-      }, 2000);
+        Taro.redirectTo({ url: `pages/${edition}/index` })
+      }, 1000);
     })
   }
 
