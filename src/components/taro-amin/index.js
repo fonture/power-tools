@@ -1,15 +1,15 @@
 
 
 export default (Comp, props) => {
-    let {action} = props;
-    const didMount = (dom)=>{
+    let { action } = props;
+    const didMount = (dom) => {
         dom.className += ` slide-in-${action}`;
-        process.nextTick(()=>{
+        process.nextTick(() => {
             dom.className += ` slide-in-${action}-active`;
         })
-        setTimeout(()=>{
+        setTimeout(() => {
             dom.className = '';
-        },200)
+        }, 200)
     }
-    return <Comp {...props} didMount={didMount}/>
+    return <Comp {...props} onDidMount={didMount} />
 };

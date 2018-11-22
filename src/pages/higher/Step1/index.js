@@ -3,7 +3,7 @@ import { View, Text } from '@tarojs/components'
 
 export default class Step1 extends Component {
     componentDidMount() {
-        this.props.didMount(this._rendered.dom);
+        this.props.onDidMount(this._rendered.dom);
     }
     render() {
         return (<View>
