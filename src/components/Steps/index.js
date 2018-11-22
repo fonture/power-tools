@@ -3,7 +3,7 @@
  * @Date: 2018-11-19 11:03:54 
  * @Description: 表单顶部步骤条
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-22 11:18:11
+ * @Last Modified time: 2018-11-22 16:30:20
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text, Input } from '@tarojs/components'
@@ -19,7 +19,7 @@ export default class Steps extends Component {
                     return [
                         <View className="flex-item">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" className={index < current ? 'active' : (index === current ? 'current' : '')} >
-                                <circle className="outerCircle" cx="10" cy="10" r="8" />
+                                <circle className="outerCircle" cx="10" cy="10" r="6" />
                                 {
                                     index === current
                                     ? <circle className="innerCircle" cx="10" cy="10" r="4" />

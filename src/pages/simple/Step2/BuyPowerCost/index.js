@@ -92,8 +92,12 @@ export default class BuyPowerCost extends Component {
             checkedList: value
         }, this.onChangeValue)
     }
+    /**
+     * @description 点击每一个列表项时将光标聚集到该行的输入框中
+     * @param {Object} e 事件对象
+     */
     onListClick = (e) => {
-        debugger
+        e.currentTarget.getElementsByTagName('input')[0].focus()
     }
     render() {
         const { method, yearPower, deviationCost, signedPrice, averagePrice} = this.state
