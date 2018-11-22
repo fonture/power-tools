@@ -114,7 +114,7 @@ export default class Step1 extends Component {
     }
     
     render() {
-        const addressList = ['四川','重庆'];
+        const addressList = ['四川地区','重庆地区'];
         const marts = ['参与', '未参与'];
         const { address, sort, mart, clickList, sheetShow, sorts } = this.state;
         const renderSheet = () =>{

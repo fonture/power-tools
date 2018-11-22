@@ -2,6 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, ScrollView } from '@tarojs/components'
 import reduxHelper from '../../utils/reduxHelper'
 import inject from '../../utils/inject'
+import { report } from '../../utils'
 import Steps from '../../components/steps'
 import Button from '../../components/Button'
 import './index.less'
@@ -19,16 +20,26 @@ export default class Form extends Component {
         step: 1,
         action: 'enter'
     }
+    // 事件队列
+    events = []
+
     componentDidMount() {
         reduxHelper('stepInfo', { current: 0, items: ['基础信息', '用电成本', '购电计算'] })
     }
+
+    addEvent = fn => {
+        typeof fn === 'function' && this.events.push(fn)
+    }
+
     preStep = () => {
+        this.events = [];
         this.state.step === 1 ?
             Taro.redirectTo({ url: 'pages/index/index' }) :
             this.setState({ step: this.state.step - 1, action: 'back' });
         reduxHelper('stepInfo', { current: this.state.step - 2, items: ['基础信息', '用电成本', '购电计算'] })
     }
     nextStep = () => {
+        this.events.forEach(e => e());
         this.state.step === 3 ?
             Taro.redirectTo({ url: 'pages/result/index' }) :
             this.setState({ step: this.state.step + 1, action: 'enter' });
@@ -40,7 +51,10 @@ export default class Form extends Component {
         return (
             <ScrollView className='form page'>
                 <Steps current={stepInfo.current} items={stepInfo.items} />
-                <Content step={this.state.step} action={this.state.action} />
+                <Content
+                    step={this.state.step}
+                    action={this.state.action}
+                    onAddEvent={this.addEvent} />
                 <Button onClick={this.preStep} type="secondary">上一步</Button>
                 <Button onClick={this.nextStep} type="primary">下一步</Button>
             </ScrollView>

@@ -8,7 +8,6 @@
 import { connect } from '@tarojs/redux'
 export default argName => comp => {
     const mapStateToProps = store => {
-        console.log(store)
         const arg = store[argName]
         return { 
             [argName]: arg || {}

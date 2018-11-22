@@ -6,6 +6,10 @@ import {
     AtInput,
     AtCheckbox
 } from 'taro-ui'
+import { 
+    getAvPriceOfElePur,
+    getAllWaterAvPriceOfElePur
+ } from '../../../../utils/formula';
 
 export default class UnPartake extends Component {
     checkboxOption = [

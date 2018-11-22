@@ -3,10 +3,14 @@ import { View } from '@tarojs/components'
 import UnPartake from './UnPartake'
 import Partake from './Partake'
 import './index.less'
-
+import { report } from '../../../utils'
 export default class Step3 extends Component {
     componentDidMount() {
-        this.props.onDidMount(this._rendered.dom);
+        const {onDidMount, onAddEvent} = this.props;
+        onDidMount(this._rendered.dom); 
+        onAddEvent(()=>{
+            console.log('okokok');
+        })
     }    
     render() {
         return (
