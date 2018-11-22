@@ -92,7 +92,9 @@ export default class BuyPowerCost extends Component {
             checkedList: value
         }, this.onChangeValue)
     }
-
+    onListClick = (e) => {
+        debugger
+    }
     render() {
         const { method, yearPower, deviationCost, signedPrice, averagePrice} = this.state
 
@@ -119,26 +121,26 @@ export default class BuyPowerCost extends Component {
                     // 年度用电量
                     ? <View>
                         <AtList className="power-input-list">
-                            <AtListItem title="年度用电量" 
+                            <AtListItem title="年度用电量" onClick={this.onListClick}
                                 extraText={
                                     <View className="at-row at-row__justify--center at-row__align--center">
-                                        <AtInput type="number" className="power-input" value={yearPower ? yearPower : ''} onChange={this.onChangeValue.bind(this, 'yearPower')}/>
+                                        <AtInput type="number" className="power-input" border={false} value={yearPower ? yearPower : ''} onChange={this.onChangeValue.bind(this, 'yearPower')}/>
                                         <div className="power-result-unit">万千瓦时</div>
                                     </View>
                                 } 
                             />
-                            <AtListItem title="年度偏差考核费用" 
+                            <AtListItem title="年度偏差考核费用" onClick={this.onListClick}
                                 extraText={
                                     <View className="at-row at-row__justify--center at-row__align--center">
-                                        <AtInput type="number" className="power-input" value={deviationCost ? deviationCost : ''} onChange={this.onChangeValue.bind(this, 'deviationCost')}/>
+                                        <AtInput type="number" className="power-input" border={false} value={deviationCost ? deviationCost : ''} onChange={this.onChangeValue.bind(this, 'deviationCost')}/>
                                         <div className="power-result-unit">元</div>
                                     </View>
                                 } 
                             />
-                            <AtListItem title="签约水电价格" 
+                            <AtListItem title="签约水电价格" onClick={this.onListClick}
                                 extraText={
                                     <View className="at-row at-row__justify--center at-row__align--center">
-                                        <AtInput type="number" className="power-input" value={signedPrice ? signedPrice : ''} onChange={this.onChangeValue.bind(this, 'signedPrice')}/>
+                                        <AtInput type="number" className="power-input" border={false} value={signedPrice ? signedPrice : ''} onChange={this.onChangeValue.bind(this, 'signedPrice')}/>
                                         <div className="power-result-unit">元/千瓦时</div>
                                     </View>
                                 } 
@@ -160,18 +162,18 @@ export default class BuyPowerCost extends Component {
                     </View>
                     // 购电均价
                     : <AtList className="power-input-self">
-                        <AtListItem title="年度用电量" 
+                        <AtListItem title="年度用电量" onClick={this.onListClick}
                             extraText={
                                 <View className="at-row at-row__justify--center at-row__align--center">
-                                    <AtInput type="number" className="power-input" value={yearPower ? yearPower : ''}  onChange={this.onChangeValue.bind(this, 'yearPower')}/>
+                                    <AtInput type="number" className="power-input" border={false} value={yearPower ? yearPower : ''}  onChange={this.onChangeValue.bind(this, 'yearPower')}/>
                                     <div className="power-result-unit">万千瓦时</div>
                                 </View>
                             } 
                         />
-                        <AtListItem title="购电均价" 
+                        <AtListItem title="购电均价" onClick={this.onListClick}
                             extraText={
                                 <View className="at-row at-row__justify--center at-row__align--center">
-                                    <AtInput type="number" className="power-input" value={averagePrice ? averagePrice : ''} onChange={this.onChangeValue.bind(this, 'averagePrice')}/>
+                                    <AtInput type="number" className="power-input" border={false} value={averagePrice ? averagePrice : ''} onChange={this.onChangeValue.bind(this, 'averagePrice')}/>
                                     <div className="power-result-unit">元/千瓦时</div>
                                 </View>
                             } 

@@ -12,45 +12,31 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        /*input自定义样式*/
-        input[type=checkbox]{
-            position: relative;
-            box-sizing: content-box;
-            width: 10pt;
-            height: 10pt;
-            border: 1pt solid #D8E4E4;
-            border-radius: 50%;
-            background-color:transparent;
-            line-height: 10pt;
-            overflow: auto;
-            &:checked::before{
-                content: '✓';
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 120%;
-                height: 100%;
-                font-size: 11pt;
-                text-align: center;
-                color: #28EA76;
-            }
-            &.current{
-                &:checked::before{
-                    content: '';
-                    position: absolute;
-                    box-sizing: content-box;
-                    border: 1pt solid #1BDCE3;
-                    width: 4pt;
-                    height: 4pt;
-                    left: 50%;
-                    top: 50%;
-                    transform: translate(-50%, -50%);
-                    border-radius: 50%;
-                    background: #1BDCE3;
-                }     
-            }
-
+        /*无状态圆样式*/
+        circle {
+            stroke: #EDFAFA;
+            stroke-width: 1pt;
         }
+        /*已完成步骤的圆样式*/
+        .active{
+            circle {
+                stroke: #636465;
+                stroke-width: 1pt
+            }
+        }
+        /*当前步骤的圆样式*/
+        .current{
+            .innerCircle{
+                fill: #1BDCE3;
+                stroke-width: 0;
+            }
+        }
+        /*勾勾样式*/
+        .hook{
+            fill:#28EA76;
+            transform: translate(-5pt,-8pt);
+        }
+
     }
     /*横线样式*/
     hr{

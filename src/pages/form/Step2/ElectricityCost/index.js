@@ -67,6 +67,10 @@ export default class ElectricityCost extends Component {
             })
         }
     }
+    onListClick = (e) => {
+        debugger
+        e.preventDefault()
+    }
     render() {
         const { high, medium, low, highPrice, mediumPrice, lowPrice, method, basePrice} = this.state
         const sum = high + medium + low
@@ -130,18 +134,18 @@ export default class ElectricityCost extends Component {
                         </AtList>
                     </View>
                     : <AtList className="power-input-self">
-                        <AtListItem title="年度用电量" 
+                        <AtListItem title="年度用电量"  onClick={this.onListClick}
                             extraText={
                                 <View className="at-row at-row__justify--center at-row__align--center">
-                                    <AtInput type="number" className="power-input" />
+                                    <AtInput type="number" className="power-input" border={false}/>
                                     <div className="power-result-unit">万千瓦时</div>
                                 </View>
                             } 
                         />
-                        <AtListItem title="用电均价" 
+                        <AtListItem title="用电均价"  onClick={this.onListClick}
                             extraText={
                                 <View className="at-row at-row__justify--center at-row__align--center">
-                                    <AtInput type="number" className="power-input" />
+                                    <AtInput type="number" className="power-input" border={false}/>
                                     <div className="power-result-unit">元/千瓦时</div>
                                 </View>
                             } 
