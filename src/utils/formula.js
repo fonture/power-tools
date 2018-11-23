@@ -18,3 +18,4 @@ export function getAllWaterAvPriceOfElePur(waterPrice, transmissionPrice, collec
     let res = waterPrice + transmissionPrice + collectionFund
     return keepDecimal(res, 5)
 }
+
