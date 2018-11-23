@@ -12,7 +12,33 @@ export function getAvPriceOfElePur(waterPrice, firePrice, transmissionPrice, col
     let res = waterPrice * 0.7 + firePrice * 0.3 + transmissionPrice + collectionFund
     return keepDecimal(res, 5)
 }
+// 未参与市场
+/**
+   * @description 未参与市场，用电
+   */
+export class noMart{
+  /**
+   * @description 未参与市场 基金计算  对象包含值
+   * @param {string} prce 平水期峰段目录电价
+   * @param {string} scale
+   * 
+   * 
+   * 
+   */
+  buyCost = (args) =>{
+    const {} = args;
+  }
+}
+// 参与市场
+export class haveMart {
+  /**
+   * @description 未参与市场 基金计算  对象包含值
+   * @param {string} prce 平水期峰段目录电价
+   */
+  buyCost = () =>{
 
+  }
+}
 // 全水电均价
 export function getAllWaterAvPriceOfElePur(waterPrice, transmissionPrice, collectionFund) {
     let res = waterPrice + transmissionPrice + collectionFund
