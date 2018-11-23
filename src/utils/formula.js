@@ -56,7 +56,7 @@ export function powerAveragePriceOfJoin(firePrice, transmissionPrice, collection
  */
 export function powerAveragePriceOfNotJoin(high, medium, low, highPrice, mediumPrice, lowPrice, collectionFund) {
     const yearPower = high + medium + low
-    if(!yearPower) return {}
+    if(!yearPower) return { yearPower, averagePrice }
     let averagePrice = ((high * highPrice + medium * mediumPrice + low * lowPrice) / yearPower + collectionFund)
     averagePrice = keepDecimal(averagePrice, 4)
     return { yearPower, averagePrice }

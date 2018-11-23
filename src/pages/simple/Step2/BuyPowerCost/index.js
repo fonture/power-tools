@@ -2,8 +2,8 @@
  * @Author: ouyangdc 
  * @Date: 2018-11-23 16:13:09 
  * @Description: 参与市场时的购电成本
- * @Last Modified by:   ouyangdc 
- * @Last Modified time: 2018-11-23 16:13:09 
+ * @Last Modified by: ouyangdc
+ * @Last Modified time: 2018-11-23 17:12:15
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -46,6 +46,7 @@ export default class BuyPowerCost extends Component {
      * @param {Object} e 事件对象
      */
     onClickSheet = (e) => {
+        if(this.state.method === e.target.innerHTML) return
         this.setState({
             method: e.target.innerHTML,
             isOpened: false,

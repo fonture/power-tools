@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:11:35 
  * @Description:未参与市场时的用电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-23 16:13:06
+ * @Last Modified time: 2018-11-23 17:15:00
  */
 
 import Taro, { Component } from '@tarojs/taro'
@@ -30,7 +30,12 @@ export default class ElectricityCost extends Component {
         highPrice: 0.8234,
         mediumPrice: 0.5234,
         lowPrice: 0.3324,
-        basePrice: 0.0324
+        yearPower: 0, 
+        averagePrice: 0
+    }
+    componentWillUnmount() {
+        const { yearPower, averagePrice } = this.state
+        reduxHelper('powerCosts', { yearPower, averagePrice })
     }
 
     /**
@@ -46,9 +51,15 @@ export default class ElectricityCost extends Component {
      * @param {Object} e 事件对象
      */
     onClickSheet = (e) => {
+        if(this.state.method === e.target.innerHTML) return
         this.setState({
             method: e.target.innerHTML,
-            isOpened: false
+            isOpened: false,
+            high: 0,
+            medium: 0,
+            low: 0,
+            yearPower: 0, 
+            averagePrice: 0
         })
     }
     /**
@@ -74,6 +85,20 @@ export default class ElectricityCost extends Component {
      */
     onListClick = (e) => {
         e.currentTarget.getElementsByTagName('input')[0].focus()
+    }
+
+    /**
+     * @description 电度电价输入事件
+     * @param {String} name 变量名
+     * @param {Number} value 变量值
+     */
+    onInput = (name, value) => {
+        const val = +value
+        if(!isNaN(val)){
+            this.setState({
+                [name]: val
+            })    
+        }
     }
 
     render() {
@@ -131,15 +156,15 @@ export default class ElectricityCost extends Component {
 
                         {/* 展示年度电量与用电均价 */}
                         <AtList className="power-result-list">
-                            <AtListItem title="年度用电量" extraText={<span>{yearPower}<span className="power-result-unit">万千瓦时</span></span>} />
-                            <AtListItem title="用电均价" extraText={<span>{averagePrice}<span className="power-result-unit">元/千瓦时</span></span>} />
+                            <AtListItem title="年度用电量" extraText={<span>{yearPower ? yearPower : ''}<span className="power-result-unit">万千瓦时</span></span>} />
+                            <AtListItem title="用电均价" extraText={<span>{averagePrice ? averagePrice : ''}<span className="power-result-unit">元/千瓦时</span></span>} />
                         </AtList>
                     </View>
                     : <AtList className="power-input-self">
                         <AtListItem title="年度用电量"  onClick={this.onListClick}
                             extraText={
                                 <View className="at-row at-row__justify--center at-row__align--center">
-                                    <AtInput type="number" className="power-input" border={false}/>
+                                    <AtInput type="number" className="power-input" border={false} value={yearPower ? yearPower : ''} onChange={this.onInput.bind(this, 'yearPower')}/>
                                     <div className="power-result-unit">万千瓦时</div>
                                 </View>
                             } 
@@ -147,7 +172,7 @@ export default class ElectricityCost extends Component {
                         <AtListItem title="用电均价"  onClick={this.onListClick}
                             extraText={
                                 <View className="at-row at-row__justify--center at-row__align--center">
-                                    <AtInput type="number" className="power-input" border={false}/>
+                                    <AtInput type="number" className="power-input" border={false} value={averagePrice ? averagePrice : ''} onChange={this.onInput.bind(this, 'averagePrice')}/>
                                     <div className="power-result-unit">元/千瓦时</div>
                                 </View>
                             } 
