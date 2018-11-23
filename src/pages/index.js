@@ -1,23 +1,10 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
 import { AtModal, AtButton, AtForm, AtInput, AtModalContent } from "taro-ui"
-import { connect } from '@tarojs/redux'
-
-import reduxHelper from '../../utils/reduxHelper'
+import reduxHelper from '../utils/reduxHelper'
 import './index.less'
 import request from '../../utils/request';
 
-
-const mapStateToProps = (store) => {
-  const { count } = store
-  if (count && JSON.stringify(count) !== '{}') {
-    return {
-      count: count.value
-    }
-  }
-}
-
-@connect(mapStateToProps)
 export default class Index extends Component {
 
   config = {
@@ -43,14 +30,15 @@ export default class Index extends Component {
     {
       title: '简单版',
       edition: 'simple',
-      img: require('../../assets/simple.png'),
+      img: require('../assets/simple.png'),
     },
     {
       title: '高级版',
       edition: 'higher',
-      img: require('../../assets/higher.png'),
+      img: require('../assets/higher.png'),
     }
   ]
+
   changeVersion = (edition) => {
     this.setState({
       activeNode: edition,
@@ -114,7 +102,7 @@ export default class Index extends Component {
           )
         }
         <Image
-          src={require('../../assets/fire.png')}
+          src={require('../assets/fire.png')}
           className='frieImage'
           onClick={this.showModel}
         />

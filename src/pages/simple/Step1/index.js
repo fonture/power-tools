@@ -4,9 +4,6 @@ import { AtList, AtListItem, AtActionSheet, AtActionSheetItem  } from 'taro-ui';
 import reduxHelper from '../../../utils/reduxHelper';
 
 
-// import './index.less'
-
-
 export default class Step1 extends Component {
 
     state = {
@@ -87,7 +84,11 @@ export default class Step1 extends Component {
     }
 
     handleClickSheetItem = (value)=>{
-        const { clickList } = this.state;
+        const { clickList, address, sort } = this.state;
+        if(clickList === 'mart') {
+            reduxHelper('stepInfo', { current: 0, items: value === '参与' ? ['基础信息', '购电成本', '目录电价'] : ['基础信息', '用电成本', '购电计算']})
+            reduxHelper('baseMessage', {address, sort, mart: value})   
+        }
         this.setState({
             [clickList]: value,
             sheetShow: false,
@@ -116,10 +117,10 @@ export default class Step1 extends Component {
             sort: [resorts[value[0]]['categoryName'],resorts[value[0]]['voltageLevelVOList'][value[1]]['voltageName']]
         })
     }
-    
+
     render() {
-        const addressList = ['四川','重庆'];
-        const marts = ['参与', '未参与'];
+        const addressList = ['四川地区','重庆地区'];
+        const marts = ['参与','未参与'];
         const { address, sort, mart, clickList, sheetShow, sorts } = this.state;
         const renderSheet = () =>{
             const wellList = {

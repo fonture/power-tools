@@ -2,6 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, ScrollView } from '@tarojs/components'
 import reduxHelper from '../../utils/reduxHelper'
 import inject from '../../utils/inject'
+import { report } from '../../utils'
 import Steps from '../../components/steps'
 import Button from '../../components/Button'
 import './index.less'
@@ -9,7 +10,7 @@ import TaroAmin from '../../components/taro-amin'
 import Step1 from './Step1';
 import Step2 from './Step2';
 import Step3 from './Step3';
-@inject('stepInfo')
+@inject('stepInfo', 'baseMessage')
 export default class Form extends Component {
 
     config = {
@@ -19,28 +20,34 @@ export default class Form extends Component {
         step: 1,
         action: 'enter'
     }
+
     componentDidMount() {
-        reduxHelper('stepInfo', { current: 0, items: ['基础信息', '用电成本', '购电计算'] })
+        reduxHelper('stepInfo', { current: 0, items: ['基础信息', '第二步', '第三步'] })
     }
+
     preStep = () => {
         this.state.step === 1 ?
             Taro.redirectTo({ url: 'pages/index/index' }) :
-            this.setState({ step: this.state.step - 1, action: 'back' });
-        reduxHelper('stepInfo', { current: this.state.step - 2, items: ['基础信息', '用电成本', '购电计算'] })
+            this.setState({ step: this.state.step - 1, action: 'back' }, () => {
+                this.state.step === 1
+                ? reduxHelper('stepInfo', { current: 0, items: ['基础信息', '第二步', '第三步'] })
+                : reduxHelper('stepInfo', { current: this.state.step - 1, items: this.props.baseMessage.mart === '参与' ? ['基础信息', '购电成本', '目录电价'] : ['基础信息', '用电成本', '购电计算']})
+            });
     }
     nextStep = () => {
         this.state.step === 3 ?
             Taro.redirectTo({ url: 'pages/result/index' }) :
             this.setState({ step: this.state.step + 1, action: 'enter' });
-        reduxHelper('stepInfo', { current: this.state.step, items: ['基础信息', '用电成本', '购电计算'] })
+        reduxHelper('stepInfo', { current: this.state.step, items: this.props.baseMessage.mart === '参与' ? ['基础信息', '购电成本', '目录电价'] : ['基础信息', '用电成本', '购电计算']})
     }
     render() {
-        const { edition } = this.$router.params
         const { stepInfo } = this.props
         return (
             <ScrollView className='form page'>
                 <Steps current={stepInfo.current} items={stepInfo.items} />
-                <Content step={this.state.step} action={this.state.action} />
+                <Content
+                    step={this.state.step}
+                    action={this.state.action} />
                 <Button onClick={this.preStep} type="secondary">上一步</Button>
                 <Button onClick={this.nextStep} type="primary">下一步</Button>
             </ScrollView>
