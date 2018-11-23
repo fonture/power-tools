@@ -18,7 +18,7 @@ export default class UnPartake extends Component {
         checkedList: [],
         yearBuy: 0,
         waterPrice: 0,
-        avPrice:''
+        avPrice: ''
     }
 
     checkboxOption = [
@@ -86,14 +86,10 @@ export default class UnPartake extends Component {
                 </View>
                 <View className="card">
                     <AtList>
-                        <AtListItem
-                            title={
-                                <AtCheckbox
-                                    options={this.checkboxOption}
-                                    selectedList={this.state.checkedList}
-                                    onChange={this.handleCheckBoxChange}
-                                />
-                            }
+                        <AtCheckbox
+                            options={this.checkboxOption}
+                            selectedList={this.state.checkedList}
+                            onChange={this.handleCheckBoxChange}
                         />
                         <AtListItem
                             title='购电均价：'
