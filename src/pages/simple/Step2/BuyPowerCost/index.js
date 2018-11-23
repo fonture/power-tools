@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:13:09 
  * @Description: 参与市场时的购电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-23 17:12:15
+ * @Last Modified time: 2018-11-23 17:53:01
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -17,8 +17,10 @@ import {
 } from 'taro-ui'
 import { powerAveragePriceOfJoin } from '../../../../utils/formula'
 import reduxHelper from '../../../../utils/reduxHelper'
+import inject from '../../../../utils/inject'
 import './index.less'
 
+@inject('newestCataloguePrice')
 export default class BuyPowerCost extends Component {
     state = {
         isOpened: false,
@@ -64,6 +66,7 @@ export default class BuyPowerCost extends Component {
      */
     onChangeValue = (type, value) => {
         const { yearPower, deviationCost, signedPrice, method, checkedList } = this.state
+        const { newestCataloguePrice: { collectionFund } } = this.props
         let values = { yearPower, deviationCost, signedPrice }
 
         // 如果type不为undefined，即不是点击是否参与全水电选项触发的
@@ -77,7 +80,7 @@ export default class BuyPowerCost extends Component {
              * ToDo: 根据公式计算购电均价
              */
             const { yearPower, deviationCost, signedPrice } = values
-            values.averagePrice = powerAveragePriceOfJoin(0.5360, 0.3456, 0.6393, yearPower, deviationCost, signedPrice, checkedList.length)
+            values.averagePrice = powerAveragePriceOfJoin(0.5360, 0.3456, collectionFund, yearPower, deviationCost, signedPrice, checkedList.length)
         }
         
         this.setState({

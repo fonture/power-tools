@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:11:35 
  * @Description:未参与市场时的用电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-23 17:26:19
+ * @Last Modified time: 2018-11-23 17:53:30
  */
 
 import Taro, { Component } from '@tarojs/taro'
@@ -19,8 +19,10 @@ import {
 import PowerProportion from './PowerProportion'
 import { powerAveragePriceOfNotJoin } from '../../../../utils/formula'
 import reduxHelper from '../../../../utils/reduxHelper'
+import inject from '../../../../utils/inject'
 import './index.less'
 
+@inject('newestCataloguePrice')
 export default class ElectricityCost extends Component {
     state = {
         isOpened: false,
@@ -28,9 +30,6 @@ export default class ElectricityCost extends Component {
         high: 0,
         medium: 0,
         low: 0,
-        highPrice: 0.8234,
-        mediumPrice: 0.5234,
-        lowPrice: 0.3324,
         yearPower: 0, 
         averagePrice: 0
     }
@@ -69,11 +68,12 @@ export default class ElectricityCost extends Component {
      * @param {String} value 输入框的值
      */
     onChangeValue = (type, value) => {
-        value = +value
-        if(!isNaN(value)){
-            const values = Object.assign({}, this.state, {[type]: value})
-            const { high, medium, low, highPrice, mediumPrice, lowPrice } = values
-            const result = powerAveragePriceOfNotJoin(high, medium, low, highPrice, mediumPrice, lowPrice, 0.5423)
+        const val = +value
+        const { newestCataloguePrice: {cataloguePriceVoMap: {peak, plain, valley}, collectionFund} } = this.props
+        if(!isNaN(val)){
+            const values = Object.assign({}, this.state, {[type]: val})
+            const { high, medium, low } = values
+            const result = powerAveragePriceOfNotJoin(high, medium, low, peak.price, plain.price, valley.price, collectionFund)
             this.setState({
                 ...values,
                 ...result
