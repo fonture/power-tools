@@ -1,3 +1,10 @@
+/*
+ * @Author: ouyangdc 
+ * @Date: 2018-11-23 16:13:09 
+ * @Description: 参与市场时的购电成本
+ * @Last Modified by:   ouyangdc 
+ * @Last Modified time: 2018-11-23 16:13:09 
+ */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { 
@@ -8,16 +15,23 @@ import {
     AtInput,
     AtCheckbox,
 } from 'taro-ui'
+import { powerAveragePriceOfJoin } from '../../../../utils/formula'
+import reduxHelper from '../../../../utils/reduxHelper'
 import './index.less'
 
 export default class BuyPowerCost extends Component {
     state = {
         isOpened: false,
         method: '年度用电量',
+        checkedList: [],
         yearPower: 0, 
         deviationCost: 0, 
         signedPrice: 0, 
         averagePrice: 0
+    }
+    componentWillUnmount() {
+        const { yearPower, averagePrice } = this.state
+        reduxHelper('powerCosts', { yearPower, averagePrice })
     }
     /**
      * @description 点击输入方式时显示底部活动页
@@ -48,7 +62,7 @@ export default class BuyPowerCost extends Component {
      * @param {String} value 输入框的值
      */
     onChangeValue = (type, value) => {
-        const { yearPower, deviationCost, signedPrice, method } = this.state
+        const { yearPower, deviationCost, signedPrice, method, checkedList } = this.state
         let values = { yearPower, deviationCost, signedPrice }
 
         // 如果type不为undefined，即不是点击是否参与全水电选项触发的
@@ -56,13 +70,13 @@ export default class BuyPowerCost extends Component {
             value = +value
             values = Object.assign({}, values, {[type]: value})
         }
-
         // 如果购电均价是手动输入的，也不需要重新计算了
         if(method === '年度用电量') {
             /****
              * ToDo: 根据公式计算购电均价
              */
-            values.averagePrice = values.yearPower + values.deviationCost + values.signedPrice
+            const { yearPower, deviationCost, signedPrice } = values
+            values.averagePrice = powerAveragePriceOfJoin(0.5360, 0.3456, 0.6393, yearPower, deviationCost, signedPrice, checkedList.length)
         }
         
         this.setState({
