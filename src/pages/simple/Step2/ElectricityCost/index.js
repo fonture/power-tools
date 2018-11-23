@@ -1,3 +1,11 @@
+/*
+ * @Author: ouyangdc 
+ * @Date: 2018-11-23 16:11:35 
+ * @Description:未参与市场时的用电成本
+ * @Last Modified by: ouyangdc
+ * @Last Modified time: 2018-11-23 16:13:06
+ */
+
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { 
@@ -9,6 +17,7 @@ import {
     AtInput,
 } from 'taro-ui'
 import PowerProportion from './PowerProportion'
+import { powerAveragePriceOfNotJoin } from '../../../../utils/formula'
 import './index.less'
 
 export default class ElectricityCost extends Component {
@@ -50,8 +59,12 @@ export default class ElectricityCost extends Component {
     onChangeValue = (type, value) => {
         value = +value
         if(!isNaN(value)){
+            const values = Object.assign({}, this.state, {[type]: value})
+            const { high, medium, low, highPrice, mediumPrice, lowPrice } = values
+            const result = powerAveragePriceOfNotJoin(high, medium, low, highPrice, mediumPrice, lowPrice, 0.5423)
             this.setState({
-                [type]: value
+                ...values,
+                ...result
             })
         }
     }
@@ -62,22 +75,20 @@ export default class ElectricityCost extends Component {
     onListClick = (e) => {
         e.currentTarget.getElementsByTagName('input')[0].focus()
     }
+
     render() {
-        const { high, medium, low, highPrice, mediumPrice, lowPrice, method, basePrice} = this.state
-        const sum = high + medium + low
-        const price = high * highPrice + medium * mediumPrice + low * lowPrice
-        const percent = sum ? (price / sum + basePrice).toFixed(4) : 0
+        const { high, medium, low, method, yearPower, averagePrice} = this.state
         const items = [
             {
-                percent: sum && (high * 100 / sum).toFixed(2) + '%', 
+                percent: yearPower && (high * 100 / yearPower).toFixed(2) + '%', 
                 value: high, 
                 itemName: '峰'
             }, {
-                percent: sum && (medium * 100 / sum).toFixed(2) + '%', 
+                percent: yearPower && (medium * 100 / yearPower).toFixed(2) + '%', 
                 value: medium, 
                 itemName: '平'
             }, {
-                percent: sum && (low * 100 / sum).toFixed(2) + '%', 
+                percent: yearPower && (low * 100 / yearPower).toFixed(2) + '%', 
                 value: low, 
                 itemName: '谷'
             }
@@ -120,8 +131,8 @@ export default class ElectricityCost extends Component {
 
                         {/* 展示年度电量与用电均价 */}
                         <AtList className="power-result-list">
-                            <AtListItem title="年度用电量" extraText={<span>{sum}<span className="power-result-unit">万千瓦时</span></span>} />
-                            <AtListItem title="用电均价" extraText={<span>{percent}<span className="power-result-unit">元/千瓦时</span></span>} />
+                            <AtListItem title="年度用电量" extraText={<span>{yearPower}<span className="power-result-unit">万千瓦时</span></span>} />
+                            <AtListItem title="用电均价" extraText={<span>{averagePrice}<span className="power-result-unit">元/千瓦时</span></span>} />
                         </AtList>
                     </View>
                     : <AtList className="power-input-self">
