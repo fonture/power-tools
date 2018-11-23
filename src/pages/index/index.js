@@ -38,6 +38,7 @@ export default class Index extends Component {
       img: require('../../assets/higher.png'),
     }
   ]
+
   changeVersion = (edition) => {
     this.setState({
       activeNode: edition,

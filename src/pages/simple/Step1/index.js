@@ -118,9 +118,19 @@ export default class Step1 extends Component {
         })
     }
     
+    onClickMart = (e) => {
+        const mart = e.target.innerHTML
+        reduxHelper('stepInfo', { current: 0, items: mart === '参与' ? ['基础信息', '购电成本', '目录电价'] : ['基础信息', '用电成本', '购电计算']})
+        const { address, sort } = this.state;
+        reduxHelper('baseMessage', {address, sort, mart})    
+    }
+
     render() {
         const addressList = ['四川地区','重庆地区'];
-        const marts = ['参与', '未参与'];
+        const marts = [
+            <View onClick={this.onClickMart}>参与</View>, 
+            <View onClick={this.onClickMart}>未参与</View>
+        ];
         const { address, sort, mart, clickList, sheetShow, sorts } = this.state;
         const renderSheet = () =>{
             const wellList = {

@@ -27,6 +27,7 @@ export default class Step2 extends Component {
         console.log(result)
     }    
     render() {
+        
         const { join } = this.props
         return (
             <View>
