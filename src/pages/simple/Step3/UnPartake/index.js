@@ -6,10 +6,10 @@ import {
     AtInput,
     AtCheckbox
 } from 'taro-ui'
-import { 
+import {
     getAvPriceOfElePur,
     getAllWaterAvPriceOfElePur
- } from '../../../../utils/formula';
+} from '../../../../utils/formula';
 
 export default class UnPartake extends Component {
     checkboxOption = [
@@ -51,8 +51,8 @@ export default class UnPartake extends Component {
                         <AtListItem
                             title={
                                 <AtCheckbox
-                                options={this.checkboxOption}
-                              />
+                                    options={this.checkboxOption}
+                                />
                             }
                         />
                         <AtListItem
@@ -70,5 +70,5 @@ export default class UnPartake extends Component {
                     </AtList>
                 </View>
             </View>)
-    }    
+    }
 }

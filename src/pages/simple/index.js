@@ -20,19 +20,12 @@ export default class Form extends Component {
         step: 1,
         action: 'enter'
     }
-    // 事件队列
-    events = []
 
     componentDidMount() {
         reduxHelper('stepInfo', { current: 0, items: ['基础信息', '第二步', '第三步'] })
     }
 
-    addEvent = fn => {
-        typeof fn === 'function' && this.events.push(fn)
-    }
-
     preStep = () => {
-        this.events = [];
         this.state.step === 1 ?
             Taro.redirectTo({ url: 'pages/index/index' }) :
             this.setState({ step: this.state.step - 1, action: 'back' }, () => {
@@ -42,7 +35,6 @@ export default class Form extends Component {
             });
     }
     nextStep = () => {
-        this.events.forEach(e => e());
         this.state.step === 3 ?
             Taro.redirectTo({ url: 'pages/result/index' }) :
             this.setState({ step: this.state.step + 1, action: 'enter' });
@@ -55,8 +47,7 @@ export default class Form extends Component {
                 <Steps current={stepInfo.current} items={stepInfo.items} />
                 <Content
                     step={this.state.step}
-                    action={this.state.action}
-                    onAddEvent={this.addEvent} />
+                    action={this.state.action} />
                 <Button onClick={this.preStep} type="secondary">上一步</Button>
                 <Button onClick={this.nextStep} type="primary">下一步</Button>
             </ScrollView>

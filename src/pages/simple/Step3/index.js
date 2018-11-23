@@ -6,12 +6,9 @@ import './index.less'
 import { report } from '../../../utils'
 export default class Step3 extends Component {
     componentDidMount() {
-        const {onDidMount, onAddEvent} = this.props;
-        onDidMount(this._rendered.dom); 
-        onAddEvent(()=>{
-            console.log('okokok');
-        })
-    }    
+        const { onDidMount } = this.props;
+        onDidMount(this._rendered.dom);
+    }
     render() {
         return (
             <View>
