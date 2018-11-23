@@ -39,13 +39,12 @@ export function powerAveragePriceOfJoin(firePrice, transmissionPrice, collection
     } else {
         price = signedPrice * 0.7 + firePrice * 0.3 + deviationCost/yearPower + transmissionPrice + collectionFund
     }
-    return price.toFixed(4)
+    return keepDecimal(price, 4)
 }
 
 
 /**
  * @description 未参与市场时年度用电量、用电均价的计算
- * @export 
  * @param {Float} high 峰电量
  * @param {Float} medium 平电量
  * @param {Float} low 谷电量
@@ -53,11 +52,12 @@ export function powerAveragePriceOfJoin(firePrice, transmissionPrice, collection
  * @param {Float} mediumPrice 平电价
  * @param {Float} lowPrice 谷电价
  * @param {Float} collectionFund 基金
- * @returns 
+ * @returns 年度用电量、用电均价
  */
 export function powerAveragePriceOfNotJoin(high, medium, low, highPrice, mediumPrice, lowPrice, collectionFund) {
     const yearPower = high + medium + low
     if(!yearPower) return {}
-    const averagePrice = ((high * highPrice + medium * mediumPrice + low * lowPrice) / yearPower + collectionFund).toFixed(4)
+    let averagePrice = ((high * highPrice + medium * mediumPrice + low * lowPrice) / yearPower + collectionFund)
+    averagePrice = keepDecimal(averagePrice, 4)
     return { yearPower, averagePrice }
 }
