@@ -24,7 +24,7 @@ export default class Form extends Component {
         })
     }
     tryAgain = () => {
-        Taro.redirectTo({ url: 'pages/index/index' })
+        Taro.redirectTo({ url: 'pages/index' })
     }
     generateReport = () => {
         Taro.redirectTo({ url: 'pages/resultCanvas/index' })

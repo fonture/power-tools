@@ -9,6 +9,9 @@ import {
     AtInput,
 } from 'taro-ui'
 import PowerProportion from '../../Step2/ElectricityCost/PowerProportion'
+import {
+    powerAveragePriceOfNotJoin,
+} from '../../../../utils/formula'
 
 
 export default class Partake extends Component {
@@ -21,20 +24,12 @@ export default class Partake extends Component {
         highPrice: 0.8234,
         mediumPrice: 0.5234,
         lowPrice: 0.3324,
-        basePrice: 0.0324
+        basePrice: 0.0324,
+        averagePrice: 0,
+        yearPower: 0
     }
     componentDidMount() {
-        // Taro.request({
-        //     url: 'http://localhost:8080/test',
-        //     method: 'GET',
-        //     data: {
-        //       foo: 'foo',
-        //       bar: 10
-        //     },
-        //     header: {
-        //       'content-type': 'application/json'
-        //     }
-        //   }).then(res => console.log(res.data))
+
     }
     /**
      * @description 点击输入方式时显示底部活动页
@@ -49,9 +44,15 @@ export default class Partake extends Component {
      * @param {Object} e 事件对象
      */
     onClickSheet = (e) => {
+        if(this.state.method === e.target.innerHTML) return
         this.setState({
             method: e.target.innerHTML,
-            isOpened: false
+            isOpened: false,
+            high: 0,
+            medium: 0,
+            low: 0,
+            yearPower: 0, 
+            averagePrice: 0
         })
     }
     /**
@@ -61,28 +62,37 @@ export default class Partake extends Component {
      */
     onChangeValue = (type, value) => {
         value = +value
-        if (!isNaN(value)) {
+        if(!isNaN(value)){
+            const values = Object.assign({}, this.state, {[type]: value})
+            const { high, medium, low, highPrice, mediumPrice, lowPrice } = values
+            const result = powerAveragePriceOfNotJoin(high, medium, low, highPrice, mediumPrice, lowPrice, 0.5423)
             this.setState({
-                [type]: value
+                ...values,
+                ...result
             })
         }
     }
+    getCompData = () => {
+        const {high, medium, low,highPrice, mediumPrice, lowPrice} = this.state;
+        let res = powerAveragePriceOfNotJoin(high, medium, low, highPrice, mediumPrice, lowPrice, 1);
+        const {yearPower, averagePrice} = res;
+        this.setState({
+            averagePrice
+        })
+    }
     render() {
-        const { high, medium, low, highPrice, mediumPrice, lowPrice, method, basePrice } = this.state
-        const sum = high + medium + low
-        const price = high * highPrice + medium * mediumPrice + low * lowPrice
-        const percent = sum ? (price / sum + basePrice).toFixed(4) : 0
+        const { high, medium, low, highPrice, mediumPrice, lowPrice, method, basePrice, yearPower, averagePrice } = this.state
         const items = [
             {
-                percent: sum && (high * 100 / sum).toFixed(2) + '%',
+                percent: yearPower && (high * 100 / yearPower).toFixed(2) + '%',
                 value: high,
                 itemName: '峰'
             }, {
-                percent: sum && (medium * 100 / sum).toFixed(2) + '%',
+                percent: yearPower && (medium * 100 / yearPower).toFixed(2) + '%',
                 value: medium,
                 itemName: '平'
             }, {
-                percent: sum && (low * 100 / sum).toFixed(2) + '%',
+                percent: yearPower && (low * 100 / yearPower).toFixed(2) + '%',
                 value: low,
                 itemName: '谷'
             }
@@ -135,7 +145,7 @@ export default class Partake extends Component {
                                             type="number"
                                             className="power-input"
                                             title="万千瓦时"
-                                            value={sum}
+                                            value={yearPower}
                                             border={false} />
                                     } />
                                     <AtListItem title="用电均价" hasBorder={false} extraText={
@@ -144,7 +154,7 @@ export default class Partake extends Component {
                                             type="number"
                                             className="power-input"
                                             title="元/千瓦时"
-                                            value={percent}
+                                            value={averagePrice}
                                             border={false} />
                                     } />
                                 </AtList>
@@ -158,7 +168,8 @@ export default class Partake extends Component {
                                             type="number"
                                             className="power-input"
                                             title="万千瓦时"
-                                            border={false} />
+                                            border={false} 
+                                            value={yearPower}/>
                                     }
                                 />
                                 <AtListItem title="用电均价"
@@ -168,7 +179,8 @@ export default class Partake extends Component {
                                             type="number"
                                             className="power-input"
                                             title="元/千瓦时"
-                                            border={false} />
+                                            border={false}
+                                            value={averagePrice} />
                                     }
                                 />
                             </AtList>

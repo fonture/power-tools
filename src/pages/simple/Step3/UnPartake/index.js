@@ -12,13 +12,13 @@ import {
 } from '../../../../utils/formula';
 import inject from '../../../../utils/inject'
 import reduxHelper from '../../../../utils/reduxHelper'
-@inject('step3')
+@inject('unPartake')
 export default class UnPartake extends Component {
     state = {
-        checkedList: [],
-        yearBuy: 0,
-        waterPrice: 0,
-        avPrice: ''
+        checkedList: this.props.unPartake.checkedList || [],
+        yearBuy: this.props.unPartake.yearBuy || 0,
+        waterPrice: this.props.unPartake.waterPrice || 0,
+        avPrice: this.props.unPartake.avPrice || ''
     }
 
     checkboxOption = [
@@ -52,13 +52,16 @@ export default class UnPartake extends Component {
             avPrice
         })
     }
+    componentWillUnmount() {
+        reduxHelper('unPartake', { ...this.state })
+    }
     render() {
         return (
             <View>
                 <View className="card">
                     <AtList>
                         <AtListItem
-                            title='预计年度购电量：'
+                            title='预计年度购电量'
                             extraText={
                                 <AtInput
                                     type="number"
@@ -70,7 +73,7 @@ export default class UnPartake extends Component {
                             }
                         />
                         <AtListItem
-                            title='签约水电价格：'
+                            title='签约水电价格'
                             hasBorder={false}
                             extraText={
                                 <AtInput
@@ -92,7 +95,7 @@ export default class UnPartake extends Component {
                             onChange={this.handleCheckBoxChange}
                         />
                         <AtListItem
-                            title='购电均价：'
+                            title='购电均价'
                             hasBorder={false}
                             extraText={
                                 <AtInput
