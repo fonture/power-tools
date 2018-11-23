@@ -19,8 +19,6 @@ export function getAllWaterAvPriceOfElePur(waterPrice, transmissionPrice, collec
     return keepDecimal(res, 5)
 }
 
-<<<<<<< HEAD
-=======
 
 /**
  * @description 参与市场时购电均价计算
@@ -63,4 +61,3 @@ export function powerAveragePriceOfNotJoin(high, medium, low, highPrice, mediumP
     averagePrice = keepDecimal(averagePrice, 4)
     return { yearPower, averagePrice }
 }
->>>>>>> 892860c99ceddc5fe035c2c1056c421396c0219f
