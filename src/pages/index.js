@@ -3,7 +3,7 @@ import { View, Image } from '@tarojs/components'
 import { AtModal, AtButton, AtForm, AtInput, AtModalContent } from "taro-ui"
 import reduxHelper from '../utils/reduxHelper'
 import './index.less'
-import request from '../../utils/request';
+import request from '../utils/request';
 
 export default class Index extends Component {
 

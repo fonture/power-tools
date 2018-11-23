@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:11:35 
  * @Description:未参与市场时的用电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-23 17:15:00
+ * @Last Modified time: 2018-11-23 17:26:19
  */
 
 import Taro, { Component } from '@tarojs/taro'
@@ -18,6 +18,7 @@ import {
 } from 'taro-ui'
 import PowerProportion from './PowerProportion'
 import { powerAveragePriceOfNotJoin } from '../../../../utils/formula'
+import reduxHelper from '../../../../utils/reduxHelper'
 import './index.less'
 
 export default class ElectricityCost extends Component {
