@@ -85,49 +85,51 @@ export default class Index extends Component {
   render() {
     const { activeNode, modelVis, firePrice = 0.4025 } = this.state;
     return (
-      <View className='index page'>
-        {
-          this.editions.map(item =>
-          <View
-            key={item.edition}
-            onClick={this.changeVersion.bind(this,item.edition)}
-            className={`BoxAvatar ${item.edition} ${activeNode === null ? '' : item.edition === activeNode ? 'acShow' : 'acHide'}`}
-          >
-            <Image
-              src={item.img}
-              mode='aspectFill'
-              className='indexAtAvatar'
-            />
-          </View>
-          )
-        }
-        <Image
-          src={require('../assets/fire.png')}
-          className='frieImage'
-          onClick={this.showModel}
-        />
-        <AtModal
-          isOpened={modelVis}
-          onClose={this.handleClose}
-          onCancel={this.handleClose}
-          onConfirm={this.handleClose}
-          className='formContent'
-        >
-          <AtModalContent>
-            <AtForm
-              onSubmit={this.handleSubmit}
-              className='formBoder'
+      <View className='page indexPage'>
+        <View className='index'>
+          {
+            this.editions.map(item =>
+            <View
+              key={item.edition}
+              onClick={this.changeVersion.bind(this,item.edition)}
+              className={`BoxAvatar ${item.edition} ${activeNode === null ? '' : item.edition === activeNode ? 'acShow' : 'acHide'}`}
             >
-              <AtInput
-                name='value'
-                title='火电价格'
-                type='number'
-                placeholder={`默认火电价格${firePrice}`}
+              <Image
+                src={item.img}
+                mode='aspectFill'
+                className='indexAtAvatar'
               />
-              <AtButton formType='submit' width='100px' className='sumitButton'>确定</AtButton>
-            </AtForm>
-          </AtModalContent>
-        </AtModal>
+            </View>
+            )
+          }
+          <Image
+            src={require('../assets/fire.png')}
+            className='frieImage'
+            onClick={this.showModel}
+          />
+          <AtModal
+            isOpened={modelVis}
+            onClose={this.handleClose}
+            onCancel={this.handleClose}
+            onConfirm={this.handleClose}
+            className='formContent'
+          >
+            <AtModalContent>
+              <AtForm
+                onSubmit={this.handleSubmit}
+                className='formBoder'
+              >
+                <AtInput
+                  name='value'
+                  title='火电价格'
+                  type='number'
+                  placeholder={`默认火电价格${firePrice}`}
+                />
+                <AtButton formType='submit' width='100px' className='sumitButton'>确定</AtButton>
+              </AtForm>
+            </AtModalContent>
+          </AtModal>
+        </View>
       </View>
     )
   }
