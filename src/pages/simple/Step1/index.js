@@ -4,6 +4,7 @@ import { AtList, AtListItem, AtActionSheet, AtActionSheetItem, AtIcon  } from 't
 import reduxHelper from '../../../utils/reduxHelper';
 
 import './index.less'
+import request from '../../../utils/request';
 
 export default class Step1 extends Component {
 
@@ -16,8 +17,13 @@ export default class Step1 extends Component {
         sheetShow: false,
         sorts: [[],[]],
     }
-    componentDidMount() {
+    async componentDidMount() {
         this.props.onDidMount(this._rendered.dom);
+        const {data} = await request({
+            method: 'get',
+            url: '/wechat/kit/ele/category',
+        });
+        this.resorts = data;
         this.initPicker();
     }
     componentWillUnmount(){

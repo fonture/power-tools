@@ -16,8 +16,7 @@ export default class Index extends Component {
       method: 'get',
       url: '/wechat/kit/thermal/price',
     });
-    console.log(data.thermalPrice)
-    reduxHelper('firePrice', data.thermalPrice);
+    reduxHelper('firePrice', data.thermalPrice||0.4025);
     this.setState({
       firePrice: data.thermalPrice,
     })
