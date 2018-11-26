@@ -7,7 +7,6 @@ export default (options = { method: 'GET', data: {} }) => {
   if (!noConsole) {
     console.log(`${new Date().toLocaleString()}【 M=${options.url} 】P=${JSON.stringify(options.data)}`);
   }
-
   return Taro.request({
     url: baseUrl + options.url,
     data: {
