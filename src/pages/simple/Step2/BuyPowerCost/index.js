@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:13:09 
  * @Description: 参与市场时的购电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-23 17:53:01
+ * @Last Modified time: 2018-11-26 14:39:13
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -20,7 +20,7 @@ import reduxHelper from '../../../../utils/reduxHelper'
 import inject from '../../../../utils/inject'
 import './index.less'
 
-@inject('newestCataloguePrice')
+@inject('newestCataloguePrice', 'newestTransmissionPrice', 'firePrice')
 export default class BuyPowerCost extends Component {
     state = {
         isOpened: false,
@@ -30,6 +30,11 @@ export default class BuyPowerCost extends Component {
         deviationCost: 0, 
         signedPrice: 0, 
         averagePrice: 0
+    }
+    defaultProps = { 
+        newestCataloguePrice: { collectionFund: 0 }, 
+        newestTransmissionPrice: { price: 0 },
+        firePrice: {thermalPrice: 0}
     }
     componentWillUnmount() {
         const { yearPower, averagePrice } = this.state
@@ -66,7 +71,7 @@ export default class BuyPowerCost extends Component {
      */
     onChangeValue = (type, value) => {
         const { yearPower, deviationCost, signedPrice, method, checkedList } = this.state
-        const { newestCataloguePrice: { collectionFund } } = this.props
+        const { newestCataloguePrice: { collectionFund }, newestTransmissionPrice: { price }, firePrice: { thermalPrice } } = this.props
         let values = { yearPower, deviationCost, signedPrice }
 
         // 如果type不为undefined，即不是点击是否参与全水电选项触发的
@@ -80,7 +85,8 @@ export default class BuyPowerCost extends Component {
              * ToDo: 根据公式计算购电均价
              */
             const { yearPower, deviationCost, signedPrice } = values
-            values.averagePrice = powerAveragePriceOfJoin(0.5360, 0.3456, collectionFund, yearPower, deviationCost, signedPrice, checkedList.length)
+            
+            values.averagePrice = powerAveragePriceOfJoin(thermalPrice, price, collectionFund, yearPower, deviationCost, signedPrice, checkedList.length)
         }
         
         this.setState({
@@ -102,6 +108,7 @@ export default class BuyPowerCost extends Component {
      * @param {Object} e 事件对象
      */
     onListClick = (e) => {
+        e.preventDefault()
         e.currentTarget.getElementsByTagName('input')[0].focus()
     }
     render() {

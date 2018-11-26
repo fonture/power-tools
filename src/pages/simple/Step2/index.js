@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:12:20 
  * @Description: 第二步入口文件
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-23 17:36:38
+ * @Last Modified time: 2018-11-26 14:43:38
  */
 import Taro, { Component } from '@tarojs/taro'
 import PropTypes from 'prop-types'
@@ -25,7 +25,9 @@ export default class Step2 extends Component {
     }
     async componentDidMount() {
         this.props.onDidMount(this._rendered.dom);
-        const result = await request({
+        
+        // 请求基金
+        const catalogueprice = await request({
             method: 'GET',
             url: '/wechat/kit/catalogueprice/year',
             data: {
@@ -34,7 +36,20 @@ export default class Step2 extends Component {
                 voltage: 'a'
             }
         })
-        reduxHelper('newestCataloguePrice', {...result.data.newestCataloguePrice})
+        
+        // 请求输配电价
+        const transmissionprice = await request({
+            method: 'GET',
+            url: '/wechat/kit/transmissionprice/year',
+            data: {
+                tradeCenter: 'sichuan', 
+                category: 'a',
+                voltage: 'a'
+            }
+        })
+        
+        catalogueprice && catalogueprice.data && reduxHelper('newestCataloguePrice', {...catalogueprice.data.newestCataloguePrice})
+        transmissionprice && transmissionprice.data && reduxHelper('newestTransmissionPrice', transmissionprice.data.newestTransmissionPrice)
     }    
     render() {
         const { baseMessage } = this.props
