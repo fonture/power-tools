@@ -1,8 +1,10 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Picker } from '@tarojs/components'
-import { AtList, AtListItem, AtActionSheet, AtActionSheetItem  } from 'taro-ui';
+import { View, Picker, Text } from '@tarojs/components'
+import { AtList, AtListItem, AtActionSheet, AtActionSheetItem, AtIcon  } from 'taro-ui';
 import reduxHelper from '../../../utils/reduxHelper';
 
+import './index.less'
+import request from '../../../utils/request';
 
 export default class Step1 extends Component {
 
@@ -15,13 +17,24 @@ export default class Step1 extends Component {
         sheetShow: false,
         sorts: [[],[]],
     }
-    componentDidMount() {
+    async componentDidMount() {
         this.props.onDidMount(this._rendered.dom);
+        const {data} = await request({
+            method: 'get',
+            url: '/wechat/kit/ele/category',
+        });
+        this.resorts = data;
         this.initPicker();
     }
     componentWillUnmount(){
-        const { address, sort, mart } = this.state;
-        reduxHelper('baseMessage', {address, sort, mart})
+        const { address, mart, sort } = this.state;
+        let sortValue = sort;
+        if(sort !== null){
+            const fistItem = this.resorts.find(item => item.categoryName === sort[0]);
+            sortValue = [fistItem['categoryIdentify'], fistItem.voltageLevelVOList.find(item=>item.voltageName === sort[1])['voltageIdentify']]
+        }
+        
+        reduxHelper('baseMessage', {address, sortValue, mart})
     }
     resorts = [
         {
@@ -128,8 +141,13 @@ export default class Step1 extends Component {
                 // "sort": sorts,
                 "mart": marts,
             }[clickList] || [];
+            const sheetTitle = {
+                "address": '请选择地区',
+                // "sort": sorts,
+                "mart": '请选择是否参与市场',
+            }[clickList] || [];
             return (
-                <AtActionSheet isOpened={sheetShow}>
+                <AtActionSheet isOpened={sheetShow} className='pickerSheet' title={sheetTitle}>
                     {wellList.map(item=>
                         <AtActionSheetItem key={item} onClick={this.handleClickSheetItem.bind(this,item)}>
                             {item}
@@ -141,12 +159,39 @@ export default class Step1 extends Component {
         const renderSort =()=> {
             if(sort){
                 // return sort;
-                return <AtListItem
-                  title='用电分类'
-                  arrow='right'
-                  className='pickerList'
-                  extraText={sort}
-                />
+                // 模拟list
+                return <View className='at-list__item'>
+                    <View className='at-list__item-container'>
+                        <View className='at-list__item-content item-content'>
+                            <View className='item-content__info'>
+                                <View className='item-content__info-title'>
+                                    用电分类
+                                </View>
+                            </View>
+                        </View>
+                        <View className='at-list__item-extra item-extra'>
+                            <View className='item-extra__info'>
+                                <Text
+                                  style={{
+                                    display: 'block',
+                                    fontSize: '16px',
+                                    lineHeight: '1',
+                                  }}
+                                >{sort[0]}</Text>
+                                <Text
+                                  style={{
+                                    display: 'block',
+                                    fontSize: '14px',
+                                    lineHeight: '1',
+                                  }}
+                                >{sort[1]}</Text>
+                            </View>
+                            <View className='item-extra__icon'>
+                                <AtIcon size='24' value='chevron-right' color='rgb(199, 199, 204)' />
+                            </View>
+                        </View>
+                    </View>
+                </View>
             } else {
                 return <AtListItem title='用电分类' arrow='right' extraText='请选择用电分类' />
             }

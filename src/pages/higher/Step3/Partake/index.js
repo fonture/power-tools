@@ -8,7 +8,7 @@ import {
     AtCard,
     AtInput,
 } from 'taro-ui'
-import PowerProportion from '../../Step2/ElectricityCost/PowerProportion'
+import PowerProportion from '../../../../components/PowerProportion'
 
 
 export default class Partake extends Component {

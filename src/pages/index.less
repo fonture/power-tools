@@ -1,6 +1,28 @@
+
+#app{
+    .page{
+        &.indexPage{
+            width: 100%;
+            height: 100%;
+            background-color: #111516;
+            box-sizing: border-box;
+            border-top: 1PX solid #1BDCE3;
+        }
+        .index{
+            width: 750px;
+            height: 1208px;
+            background-size: 100%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-top: -604px;
+            margin-left: -375px;
+        }
+    }
+}
 .index{
     position: relative;
-    width: 100%;
+    width: 750px;
     height: 100%;
     background-repeat: no-repeat;
     background-size: cover;
@@ -29,8 +51,8 @@
             top: 630px;
         }
         &.acShow{
-            // 可能不是很居中，是设计图背景是包含了头部的，具体情况需要根据手机显示情况进行调整。
-            top: 344px;
+            // 可能不是很居中，是设计图背景是包含了头部的，具体情况需要根据手机显示情况进行调整。1208
+            top: 408px;
             transition: top 0.3s ease-in 0.3s;
             animation: RotateBox 5s linear 0.3s infinite;
             .indexAtAvatar{
@@ -65,6 +87,12 @@
     }
     .formBoder{
         padding-top: 0.8em;
+        .at-input{
+            color: #fff;
+            // &::after{
+            //     border-bottom: none;
+            // }
+        }
         &:after{
             border: none;
         }
@@ -73,6 +101,8 @@
         margin-top: 2em;
         padding: 0.6em auto;
         width: 6em;
+        color: #1BDCE3;
+        background: #262828;
     }
 }
 @keyframes hideBox {
@@ -110,3 +140,9 @@
     }
 }
 
+.formContent .at-modal__container, .formContent .at-form, .formContent .at-input{
+    background-color: rgba(0,0,0,.6);
+}
+.formContent .at-modal__container{
+    border: none;
+}

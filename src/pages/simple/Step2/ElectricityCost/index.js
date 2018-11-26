@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:11:35 
  * @Description:未参与市场时的用电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-23 17:53:30
+ * @Last Modified time: 2018-11-26 15:30:01
  */
 
 import Taro, { Component } from '@tarojs/taro'
@@ -16,7 +16,7 @@ import {
     AtCard, 
     AtInput,
 } from 'taro-ui'
-import PowerProportion from './PowerProportion'
+import PowerProportion from '../../../../components/PowerProportion'
 import { powerAveragePriceOfNotJoin } from '../../../../utils/formula'
 import reduxHelper from '../../../../utils/reduxHelper'
 import inject from '../../../../utils/inject'
@@ -32,6 +32,16 @@ export default class ElectricityCost extends Component {
         low: 0,
         yearPower: 0, 
         averagePrice: 0
+    }
+    defaultProps = {
+        newestCataloguePrice: {
+            cataloguePriceVoMap: {
+                peak: {price: 0}, 
+                plain: {price: 0}, 
+                valley: {price: 0}
+            }, 
+            collectionFund: 0
+        }
     }
     componentWillUnmount() {
         const { yearPower, averagePrice } = this.state
@@ -149,7 +159,7 @@ export default class ElectricityCost extends Component {
                             {
                                 items.map(item => {
                                     const { percent, value, itemName } = item
-                                    return <PowerProportion percent={percent} value={value} itemName={itemName} onChangeValue={this.onChangeValue}/>
+                                    return <PowerProportion percent={percent} value={value} itemName={itemName} onChangeValue={this.onChangeValue.bind(this)}/>
                                 })
                             }    
                             </View>
