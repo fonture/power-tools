@@ -1,13 +1,12 @@
 stages:
-  pull
-  dependencies
-  build
+  - pull
+  - dependencies
+  - build
   # depoly
 
 fetch_repo:
   stage: pull
   script:
-    - mkdir /var/www/power-tools/
     - cd /var/www/power-tools/
     - ../gitClone.sh "git@172.16.17.29:front-end/power-tools.git" "power-tools" "dev"
   only:
