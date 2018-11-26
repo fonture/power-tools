@@ -30,13 +30,14 @@ export default class Step1 extends Component {
     }
     componentWillUnmount(){
         const { address, mart, sort } = this.state;
+        const adsWord = address.map(item=> item=== '四川地区' ? 'SC': 'CQ');
         let sortValue = sort;
         if(sort !== null){
             const fistItem = this.resorts.find(item => item.categoryName === sort[0]);
             sortValue = [fistItem['categoryIdentify'], fistItem.voltageLevelVOList.find(item=>item.voltageName === sort[1])['voltageIdentify']]
         }
         
-        reduxHelper('baseMessage', {address, sort:sortValue, sortValue: sort,  mart})
+        reduxHelper('baseMessage', {address, adsWord, sort:sortValue, sortValue: sort,  mart})
     }
     resorts = [
         {
