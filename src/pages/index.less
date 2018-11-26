@@ -65,6 +65,12 @@
     }
     .formBoder{
         padding-top: 0.8em;
+        .at-input{
+            color: #fff;
+            // &::after{
+            //     border-bottom: none;
+            // }
+        }
         &:after{
             border: none;
         }
@@ -73,6 +79,8 @@
         margin-top: 2em;
         padding: 0.6em auto;
         width: 6em;
+        color: #1BDCE3;
+        background: #262828;
     }
 }
 @keyframes hideBox {
@@ -110,3 +118,9 @@
     }
 }
 
+.formContent .at-modal__container, .formContent .at-form, .formContent .at-input{
+    background-color: rgba(0,0,0,.6);
+}
+.formContent .at-modal__container{
+    border: none;
+}

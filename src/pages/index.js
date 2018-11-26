@@ -16,7 +16,7 @@ export default class Index extends Component {
       method: 'get',
       url: '/wechat/kit/thermal/price',
     });
-    console.log(data.data.thermalPrice)
+    console.log(data.thermalPrice)
     reduxHelper('firePrice', data.thermalPrice);
     this.setState({
       firePrice: data.thermalPrice,
@@ -111,6 +111,7 @@ export default class Index extends Component {
           onClose={this.handleClose}
           onCancel={this.handleClose}
           onConfirm={this.handleClose}
+          className='formContent'
         >
           <AtModalContent>
             <AtForm
