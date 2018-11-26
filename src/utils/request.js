@@ -4,6 +4,7 @@ const { baseUrl, noConsole } = config(Object.assign);
 const request_data = {};
 
 export default (options = { method: 'GET', data: {} }) => {
+  
   if (!noConsole) {
     console.log(`${new Date().toLocaleString()}【 M=${options.url} 】P=${JSON.stringify(options.data)}`);
   }

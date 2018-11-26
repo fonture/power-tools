@@ -11,8 +11,6 @@ const config = {
   },
   sourceRoot: 'src',
   outputRoot: 'dist',
-  // baseUrl: 'http://172.16.11.28:6010',
-  baseUrl: '',
   plugins: {
     babel: {
       sourceMap: true,
@@ -48,24 +46,6 @@ const config = {
     }
   },
   h5: {
-    publicPath: '/',
-    staticDirectory: 'static',
-    devServer: {
-      proxy: {
-        '/wechat': {
-          target: 'http://172.16.11.28:6010/',
-          changeOrigin: true,
-          secure: false,
-        },
-      }
-    },
-    module: {
-      postcss: {
-        autoprefixer: {
-          enable: true
-        }
-      }
-    }
   }
 }
 
