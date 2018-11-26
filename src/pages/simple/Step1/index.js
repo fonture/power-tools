@@ -5,7 +5,9 @@ import reduxHelper from '../../../utils/reduxHelper';
 
 import './index.less'
 import request from '../../../utils/request';
+import inject from '../../../utils/inject';
 
+@inject('baseMessage')
 export default class Step1 extends Component {
 
     state = {
@@ -34,7 +36,7 @@ export default class Step1 extends Component {
             sortValue = [fistItem['categoryIdentify'], fistItem.voltageLevelVOList.find(item=>item.voltageName === sort[1])['voltageIdentify']]
         }
         
-        reduxHelper('baseMessage', {address, sortValue, mart})
+        reduxHelper('baseMessage', {address, sort:sortValue, sortValue: sort,  mart})
     }
     resorts = [
         {
@@ -109,8 +111,12 @@ export default class Step1 extends Component {
     }
     
     initPicker = () => {
+        const {address='请选择地区' , sortValue= null,mart= '请选择是否参与市场'} = this.props.baseMessage;
         this.setState({
             sorts: this.formatArr(0),
+            address,
+            sort: sortValue,
+            mart,
         })
     }
 
