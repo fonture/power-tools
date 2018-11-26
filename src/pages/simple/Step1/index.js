@@ -30,7 +30,10 @@ export default class Step1 extends Component {
     }
     componentWillUnmount(){
         const { address, mart, sort } = this.state;
-        const adsWord = address.map(item=> item=== '四川地区' ? 'SC': 'CQ');
+        let adsWord = '';
+        if(address !== '请选择地区') {
+            adsWord = address.map(item=> item=== '四川地区' ? 'SC': 'CQ');
+        }
         let sortValue = sort;
         if(sort !== null){
             const fistItem = this.resorts.find(item => item.categoryName === sort[0]);
