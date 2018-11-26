@@ -1,7 +1,7 @@
 stages:
-  pull
-  dependencies
-  build
+  - pull
+  - dependencies
+  - build
   # depoly
 
 fetch_repo:
