@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:11:35 
  * @Description:未参与市场时的用电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-26 15:30:01
+ * @Last Modified time: 2018-11-26 17:13:51
  */
 
 import Taro, { Component } from '@tarojs/taro'
@@ -22,18 +22,19 @@ import reduxHelper from '../../../../utils/reduxHelper'
 import inject from '../../../../utils/inject'
 import './index.less'
 
-@inject('newestCataloguePrice')
+@inject('newestCataloguePrice', 'electricityCostData')
 export default class ElectricityCost extends Component {
     state = {
-        isOpened: false,
-        method: '用电量',
-        high: 0,
-        medium: 0,
-        low: 0,
-        yearPower: 0, 
-        averagePrice: 0
+        isOpened: this.props.electricityCostData.isOpened || false,
+        method: this.props.electricityCostData.method || '用电量',
+        high: this.props.electricityCostData.high || 0,
+        medium: this.props.electricityCostData.medium || 0,
+        low: this.props.electricityCostData.low || 0,
+        yearPower: this.props.electricityCostData.yearPower || 0,
+        averagePrice: this.props.electricityCostData.averagePrice || 0,
     }
     defaultProps = {
+        electricityCostData: {},
         newestCataloguePrice: {
             cataloguePriceVoMap: {
                 peak: {price: 0}, 
@@ -54,6 +55,8 @@ export default class ElectricityCost extends Component {
     onToggleInputMethod = () => {
         this.setState({
             isOpened: true
+        }, () => {
+            reduxHelper('electricityCostData', this.state)
         })
     }
     /**
@@ -70,6 +73,8 @@ export default class ElectricityCost extends Component {
             low: 0,
             yearPower: 0, 
             averagePrice: 0
+        }, () => {
+            reduxHelper('electricityCostData', this.state)
         })
     }
     /**
@@ -86,7 +91,10 @@ export default class ElectricityCost extends Component {
             const result = powerAveragePriceOfNotJoin(high, medium, low, peak.price, plain.price, valley.price, collectionFund)
             this.setState({
                 ...values,
-                ...result
+                ...result,
+                isOpened: false
+            }, () => {
+                reduxHelper('electricityCostData', this.state)
             })
         }
     }
@@ -108,6 +116,8 @@ export default class ElectricityCost extends Component {
         if(!isNaN(val)){
             this.setState({
                 [name]: val
+            }, () => {
+                reduxHelper('electricityCostData', this.state)
             })    
         }
     }

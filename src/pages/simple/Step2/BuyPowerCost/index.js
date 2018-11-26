@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:13:09 
  * @Description: 参与市场时的购电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-26 14:39:13
+ * @Last Modified time: 2018-11-26 17:13:33
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -20,21 +20,22 @@ import reduxHelper from '../../../../utils/reduxHelper'
 import inject from '../../../../utils/inject'
 import './index.less'
 
-@inject('newestCataloguePrice', 'newestTransmissionPrice', 'firePrice')
+@inject('newestCataloguePrice', 'newestTransmissionPrice', 'firePrice', 'buyPowerCostData')
 export default class BuyPowerCost extends Component {
     state = {
-        isOpened: false,
-        method: '年度用电量',
-        checkedList: [],
-        yearPower: 0, 
-        deviationCost: 0, 
-        signedPrice: 0, 
-        averagePrice: 0
+        isOpened: this.props.buyPowerCostData.isOpened || false,
+        method: this.props.buyPowerCostData.method || '年度用电量',
+        checkedList: this.props.buyPowerCostData.checkedList || [],
+        yearPower: this.props.buyPowerCostData.yearPower || 0, 
+        deviationCost: this.props.buyPowerCostData.deviationCost || 0, 
+        signedPrice: this.props.buyPowerCostData.signedPrice || 0, 
+        averagePrice: this.props.buyPowerCostData.averagePrice || 0
     }
     defaultProps = { 
         newestCataloguePrice: { collectionFund: 0 }, 
         newestTransmissionPrice: { price: 0 },
-        firePrice: {thermalPrice: 0}
+        firePrice: {thermalPrice: 0},
+        buyPowerCostData: {}
     }
     componentWillUnmount() {
         const { yearPower, averagePrice } = this.state
@@ -46,6 +47,8 @@ export default class BuyPowerCost extends Component {
     onToggleInputMethod = () => {
         this.setState({
             isOpened: true
+        }, () => {
+            reduxHelper('buyPowerCostData', this.state)
         })
     }
     /**
@@ -62,6 +65,8 @@ export default class BuyPowerCost extends Component {
             deviationCost: 0, 
             signedPrice: 0, 
             averagePrice: 0
+        }, () => {
+            reduxHelper('buyPowerCostData', this.state)
         })
     }
     /**
@@ -79,7 +84,7 @@ export default class BuyPowerCost extends Component {
             value = +value
             values = Object.assign({}, values, {[type]: value})
         }
-        // 如果购电均价是手动输入的，也不需要重新计算了
+        // 年度用电量需要计算。如果购电均价是手动输入的，不需要重新计算
         if(method === '年度用电量') {
             /****
              * ToDo: 根据公式计算购电均价
@@ -90,7 +95,10 @@ export default class BuyPowerCost extends Component {
         }
         
         this.setState({
-            ...values
+            ...values,
+            isOpened: false
+        }, () => {
+            reduxHelper('buyPowerCostData', this.state)
         })
     }
 
