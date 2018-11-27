@@ -7,8 +7,8 @@ import inject from '../../utils/inject'
 import { AtList, AtListItem, AtDivider, AtCurtain } from 'taro-ui';
 import './index.less'
 
-const cryImage = require('../../assets/cry.png');
-const smlieImage = require('../../assets/smile.png');
+const cryImage = require('../../assets/images/cry.png');
+const smlieImage = require('../../assets/images/smile.png');
 @inject()
 export default class Form extends Component {
     config = {

@@ -1,6 +1,6 @@
 import Taro from '@tarojs/taro';
-import config from '../../config';
-const { baseUrl, noConsole } = config(Object.assign);
+const config = require('../../config');
+const { noConsole, env } = config(Object.assign);
 const request_data = {};
 
 export default (options = { method: 'GET', data: {} }) => {

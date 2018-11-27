@@ -1,9 +1,9 @@
 module.exports = {
-  baseUrl: '',
   env: {
     NODE_ENV: '"development"'
   },
   defineConstants: {
+    baseUrl: '""',
   },
   weapp: {},
   h5: {
