@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:12:20 
  * @Description: 第二步入口文件
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-26 14:43:38
+ * @Last Modified time: 2018-11-27 08:59:11
  */
 import Taro, { Component } from '@tarojs/taro'
 import PropTypes from 'prop-types'
@@ -18,22 +18,27 @@ import './index.less'
 @inject('baseMessage')
 export default class Step2 extends Component {
     static propTypes = {
-        join: PropTypes.bool
+        baseMessage: PropTypes.object.isRequired
     }
     static defaultProps = {
-        join: true
+        baseMessage: {
+            adsWord: '',
+            mart: '',
+            sort: []
+        }
     }
     async componentDidMount() {
         this.props.onDidMount(this._rendered.dom);
+        const { adsWord, sort } = this.props.baseMessage
         
         // 请求基金
         const catalogueprice = await request({
             method: 'GET',
             url: '/wechat/kit/catalogueprice/year',
             data: {
-                tradeCenter: 'sichuan', 
-                category: 'a',
-                voltage: 'a'
+                tradeCenter: adsWord, 
+                category: sort[0],
+                voltage: sort[1]
             }
         })
         
@@ -42,9 +47,9 @@ export default class Step2 extends Component {
             method: 'GET',
             url: '/wechat/kit/transmissionprice/year',
             data: {
-                tradeCenter: 'sichuan', 
-                category: 'a',
-                voltage: 'a'
+                tradeCenter: adsWord, 
+                category: sort[0],
+                voltage: sort[1]
             }
         })
         
