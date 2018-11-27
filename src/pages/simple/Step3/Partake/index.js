@@ -18,7 +18,7 @@ import reduxHelper from '../../../../utils/reduxHelper';
 export default class Partake extends Component {
     state = {
         isOpened: false,
-        method: '用电量',
+        method: this.props.Partake.method||'用电量',
         high: this.props.Partake.high || 0,
         medium: this.props.Partake.medium || 0,
         low: this.props.Partake.low || 0,
@@ -90,6 +90,12 @@ export default class Partake extends Component {
         const { yearPower, averagePrice } = res;
         this.setState({
             averagePrice
+        })
+    }
+    handleValueChange = (...args) => {
+        const [key, value, ] = args;
+        this.setState({
+            [key]: value
         })
     }
     componentWillUnmount() {
@@ -184,7 +190,8 @@ export default class Partake extends Component {
                                             className="power-input"
                                             title="万千瓦时"
                                             border={false}
-                                            value={yearPower} />
+                                            value={yearPower}
+                                            onChange={this.handleValueChange.bind(null, 'yearPower')} />
                                     }
                                 />
                                 <AtListItem title="用电均价"
@@ -195,7 +202,8 @@ export default class Partake extends Component {
                                             className="power-input"
                                             title="元/千瓦时"
                                             border={false}
-                                            value={averagePrice} />
+                                            value={averagePrice} 
+                                            onChange={this.handleValueChange.bind(null, 'averagePrice')} />
                                     }
                                 />
                             </AtList>
