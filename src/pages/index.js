@@ -67,7 +67,7 @@ export default class Index extends Component {
     //  注意，只是点击按钮，有可能会触发不了表单提交
     //  且，小程序有可能无法通过 e.detail.value 获取值，需要设置sate取值，taro和taro ui的 bug
     console.log(e.detail.value.value);
-    reduxHelper('firePrice', e.detail.value)
+    reduxHelper('firePrice', {thermalPrice: e.detail.value});
     this.handleClose();
   }
   handleClose = ()=>{
