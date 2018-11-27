@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, ScrollView } from '@tarojs/components'
+import { View, ScrollView, AtToast } from '@tarojs/components'
 import reduxHelper from '../../utils/reduxHelper'
 import inject from '../../utils/inject'
 import { report } from '../../utils'
@@ -35,6 +35,13 @@ export default class Form extends Component {
             });
     }
     nextStep = () => {
+        if(this.state.message){
+            Taro.showToast({
+                icon: 'none',
+                title: this.state.message
+            })
+            return
+        }
         this.state.step === 3 ?
             Taro.redirectTo({ url: 'pages/result/index' }) :
             this.setState({ step: this.state.step + 1, action: 'enter' });

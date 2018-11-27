@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:11:35 
  * @Description:未参与市场时的用电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-27 09:53:14
+ * @Last Modified time: 2018-11-27 16:27:35
  */
 
 import Taro, { Component } from '@tarojs/taro'
@@ -22,7 +22,7 @@ import reduxHelper from '../../../../utils/reduxHelper'
 import inject from '../../../../utils/inject'
 import './index.less'
 
-@inject('newestCataloguePrice', 'electricityCostData')
+@inject('newestCataloguePrice', 'electricityCostData', 'setTip')
 export default class ElectricityCost extends Component {
     state = {
         isOpened: this.props.electricityCostData.isOpened || false,
@@ -32,6 +32,7 @@ export default class ElectricityCost extends Component {
         low: this.props.electricityCostData.low || 0,
         yearPower: this.props.electricityCostData.yearPower || 0,
         averagePrice: this.props.electricityCostData.averagePrice || 0,
+        tip: '请录入完整数据'
     }
     defaultProps = {
         electricityCostData: {},
@@ -84,7 +85,7 @@ export default class ElectricityCost extends Component {
      */
     onChangeValue = (type, value) => {
         const val = +value
-        const { newestCataloguePrice: {cataloguePriceVoMap: {peak, plain, valley}, collectionFund} } = this.props
+        const { newestCataloguePrice: {cataloguePriceVoMap: {peak, plain, valley}, collectionFund}, setTip } = this.props
         if(!isNaN(val)){
             const values = Object.assign({}, this.state, {[type]: val})
             const { high, medium, low } = values
@@ -92,6 +93,7 @@ export default class ElectricityCost extends Component {
             this.setState({
                 ...values,
                 ...result,
+                tip: high && medium && low && yearPower && averagePrice ? '' : '请录入完整数据',
                 isOpened: false
             }, () => {
                 reduxHelper('electricityCostData', this.state)
