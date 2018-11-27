@@ -7,7 +7,7 @@ module.exports = {
   },
   weapp: {},
   h5: {
-    publicPath: './',
+    publicPath: '/',
     staticDirectory: 'static'
   },
   noConsole: true
