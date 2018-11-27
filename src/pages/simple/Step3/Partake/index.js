@@ -12,24 +12,29 @@ import PowerProportion from '../../../../components/PowerProportion'
 import {
     powerAveragePriceOfNotJoin,
 } from '../../../../utils/formula'
-
-
+import inject from '../../../../utils/inject';
+import reduxHelper from '../../../../utils/reduxHelper';
+@inject('Partake', 'newestCataloguePrice', 'firePrice')
 export default class Partake extends Component {
     state = {
         isOpened: false,
         method: '用电量',
-        high: 0,
-        medium: 0,
-        low: 0,
+        high: this.props.Partake.high || 0,
+        medium: this.props.Partake.medium || 0,
+        low: this.props.Partake.low || 0,
         highPrice: 0.8234,
         mediumPrice: 0.5234,
         lowPrice: 0.3324,
-        basePrice: 0.0324,
-        averagePrice: 0,
-        yearPower: 0
+        averagePrice: this.props.Partake.averagePrice || 0,
+        yearPower: this.props.Partake.yearPower || 0
     }
     componentDidMount() {
-
+        const { thermalPrice } = this.props.firePrice;
+        if (!thermalPrice) {
+            Taro.redirectTo({
+                url: 'pages/index'
+            });
+        }
     }
     /**
      * @description 点击输入方式时显示底部活动页
@@ -44,14 +49,14 @@ export default class Partake extends Component {
      * @param {Object} e 事件对象
      */
     onClickSheet = (e) => {
-        if(this.state.method === e.target.innerHTML) return
+        if (this.state.method === e.target.innerHTML) return
         this.setState({
             method: e.target.innerHTML,
             isOpened: false,
             high: 0,
             medium: 0,
             low: 0,
-            yearPower: 0, 
+            yearPower: 0,
             averagePrice: 0
         })
     }
@@ -62,26 +67,36 @@ export default class Partake extends Component {
      */
     onChangeValue = (type, value) => {
         value = +value
-        if(!isNaN(value)){
-            const values = Object.assign({}, this.state, {[type]: value})
-            const { high, medium, low, highPrice, mediumPrice, lowPrice } = values
+        if (!isNaN(value)) {
+            const { isOpened, ...state } = this.state;
+            const values = Object.assign({}, state, { [type]: value })
+            const { high, medium, low } = values;
+            const { cataloguePriceVoMap, collectionFund } = this.props.newestCataloguePrice;
+            const { peak, plain, valley } = cataloguePriceVoMap
+            let highPrice = peak.price,
+                mediumPrice = plain.price,
+                lowPrice = valley.price
             const result = powerAveragePriceOfNotJoin(high, medium, low, highPrice, mediumPrice, lowPrice, 0.5423)
             this.setState({
                 ...values,
-                ...result
+                ...result,
+                isOpened: false
             })
         }
     }
     getCompData = () => {
-        const {high, medium, low,highPrice, mediumPrice, lowPrice} = this.state;
+        const { high, medium, low, highPrice, mediumPrice, lowPrice } = this.state;
         let res = powerAveragePriceOfNotJoin(high, medium, low, highPrice, mediumPrice, lowPrice, 1);
-        const {yearPower, averagePrice} = res;
+        const { yearPower, averagePrice } = res;
         this.setState({
             averagePrice
         })
     }
+    componentWillUnmount() {
+        reduxHelper('Partake', { ...this.state })
+    }
     render() {
-        const { high, medium, low, highPrice, mediumPrice, lowPrice, method, basePrice, yearPower, averagePrice } = this.state
+        const { high, medium, low, highPrice, mediumPrice, lowPrice, method, yearPower, averagePrice } = this.state
         const items = [
             {
                 percent: yearPower && (high * 100 / yearPower).toFixed(2) + '%',
@@ -168,8 +183,8 @@ export default class Partake extends Component {
                                             type="number"
                                             className="power-input"
                                             title="万千瓦时"
-                                            border={false} 
-                                            value={yearPower}/>
+                                            border={false}
+                                            value={yearPower} />
                                     }
                                 />
                                 <AtListItem title="用电均价"

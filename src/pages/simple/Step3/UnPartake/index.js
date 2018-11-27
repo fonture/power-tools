@@ -12,7 +12,7 @@ import {
 } from '../../../../utils/formula';
 import inject from '../../../../utils/inject'
 import reduxHelper from '../../../../utils/reduxHelper'
-@inject('unPartake')
+@inject('unPartake', 'firePrice', 'newestTransmissionPrice', 'newestCataloguePrice')
 export default class UnPartake extends Component {
     state = {
         checkedList: this.props.unPartake.checkedList || [],
@@ -28,7 +28,14 @@ export default class UnPartake extends Component {
         }
     ]
     componentDidMount() {
-        this.getAvPrice();
+        const { thermalPrice } = this.props.firePrice;
+        if (thermalPrice) {
+            this.getAvPrice();
+        } else {
+            Taro.redirectTo({
+                url: 'pages/index'
+            });
+        }
     }
     handleCheckBoxChange = () => {
         this.setState({
@@ -42,11 +49,14 @@ export default class UnPartake extends Component {
         }, this.getAvPrice)
     }
     getAvPrice = () => {
+        const { price } = this.props.newestTransmissionPrice;
+        const { thermalPrice } = this.props.firePrice;
+        const { collectionFund } = this.props.newestCataloguePrice;
         let avPrice;
         if (this.state.checkedList.length > 0) {
-            avPrice = getAllWaterAvPriceOfElePur(this.state.waterPrice, 1, 1)
+            avPrice = getAllWaterAvPriceOfElePur(this.state.waterPrice, price, collectionFund)
         } else {
-            avPrice = getAvPriceOfElePur(this.state.waterPrice, 1, 1, 1)
+            avPrice = getAvPriceOfElePur(this.state.waterPrice, thermalPrice, price, collectionFund)
         }
         this.setState({
             avPrice
