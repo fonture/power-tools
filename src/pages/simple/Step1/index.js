@@ -32,7 +32,7 @@ export default class Step1 extends Component {
         const { address, mart, sort } = this.state;
         let adsWord = '';
         if(address !== '请选择地区') {
-            adsWord = address.map(item=> item=== '四川地区' ? 'SC': 'CQ');
+            adsWord =  address=== '四川地区' ? 'SC': 'CQ';
         }
         let sortValue = sort;
         if(sort !== null){
