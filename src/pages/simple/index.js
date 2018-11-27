@@ -27,7 +27,7 @@ export default class Form extends Component {
 
     preStep = () => {
         this.state.step === 1 ?
-            Taro.redirectTo({ url: 'pages/index/index' }) :
+            Taro.redirectTo({ url: 'pages/index' }) :
             this.setState({ step: this.state.step - 1, action: 'back' }, () => {
                 this.state.step === 1
                 ? reduxHelper('stepInfo', { current: 0, items: ['基础信息', '第二步', '第三步'] })

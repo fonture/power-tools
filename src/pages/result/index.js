@@ -5,7 +5,6 @@ import Proportion from '../../components/Proportion';
 import reduxHelper from '../../utils/reduxHelper'
 import inject from '../../utils/inject'
 import { AtList, AtListItem, AtDivider, AtCurtain } from 'taro-ui';
-import html2canvas from 'html2canvas';
 import './index.less'
 
 const cryImage = require('../../assets/cry.png');
@@ -14,14 +13,6 @@ const smlieImage = require('../../assets/smile.png');
 export default class Form extends Component {
     config = {
         navigationBarTitleText: '结果页'
-    }
-    state = {
-        isOpened: false
-    }
-    onClose = () => {
-        this.setState({
-            isOpened: false
-        })
     }
     tryAgain = () => {
         Taro.redirectTo({ url: 'pages/index' })

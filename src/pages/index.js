@@ -16,6 +16,7 @@ export default class Index extends Component {
       method: 'get',
       url: '/wechat/kit/thermal/price',
     });
+    debugger
     reduxHelper('firePrice', data.thermalPrice||0.4025);
     this.setState({
       firePrice: data.thermalPrice,
@@ -66,7 +67,6 @@ export default class Index extends Component {
   handleSubmit = (e)=> {
     //  注意，只是点击按钮，有可能会触发不了表单提交
     //  且，小程序有可能无法通过 e.detail.value 获取值，需要设置sate取值，taro和taro ui的 bug
-    console.log(e.detail.value.value);
     reduxHelper('firePrice', e.detail.value)
     this.handleClose();
   }
