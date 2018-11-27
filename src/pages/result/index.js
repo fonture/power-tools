@@ -24,23 +24,20 @@ export default class Form extends Component {
         return (
             <View className='result page'>
                 <View className='result-wrp'>
-                    <View>
-                        <Text>根据您提供的数据，分析结果为</Text>
-                        <img src={smlieImage} />
-                        <h3>参与市场化交易很划算！</h3>
+                    <View className="result-header">
+                        <Text className="title">根据您提供的数据，分析结果为</Text>
+                        <img src={cryImage} className="result-img"/>
+                        <h3>不建议参加市场化交易</h3>
                     </View>
-                    <AtDivider />
-                    <View>
-                        <AtList hasBorder={false}>
+                    <View className="card">
+                        <AtList>
                             <AtListItem
                                 extraText="0.01204元"
                                 title='平均每度电节约'
-                                hasBorder={false}
                             />
                             <AtListItem
                                 extraText="241021元"
                                 title='预计节约年度电费'
-                                hasBorder={false}
                             />
                             <AtListItem
                                 extraText="50万千瓦时"

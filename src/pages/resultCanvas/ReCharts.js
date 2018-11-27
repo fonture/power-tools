@@ -57,10 +57,6 @@ class Charts extends Component {
         return (
             <View>
                 <div ref={this.refEl} style={{ width: '100%', height: '300px' }} />
-                <View className="legend at-row" style={{ textAlign: 'center' }}>
-                    <View className="at-col at-col-5 at-col__offset-1"><span style={{ background: '#3dcca6' }}></span>实际电量</View>
-                    <View className="at-col at-col-5 at-col__offset-1"><span style={{ background: '#4a9df2' }}></span>预测电量</View>
-                </View>
             </View>
         )
     }
@@ -71,58 +67,90 @@ export default class ReCharts extends Component {
     getOption = () => {
         return {
             title: {
-                text: '年度购电量曲线',
-                left: 'center'
+                text: '年度购电量曲线：',
+                textStyle: {
+                    color: '#fff',
+                    fontSize: '13',
+                    fontWeight: 400                    
+                },
+                left: '15px'
             },
             animation: false,
-            tooltip: {
-                trigger: 'axis'
+            legend: {
+                type: 'plain',
+                textStyle: {
+                    color: '#B5BBC8'
+                },
+                top: '28px',
+                right: '50px'
             },
             grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
+                show: false,
+                x: 50
             },
             xAxis: {
                 type: 'category',
                 boundaryGap: false,
-                data: ['1月', '4月', '7月', '10月'],
+                data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
                 axisTick: {
                     show: false
-                }
+                },
+                axisLine: {
+                    show: false
+                },
+                axisLabel: {
+                    color:'#80899C'
+                },
+                boundaryGap: ['8%',0]
             },
             yAxis: {
                 type: 'value',
+                axisLine:{
+                    lineStyle:{
+                        color: '#80899C'
+                    }
+                },
                 axisTick: {
+                    inside: true,
+                    length: 3
+                },
+                axisLabel: {
+                    color:'#80899C'
+                },
+                splitLine: {
                     show: false
-                }
+                },
+                name: '(万千瓦时)'
             },
             series: [
                 {
                     name: '实际电量',
                     type: 'line',
                     stack: '总量',
-                    data: [120, 132, 101, 134,],
+                    data: [120, 132, 101, 134,120, 132, 101, 134,120, 132, 101, 134],
                     lineStyle: {
                         color: '#3dcca6',
-                        width: 3
+                        width: 1
                     },
+                    symbol: 'circle',
                     itemStyle: {
-                        opacity: 0
+                        color: '#3dcca6',
+                        borderColor: '#3dcca6'
                     }
                 },
                 {
                     name: '预计电量',
                     type: 'line',
                     stack: '总量',
-                    data: [220, 182, 191, 234, 290],
+                    data: [220, 182, 191, 234, 290,220, 182, 191, 234, 290,220, 182, 191, 234, 290],
                     lineStyle: {
                         color: '#4a9df2',
-                        width: 3
+                        width: 1
                     },
+                    symbol: 'circle',
                     itemStyle: {
-                        opacity: 0
+                        color: '#4a9df2',
+                        borderColor: '#4a9df2'
                     }
                 }
             ]
