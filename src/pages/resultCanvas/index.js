@@ -19,12 +19,12 @@ export default class Form extends Component {
         Taro.redirectTo({ url: 'pages/result/index' })
     }
     componentDidMount() {
-        // let resultWrp = document.getElementsByClassName('result-wrp')[0];
-        // html2canvas(resultWrp).then(canvas => {
-        //     resultWrp.style.padding = 0;
-        //     resultWrp.innerHTML = '';
-        //     resultWrp.appendChild(canvas);
-        // });
+        let resultWrp = document.getElementsByClassName('result-wrp')[0];
+        html2canvas(resultWrp).then(canvas => {
+            resultWrp.style.padding = 0;
+            resultWrp.innerHTML = '';
+            resultWrp.appendChild(canvas);
+        });
     }
     render() {
         return (
@@ -119,7 +119,7 @@ export default class Form extends Component {
                                     <p>由<Text className="blue">BABC售电公司</Text>提供本方案</p>
                                 </View>
                                 <View className='at-col at-col-5'>
-
+                                    <img src={require('../../assets/erweima.png')} className="erweima" />
                                 </View>
                             </View>
                         </View>
