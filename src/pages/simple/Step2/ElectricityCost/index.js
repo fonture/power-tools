@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:11:35 
  * @Description:未参与市场时的用电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-26 17:13:51
+ * @Last Modified time: 2018-11-27 09:53:14
  */
 
 import Taro, { Component } from '@tarojs/taro'
@@ -143,7 +143,7 @@ export default class ElectricityCost extends Component {
             <View className="electricity-cost">
 
                 {/* 选择输入方式 */}
-                <AtList className="input-method">
+                <AtList className="card-group input-method">
                     <AtListItem title="输入方式" arrow='right' extraText={this.state.method} onClick={this.onToggleInputMethod}/>
                 </AtList>
 
@@ -162,6 +162,7 @@ export default class ElectricityCost extends Component {
                     ? <View>
                         {/* 峰平谷比例 */}
                         <AtCard
+                            className="card-group"
                             title="峰平谷比例"
                             isFull
                         >
@@ -176,12 +177,12 @@ export default class ElectricityCost extends Component {
                         </AtCard>
 
                         {/* 展示年度电量与用电均价 */}
-                        <AtList className="power-result-list">
+                        <AtList className="card-group power-result-list">
                             <AtListItem title="年度用电量" extraText={<span>{yearPower ? yearPower : ''}<span className="power-result-unit">万千瓦时</span></span>} />
                             <AtListItem title="用电均价" extraText={<span>{averagePrice ? averagePrice : ''}<span className="power-result-unit">元/千瓦时</span></span>} />
                         </AtList>
                     </View>
-                    : <AtList className="power-input-self">
+                    : <AtList className="card-group power-input-self">
                         <AtListItem title="年度用电量"  onClick={this.onListClick}
                             extraText={
                                 <View className="at-row at-row__justify--center at-row__align--center">
