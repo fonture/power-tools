@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:13:09 
  * @Description: 参与市场时的购电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-26 17:13:33
+ * @Last Modified time: 2018-11-27 09:53:44
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -126,7 +126,7 @@ export default class BuyPowerCost extends Component {
             <View className="buy-power-cost">
 
                 {/* 选择输入方式 */}
-                <AtList className="input-method">
+                <AtList className="card-group input-method">
                     <AtListItem title="输入方式" arrow='right' extraText={this.state.method} onClick={this.onToggleInputMethod}/>
                 </AtList>
 
@@ -144,7 +144,7 @@ export default class BuyPowerCost extends Component {
                     method === '年度用电量'
                     // 年度用电量
                     ? <View>
-                        <AtList className="power-input-list">
+                        <AtList className="card-group power-input-list">
                             <AtListItem title="年度用电量" onClick={this.onListClick}
                                 extraText={
                                     <View className="at-row at-row__justify--center at-row__align--center">
@@ -170,7 +170,7 @@ export default class BuyPowerCost extends Component {
                                 } 
                             />
                         </AtList>
-                        <AtList className="power-result-list">
+                        <AtList className="card-group power-result-list">
                             <AtCheckbox
                                 options={[{
                                     value: 'joinAllPower',
@@ -185,7 +185,7 @@ export default class BuyPowerCost extends Component {
                         </AtList>
                     </View>
                     // 购电均价
-                    : <AtList className="power-input-self">
+                    : <AtList className="card-group power-input-self">
                         <AtListItem title="年度用电量" onClick={this.onListClick}
                             extraText={
                                 <View className="at-row at-row__justify--center at-row__align--center">
