@@ -45,4 +45,21 @@
     .at-list__item-extra{
         flex: 1;
     }
+
+    /*列表右侧附加信息的内容太长会显示省略号，需要手动修改*/
+    .at-list__item .item-extra__info {
+        text-overflow: initial;
+        max-width: initial;
+        width: 100%;
+    }
+    .at-list__item::after {
+        left: 0;
+    }
+    .at-list__item:active{
+        background: transparent;
+    }
+    // 强制不换行
+    .at-list__item-extra{
+        white-space: nowrap;
+    }
 }
