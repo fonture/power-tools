@@ -1,13 +1,13 @@
 module.exports = {
   env: {
     NODE_ENV: '"production"',
+    baseUrl: 'http://172.16.11.28:6010"',
   },
   defineConstants: {
-    baseUrl: '"http://172.16.11.28:6010"',
   },
   weapp: {},
   h5: {
-    publicPath: './',
+    publicPath: '/',
     staticDirectory: 'static'
   },
   noConsole: true

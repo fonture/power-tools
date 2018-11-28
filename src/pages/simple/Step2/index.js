@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:12:20 
  * @Description: 第二步入口文件
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-27 08:59:11
+ * @Last Modified time: 2018-11-28 09:21:24
  */
 import Taro, { Component } from '@tarojs/taro'
 import PropTypes from 'prop-types'

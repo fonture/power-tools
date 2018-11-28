@@ -1,57 +1,97 @@
-/*列表右侧附加信息的内容太长会显示省略号，需要手动修改*/
-.at-list__item .item-extra__info {
-    text-overflow: initial;
-}
-.at-list__item::after {
-    left: 0;
-}
-.at-list__item:active{
-    background: transparent;
-}
-// 强制不换行
-.at-list__item-extra{
-    white-space: nowrap;
-}
-.at-list__item-content {
-    flex: none;
-}
-.at-checkbox__icon{
-    border: 0.04267rem solid #1BDCE3;
-}
-.at-checkbox__icon--selected{
-    background-color: #313131;
-    .at-icon{
-        color: #28EA76 !important;
+
+.power-cost {
+    /*列表右侧附加信息的内容太长会显示省略号，需要手动修改*/
+    .at-list__item .item-extra__info {
+        text-overflow: initial;
+        max-width: initial;
+        width: 90%;
     }
-}
-.at-checkbox__title{
-    color: #494E54;
-}
-.card-group
-{
-    color: #494E54;
-    border: none;
-    box-shadow: 0 4px 8px -4px rgba(0,0,0,0.19);
-    .at-card-header{
-        border: none;
-        &::after{
-            content: '';
-            position: absolute;
-            transform-origin: center;
-            box-sizing: border-box;
-            pointer-events: none;
-            top: -50%;
-            left: -50%;
-            right: -50%;
-            bottom: -50%;
-            border: 0 solid #DCDCDC;
-            transform: scale(0.5);
-            border-top-width: 1PX;
-            border-bottom-width: 1PX;
+    .at-list__item::after {
+        left: 0;
+    }
+    .at-list__item:active{
+        background: transparent;
+    }
+    /* 强制不换行 */
+    .at-list__item-extra{
+        white-space: nowrap;
+        flex: 1;
+    }
+
+    .item-content__info-title{
+        font-size: 28px;
+        color: #494E54;
+    }
+
+    .at-checkbox__title{
+        color: #494E54;
+    }
+
+    .at-list__item-content {
+        flex: none;
+    }
+
+    /*复选框样式*/
+    .at-checkbox__icon{
+        border: 0.04267rem solid #1BDCE3;
+    }
+    .at-checkbox__icon--selected{
+        background-color: #313131;
+        border: 0.04267rem solid #1BDCE3;
+        .at-icon{
+            color: #28EA76 !important;
         }
     }
-}
-.item-content__info-title{
-    font-size: 14pt;
-    color: #494E54;
+
+    .card-group{
+        color: #494E54;
+        border: none;
+        box-shadow: 0 4px 8px -4px rgba(0,0,0,0.19);
+        .at-card-header{
+            border: none;
+            &::after{
+                content: '';
+                position: absolute;
+                transform-origin: center;
+                box-sizing: border-box;
+                pointer-events: none;
+                top: -50%;
+                left: -50%;
+                right: -50%;
+                bottom: -50%;
+                border: 0 solid #DCDCDC;
+                transform: scale(0.5);
+                border-top-width: 1PX;
+                border-bottom-width: 1PX;
+            }
+        }
+    }
+
+    /*输入方式*/
+    .input-method{
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    /*输入框样式*/
+    .power-input{
+        padding: 0;
+        margin: 0 auto;
+        width: 100%;
+        input{
+            text-align: right;
+            font-size: 28px;
+            color: #494E54;
+        }
+    }
+    /*总电量、电价列表样式*/
+    .power-input-list, .power-result-list {
+        margin-top: 20px;
+    }
+    /*年度用电量、用电均价单位样式*/
+    .power-result-unit {
+        margin-left: 10px;
+        color: #919191;
+        font-size: 28px;
+    }
+    
 }

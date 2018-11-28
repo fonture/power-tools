@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:13:09 
  * @Description: 参与市场时的购电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-27 09:53:44
+ * @Last Modified time: 2018-11-28 09:39:03
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -29,7 +29,8 @@ export default class BuyPowerCost extends Component {
         yearPower: this.props.buyPowerCostData.yearPower || 0, 
         deviationCost: this.props.buyPowerCostData.deviationCost || 0, 
         signedPrice: this.props.buyPowerCostData.signedPrice || 0, 
-        averagePrice: this.props.buyPowerCostData.averagePrice || 0
+        averagePrice: this.props.buyPowerCostData.averagePrice || 0,
+        tip: '请录入完整数据'
     }
     defaultProps = { 
         newestCataloguePrice: { collectionFund: 0 }, 
@@ -96,9 +97,14 @@ export default class BuyPowerCost extends Component {
         
         this.setState({
             ...values,
+            tip: yearPower && values.averagePrice && deviationCost && signedPrice ? '' : '请录入完整数据',
             isOpened: false
         }, () => {
             reduxHelper('buyPowerCostData', this.state)
+            const { yearPower, averagePrice, deviationCost, signedPrice } = this.state
+            if(!yearPower || !deviationCost || !signedPrice || !averagePrice){
+                setTip.fun('请录入完整数据')
+            }
         })
     }
 
@@ -123,7 +129,7 @@ export default class BuyPowerCost extends Component {
         const { method, yearPower, deviationCost, signedPrice, averagePrice} = this.state
 
         return (
-            <View className="buy-power-cost">
+            <View className="power-cost">
 
                 {/* 选择输入方式 */}
                 <AtList className="card-group input-method">
