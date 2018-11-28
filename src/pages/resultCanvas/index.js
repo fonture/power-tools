@@ -26,7 +26,7 @@ export default class Form extends Component {
             resultWrp.appendChild(canvas);
         });
     }
-    render() {
+    render() { 
         return (
             <ScrollView className='result page'>
                 <AtIcon className="close"

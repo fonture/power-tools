@@ -19,7 +19,7 @@ install_deps:
   only:
     - dev
   script:
-    cd /var/www/power-tools/power-tools
+    - cd /var/www/power-tools/power-tools
     - yarn install
   except:
     - triggers
@@ -29,7 +29,7 @@ build:
   only:
     - dev
   script:
-    cd /var/www/power-tools/power-tools
+    - cd /var/www/power-tools/power-tools
     - yarn run build:h5
   except:
     - triggers
