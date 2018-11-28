@@ -3,7 +3,7 @@
  * @Date: 2018-11-20 15:04:11 
  * @Description: 输入峰平谷单个组件
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-28 14:11:51
+ * @Last Modified time: 2018-11-28 19:18:12
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -22,7 +22,7 @@ export default class PowerProportion extends Component {
                         <AtInput 
                             type="number"
                             className="power-input" 
-                            value={value ? value : ''} 
+                            value={value} 
                             onChange={(value) => {
                                 let type = 'high'
                                 switch(itemName) {
