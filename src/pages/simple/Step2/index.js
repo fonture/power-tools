@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:12:20 
  * @Description: 第二步入口文件
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-28 09:21:24
+ * @Last Modified time: 2018-11-28 17:11:42
  */
 import Taro, { Component } from '@tarojs/taro'
 import PropTypes from 'prop-types'
@@ -31,7 +31,7 @@ export default class Step2 extends Component {
         this.props.onDidMount(this._rendered.dom);
         const { adsWord, sort } = this.props.baseMessage
         
-        // 请求基金
+        // 请求基金、峰平谷电价
         const catalogueprice = await request({
             method: 'GET',
             url: '/wechat/kit/catalogueprice/year',

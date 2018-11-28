@@ -80,7 +80,7 @@ export function powerAveragePriceOfJoin(firePrice, transmissionPrice, collection
  * @param {Float} collectionFund 基金
  * @returns 年度用电量、用电均价
  */
-export function powerAveragePriceOfNotJoin(high, medium, low, highPrice, mediumPrice, lowPrice, collectionFund) {
+export function powerAveragePriceOfNotJoin(high = 0, medium = 0, low = 0, highPrice, mediumPrice, lowPrice, collectionFund) {
     const yearPower = high + medium + low
     if(!yearPower) return { yearPower, averagePrice }
     let averagePrice = ((high * highPrice + medium * mediumPrice + low * lowPrice) / yearPower + collectionFund)

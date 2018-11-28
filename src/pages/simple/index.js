@@ -3,14 +3,15 @@ import { View, ScrollView, AtToast } from '@tarojs/components'
 import reduxHelper from '../../utils/reduxHelper'
 import inject from '../../utils/inject'
 import { report } from '../../utils'
-import Steps from '../../components/steps'
+import Steps from '../../components/Steps'
 import Button from '../../components/Button'
 import './index.less'
 import TaroAmin from '../../components/taro-amin'
 import Step1 from './Step1';
 import Step2 from './Step2';
 import Step3 from './Step3';
-@inject('stepInfo', 'baseMessage', 'electricityCostData', 'buyPowerCostData')
+
+@inject('stepInfo', 'baseMessage')
 export default class Form extends Component {
 
     config = {
@@ -35,22 +36,8 @@ export default class Form extends Component {
             });
     }
     nextStep = () => {
-        const {baseMessage, electricityCostData, buyPowerCostData} = this.props
+        const {baseMessage} = this.props
         const { step } = this.state
-        // 如果当前是第二步，取对应数据集中的提示信息判断，如果不为空则显示轻提示
-        if(step === 2 && baseMessage.mart === '参与' && buyPowerCostData.tip !== '') {
-            Taro.showToast({
-                icon: 'none',
-                title: buyPowerCostData.tip
-            })
-            return
-        }else if(step === 2 && baseMessage.mart === '未参与' && electricityCostData.tip !== '') {
-            Taro.showToast({
-                icon: 'none',
-                title: electricityCostData.tip
-            })
-            return
-        }
         step === 3 ?
             Taro.redirectTo({ url: 'pages/result/index' }) :
             this.setState({ step: step + 1, action: 'enter' });

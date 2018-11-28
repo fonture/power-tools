@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:11:35 
  * @Description:未参与市场时的用电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-28 11:36:05
+ * @Last Modified time: 2018-11-28 14:12:11
  */
 
 import Taro, { Component } from '@tarojs/taro'
@@ -88,7 +88,7 @@ export default class ElectricityCost extends Component {
      */
     onChangeValue = (type, value) => {
         const val = +value
-        const { newestCataloguePrice: {cataloguePriceVoMap: {peak, plain, valley}, collectionFund}, setTip } = this.props
+        const { newestCataloguePrice: {cataloguePriceVoMap: {peak, plain, valley}, collectionFund} } = this.props
         if(!isNaN(val)){
             const values = Object.assign({}, this.state, {[type]: val})
             const { high, medium, low } = values
@@ -177,7 +177,7 @@ export default class ElectricityCost extends Component {
                             {
                                 items.map(item => {
                                     const { percent, value, itemName } = item
-                                    return <PowerProportion percent={percent} value={value} itemName={itemName} onChangeValue={this.onChangeValue.bind(this)}/>
+                                    return <PowerProportion percent={percent} value={value} itemName={itemName} showPercent={true} onChangeValue={this.onChangeValue.bind(this)}/>
                                 })
                             }    
                             </View>
