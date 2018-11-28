@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:13:09 
  * @Description: 参与市场时的购电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-27 16:30:18
+ * @Last Modified time: 2018-11-28 09:39:03
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -129,7 +129,7 @@ export default class BuyPowerCost extends Component {
         const { method, yearPower, deviationCost, signedPrice, averagePrice} = this.state
 
         return (
-            <View className="buy-power-cost">
+            <View className="power-cost">
 
                 {/* 选择输入方式 */}
                 <AtList className="card-group input-method">

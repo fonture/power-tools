@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:11:35 
  * @Description:未参与市场时的用电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-27 16:43:59
+ * @Last Modified time: 2018-11-28 09:23:22
  */
 
 import Taro, { Component } from '@tarojs/taro'
@@ -142,7 +142,7 @@ export default class ElectricityCost extends Component {
             }
         ]
         return (
-            <View className="electricity-cost">
+            <View className="power-cost electricity-cost">
 
                 {/* 选择输入方式 */}
                 <AtList className="card-group input-method">
