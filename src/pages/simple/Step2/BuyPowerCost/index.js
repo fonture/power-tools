@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:13:09 
  * @Description: 参与市场时的购电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-28 09:39:03
+ * @Last Modified time: 2018-11-28 11:14:23
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -86,25 +86,23 @@ export default class BuyPowerCost extends Component {
             values = Object.assign({}, values, {[type]: value})
         }
         // 年度用电量需要计算。如果购电均价是手动输入的，不需要重新计算
+        let tip = ''
         if(method === '年度用电量') {
-            /****
-             * ToDo: 根据公式计算购电均价
-             */
+            // 计算均价
             const { yearPower, deviationCost, signedPrice } = values
-            
             values.averagePrice = powerAveragePriceOfJoin(thermalPrice, price, collectionFund, yearPower, deviationCost, signedPrice, checkedList.length)
+            tip = yearPower && values.averagePrice && deviationCost && signedPrice ? '' : '请录入完整数据'
+        } else {
+            const { yearPower, averagePrice } = values
+            tip = yearPower && averagePrice ? '' : '请录入完整数据'
         }
         
         this.setState({
             ...values,
-            tip: yearPower && values.averagePrice && deviationCost && signedPrice ? '' : '请录入完整数据',
+            tip,
             isOpened: false
         }, () => {
             reduxHelper('buyPowerCostData', this.state)
-            const { yearPower, averagePrice, deviationCost, signedPrice } = this.state
-            if(!yearPower || !deviationCost || !signedPrice || !averagePrice){
-                setTip.fun('请录入完整数据')
-            }
         })
     }
 

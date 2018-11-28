@@ -10,7 +10,7 @@ import TaroAmin from '../../components/taro-amin'
 import Step1 from './Step1';
 import Step2 from './Step2';
 import Step3 from './Step3';
-@inject('stepInfo', 'baseMessage')
+@inject('stepInfo', 'baseMessage', 'electricityCostData', 'buyPowerCostData')
 export default class Form extends Component {
 
     config = {
@@ -35,17 +35,26 @@ export default class Form extends Component {
             });
     }
     nextStep = () => {
-        if(this.state.message){
+        const {baseMessage, electricityCostData, buyPowerCostData} = this.props
+        const { step } = this.state
+        // 如果当前是第二步，取对应数据集中的提示信息判断，如果不为空则显示轻提示
+        if(step === 2 && baseMessage.mart === '参与' && buyPowerCostData.tip !== '') {
             Taro.showToast({
                 icon: 'none',
-                title: this.state.message
+                title: buyPowerCostData.tip
+            })
+            return
+        }else if(step === 2 && baseMessage.mart === '未参与' && electricityCostData.tip !== '') {
+            Taro.showToast({
+                icon: 'none',
+                title: electricityCostData.tip
             })
             return
         }
-        this.state.step === 3 ?
+        step === 3 ?
             Taro.redirectTo({ url: 'pages/result/index' }) :
-            this.setState({ step: this.state.step + 1, action: 'enter' });
-        reduxHelper('stepInfo', { current: this.state.step, items: this.props.baseMessage.mart === '参与' ? ['基础信息', '购电成本', '目录电价'] : ['基础信息', '用电成本', '购电计算']})
+            this.setState({ step: step + 1, action: 'enter' });
+        reduxHelper('stepInfo', { current: step, items: baseMessage.mart === '参与' ? ['基础信息', '购电成本', '目录电价'] : ['基础信息', '用电成本', '购电计算']})
     }
     render() {
         const { stepInfo } = this.props

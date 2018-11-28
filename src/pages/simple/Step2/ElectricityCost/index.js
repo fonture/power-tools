@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:11:35 
  * @Description:未参与市场时的用电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-28 09:23:22
+ * @Last Modified time: 2018-11-28 11:02:58
  */
 
 import Taro, { Component } from '@tarojs/taro'
@@ -93,7 +93,7 @@ export default class ElectricityCost extends Component {
             this.setState({
                 ...values,
                 ...result,
-                tip: high && medium && low && values.yearPower && values.averagePrice ? '' : '请录入完整数据',
+                tip: high && medium && low ? '' : '请录入完整数据',
                 isOpened: false
             }, () => {
                 reduxHelper('electricityCostData', this.state)
@@ -115,9 +115,11 @@ export default class ElectricityCost extends Component {
      */
     onInput = (name, value) => {
         const val = +value
+        const values = Object.assign({}, this.state, {[name]: val})
         if(!isNaN(val)){
             this.setState({
-                [name]: val
+                ...values,
+                tip: values.yearPower && values.averagePrice ? '' : '请录入完整数据'
             }, () => {
                 reduxHelper('electricityCostData', this.state)
             })    
