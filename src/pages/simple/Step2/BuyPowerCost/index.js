@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:13:09 
  * @Description: 参与市场时的购电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-28 19:09:51
+ * @Last Modified time: 2018-11-28 19:46:56
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -26,10 +26,10 @@ export default class BuyPowerCost extends Component {
         isOpened: this.props.buyPowerCostData.isOpened || false,
         method: this.props.buyPowerCostData.method || '年度用电量',
         checkedList: this.props.buyPowerCostData.checkedList || [],
-        yearPower: this.props.buyPowerCostData.yearPower || 0, 
-        deviationCost: this.props.buyPowerCostData.deviationCost || 0, 
-        signedPrice: this.props.buyPowerCostData.signedPrice || 0, 
-        averagePrice: this.props.buyPowerCostData.averagePrice || 0,
+        yearPower: this.props.buyPowerCostData.yearPower || '', 
+        deviationCost: this.props.buyPowerCostData.deviationCost || '', 
+        signedPrice: this.props.buyPowerCostData.signedPrice || '', 
+        averagePrice: this.props.buyPowerCostData.averagePrice || '',
     }
     defaultProps = { 
         newestCataloguePrice: { collectionFund: 0 }, 
@@ -64,10 +64,10 @@ export default class BuyPowerCost extends Component {
             method: e.target.innerHTML,
             isOpened: false,
             checkedList: [],
-            yearPower: 0, 
-            deviationCost: 0, 
-            signedPrice: 0, 
-            averagePrice: 0
+            yearPower: '', 
+            deviationCost: '', 
+            signedPrice: '', 
+            averagePrice: ''
         }, () => {
             reduxHelper('buyPowerCostData', this.state)
         })
@@ -90,8 +90,10 @@ export default class BuyPowerCost extends Component {
         // 年度用电量需要计算。如果购电均价是手动输入的，不需要重新计算
         if(method === '年度用电量') {
             // 计算均价
-            const { yearPower, deviationCost, signedPrice } = values
-            
+            let { yearPower, deviationCost, signedPrice } = values
+            yearPower = yearPower === '' ? 0 : yearPower
+            deviationCost = deviationCost === '' ? 0 : deviationCost
+            signedPrice = signedPrice === '' ? 0 : signedPrice
             values.averagePrice = powerAveragePriceOfJoin(thermalPrice, price, collectionFund, yearPower, deviationCost, signedPrice, checkedList.length)
         }
         

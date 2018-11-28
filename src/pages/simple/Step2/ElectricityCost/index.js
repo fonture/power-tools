@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:11:35 
  * @Description:未参与市场时的用电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-28 19:01:15
+ * @Last Modified time: 2018-11-28 19:39:57
  */
 
 import Taro, { Component } from '@tarojs/taro'
@@ -27,11 +27,11 @@ export default class ElectricityCost extends Component {
     state = {
         isOpened: this.props.electricityCostData.isOpened || false,
         method: this.props.electricityCostData.method || '用电量',
-        high: this.props.electricityCostData.high || 0,
-        medium: this.props.electricityCostData.medium || 0,
-        low: this.props.electricityCostData.low || 0,
-        yearPower: this.props.electricityCostData.yearPower || 0,
-        averagePrice: this.props.electricityCostData.averagePrice || 0,
+        high: this.props.electricityCostData.high || '',
+        medium: this.props.electricityCostData.medium || '',
+        low: this.props.electricityCostData.low || '',
+        yearPower: this.props.electricityCostData.yearPower || '',
+        averagePrice: this.props.electricityCostData.averagePrice || '',
     }
     defaultProps = {
         electricityCostData: {},
@@ -71,11 +71,11 @@ export default class ElectricityCost extends Component {
         this.setState({
             method: e.target.innerHTML,
             isOpened: false,
-            high: 0,
-            medium: 0,
-            low: 0,
-            yearPower: 0, 
-            averagePrice: 0
+            high: '',
+            medium: '',
+            low: '',
+            yearPower: '', 
+            averagePrice: ''
         }, () => {
             reduxHelper('electricityCostData', this.state)
         })
@@ -90,7 +90,10 @@ export default class ElectricityCost extends Component {
         const { newestCataloguePrice: {cataloguePriceVoMap: {peak, plain, valley}, collectionFund} } = this.props
         if(!isNaN(val)){
             const values = Object.assign({}, this.state, {[type]: val})
-            const { high, medium, low } = values
+            let { high, medium, low } = values
+            high = high === '' ? 0 : high
+            medium = medium === '' ? 0 : medium
+            low = low === '' ? 0 : low
             const result = powerAveragePriceOfNotJoin(high, medium, low, peak.price, plain.price, valley.price, collectionFund)
             this.setState({
                 ...values,

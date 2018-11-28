@@ -58,7 +58,7 @@ export function getAllWaterAvPriceOfElePur(waterPrice, transmissionPrice, collec
  * @param {Float} isJoin 是否参与全水电交易品种
  */
 export function powerAveragePriceOfJoin(firePrice, transmissionPrice, collectionFund, yearPower, deviationCost, signedPrice, isJoin) {
-    if(!yearPower) return
+    if(!yearPower) return ''
     let price = 0
     if(isJoin) {
         price = signedPrice + transmissionPrice +  deviationCost/yearPower + collectionFund
