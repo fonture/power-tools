@@ -1,27 +1,144 @@
 .result-wrp{
-    background:#fff;
-    height: auto;
-    padding: 80px 40px 40px 40px;
-    box-sizing: border-box;
-    .taro-text{
-        font-size: 28px;
+    .dash-border{
+        border: 2px dashed #888888;
+        .company{
+            color: #24FCFF;
+        }
     }
-    img{
-        width:270px;
-        margin: 20px auto;
-        display: block;
-        height:250px;
+    .result-footer{
+        width: 100%;
+        height: 368px;
+        background:url(../../assets/panbackg.png) no-repeat;
+        background-size: cover;     
+        .at-row {
+            margin-top: 10%;
+            p{
+                text-align: right;
+                font-size: 28px;
+            }   
+        }
+        .at-col-7{
+            padding-top: 40px;
+        }
+        .at-col-5{
+            text-align: center;
+            .erweima{
+                width: 200px;
+                height: 200px;
+            }
+        }
     }
-    h3{
-        text-align: center;
-        font-size: 48px;
-    }
-    .at-list__item .item-extra__info{
-        max-width: 100%;
+    .result-body{
+        background: #384556;
+        color: #fff;
+        padding-top: 50px;
+        .proportion-row{
+            .at-col{
+                width: 200px;
+                height:240px;
+                border-radius: 10px;
+                background: #4f5c6b;
+                text-align: center;
+                .num{
+                    color: #1EF6DF;
+                    line-height: 180px;
+                    font-size: 36px;
+                    font-weight:bold;
+                }
+                .ch{
+                    font-size: 24px;
+                }
+            }
+        }
+        .container{
+            padding: 32px;
+            .taro-text{
+                color:#fff;
+                font-weight: bold;
+                font-size: 28px;
+            }
+            .at-row{
+                margin: 24px 0;
+                .range{
+                    height: 40px;
+                    background: #1EF6DF;
+                }
+                .rangefull{
+                    width: 400px;
+                }
+                .rangeText{
+                    font-size: 28px;
+                    padding-left:46px;
+                    box-sizing: border-box;
+                    line-height: 1;
+                    .rangeNum{
+                        font-size: 36px;
+                        color: #24FCFF;
+                        margin-left: 20px;
+                    }
+                }
+            }
+        }
+        .resultCanvas-list{
+            background: #384556;
+            .taro-text{
+                .stepImg{
+                    width: 80px;
+                    height: 80px;
+                    vertical-align: middle;
+                    margin-right: 23px;
+                    border: 2px dashed #888888;
+                }
+            }
+            .at-list__item-extra{
+                text-align: left;
+                .item-extra__info{
+                    font-size: 28px;
+                    line-height: 2;
+                }
+            }
+        }
+        .at-divider{
+            width: 90%;
+            margin: 0 auto;
+        }
+        .wenan{
+            p{
+                text-indent:2em;
+                padding: 0 40px;
+                font-size: 24px;
+                font-weight: bold;
+                line-height:50px; 
+                margin: 5px 0;
+            }
+        }
+        .proportion-cantainer{
+            height: 280px;
+            padding: 32px;
+            box-sizing: border-box;
+            margin-top: 50px;
+            .proportion{
+                margin-top: 50px;
+                .at-col.at-col-auto{
+                    color: #fff;
+                }
+            }
+        }
+        .reCharts-container{
+            padding-top: 66px;
+            box-sizing: border-box;           
+        }
     }
 }
 .close{
-    top: 50px;
-    right:50px;
-    position: fixed;
+    display: none;
+}
+.red{
+    color: #F85A24 !important;
+}
+.pra{
+    color: #fff !important;
+}
+.blue{
+    color: #24FCFF !important;
 }

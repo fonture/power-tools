@@ -1,7 +1,7 @@
 module.exports = {
-  baseUrl: '',
   env: {
-    NODE_ENV: '"development"'
+    NODE_ENV: '"development"',
+    baseUrl: '',
   },
   defineConstants: {
   },

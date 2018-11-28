@@ -3,7 +3,7 @@
  * @Date: 2018-11-20 15:04:11 
  * @Description: 输入峰平谷单个组件
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-20 16:44:24
+ * @Last Modified time: 2018-11-27 10:18:31
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -16,7 +16,7 @@ export default class PowerProportion extends Component {
     render() {
         const { percent, value, onChangeValue, itemName } = this.props
         return (
-            <View className='at-col'>
+            <View className='power-proportion at-col'>
                 <View className="at-row at-row__justify--center at-row__align--center">
                     <View className="at-col">
                         <AtInput 

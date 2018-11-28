@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:13:09 
  * @Description: 参与市场时的购电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-26 17:13:33
+ * @Last Modified time: 2018-11-28 11:35:27
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -29,13 +29,17 @@ export default class BuyPowerCost extends Component {
         yearPower: this.props.buyPowerCostData.yearPower || 0, 
         deviationCost: this.props.buyPowerCostData.deviationCost || 0, 
         signedPrice: this.props.buyPowerCostData.signedPrice || 0, 
-        averagePrice: this.props.buyPowerCostData.averagePrice || 0
+        averagePrice: this.props.buyPowerCostData.averagePrice || 0,
+        tip: '请录入完整数据'
     }
     defaultProps = { 
         newestCataloguePrice: { collectionFund: 0 }, 
         newestTransmissionPrice: { price: 0 },
         firePrice: {thermalPrice: 0},
         buyPowerCostData: {}
+    }
+    componentDidMount(){
+        reduxHelper('buyPowerCostData', this.state)
     }
     componentWillUnmount() {
         const { yearPower, averagePrice } = this.state
@@ -85,17 +89,20 @@ export default class BuyPowerCost extends Component {
             values = Object.assign({}, values, {[type]: value})
         }
         // 年度用电量需要计算。如果购电均价是手动输入的，不需要重新计算
+        let tip = ''
         if(method === '年度用电量') {
-            /****
-             * ToDo: 根据公式计算购电均价
-             */
+            // 计算均价
             const { yearPower, deviationCost, signedPrice } = values
-            
             values.averagePrice = powerAveragePriceOfJoin(thermalPrice, price, collectionFund, yearPower, deviationCost, signedPrice, checkedList.length)
+            tip = yearPower && values.averagePrice && deviationCost && signedPrice ? '' : '请录入完整数据'
+        } else {
+            const { yearPower, averagePrice } = values
+            tip = yearPower && averagePrice ? '' : '请录入完整数据'
         }
         
         this.setState({
             ...values,
+            tip,
             isOpened: false
         }, () => {
             reduxHelper('buyPowerCostData', this.state)
@@ -123,10 +130,10 @@ export default class BuyPowerCost extends Component {
         const { method, yearPower, deviationCost, signedPrice, averagePrice} = this.state
 
         return (
-            <View className="buy-power-cost">
+            <View className="power-cost">
 
                 {/* 选择输入方式 */}
-                <AtList className="input-method">
+                <AtList className="card-group input-method">
                     <AtListItem title="输入方式" arrow='right' extraText={this.state.method} onClick={this.onToggleInputMethod}/>
                 </AtList>
 
@@ -144,7 +151,7 @@ export default class BuyPowerCost extends Component {
                     method === '年度用电量'
                     // 年度用电量
                     ? <View>
-                        <AtList className="power-input-list">
+                        <AtList className="card-group power-input-list">
                             <AtListItem title="年度用电量" onClick={this.onListClick}
                                 extraText={
                                     <View className="at-row at-row__justify--center at-row__align--center">
@@ -170,7 +177,7 @@ export default class BuyPowerCost extends Component {
                                 } 
                             />
                         </AtList>
-                        <AtList className="power-result-list">
+                        <AtList className="card-group power-result-list">
                             <AtCheckbox
                                 options={[{
                                     value: 'joinAllPower',
@@ -185,7 +192,7 @@ export default class BuyPowerCost extends Component {
                         </AtList>
                     </View>
                     // 购电均价
-                    : <AtList className="power-input-self">
+                    : <AtList className="card-group power-input-self">
                         <AtListItem title="年度用电量" onClick={this.onListClick}
                             extraText={
                                 <View className="at-row at-row__justify--center at-row__align--center">

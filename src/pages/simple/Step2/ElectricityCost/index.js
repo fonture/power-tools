@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:11:35 
  * @Description:未参与市场时的用电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-26 17:13:51
+ * @Last Modified time: 2018-11-28 11:36:05
  */
 
 import Taro, { Component } from '@tarojs/taro'
@@ -22,7 +22,7 @@ import reduxHelper from '../../../../utils/reduxHelper'
 import inject from '../../../../utils/inject'
 import './index.less'
 
-@inject('newestCataloguePrice', 'electricityCostData')
+@inject('newestCataloguePrice', 'electricityCostData', 'setTip')
 export default class ElectricityCost extends Component {
     state = {
         isOpened: this.props.electricityCostData.isOpened || false,
@@ -32,6 +32,7 @@ export default class ElectricityCost extends Component {
         low: this.props.electricityCostData.low || 0,
         yearPower: this.props.electricityCostData.yearPower || 0,
         averagePrice: this.props.electricityCostData.averagePrice || 0,
+        tip: '请录入完整数据'
     }
     defaultProps = {
         electricityCostData: {},
@@ -43,6 +44,9 @@ export default class ElectricityCost extends Component {
             }, 
             collectionFund: 0
         }
+    }
+    componentDidMount(){
+        reduxHelper('electricityCostData', this.state)
     }
     componentWillUnmount() {
         const { yearPower, averagePrice } = this.state
@@ -84,7 +88,7 @@ export default class ElectricityCost extends Component {
      */
     onChangeValue = (type, value) => {
         const val = +value
-        const { newestCataloguePrice: {cataloguePriceVoMap: {peak, plain, valley}, collectionFund} } = this.props
+        const { newestCataloguePrice: {cataloguePriceVoMap: {peak, plain, valley}, collectionFund}, setTip } = this.props
         if(!isNaN(val)){
             const values = Object.assign({}, this.state, {[type]: val})
             const { high, medium, low } = values
@@ -92,6 +96,7 @@ export default class ElectricityCost extends Component {
             this.setState({
                 ...values,
                 ...result,
+                tip: high && medium && low ? '' : '请录入完整数据',
                 isOpened: false
             }, () => {
                 reduxHelper('electricityCostData', this.state)
@@ -113,9 +118,11 @@ export default class ElectricityCost extends Component {
      */
     onInput = (name, value) => {
         const val = +value
+        const values = Object.assign({}, this.state, {[name]: val})
         if(!isNaN(val)){
             this.setState({
-                [name]: val
+                ...values,
+                tip: values.yearPower && values.averagePrice ? '' : '请录入完整数据'
             }, () => {
                 reduxHelper('electricityCostData', this.state)
             })    
@@ -140,10 +147,10 @@ export default class ElectricityCost extends Component {
             }
         ]
         return (
-            <View className="electricity-cost">
+            <View className="power-cost electricity-cost">
 
                 {/* 选择输入方式 */}
-                <AtList className="input-method">
+                <AtList className="card-group input-method">
                     <AtListItem title="输入方式" arrow='right' extraText={this.state.method} onClick={this.onToggleInputMethod}/>
                 </AtList>
 
@@ -162,6 +169,7 @@ export default class ElectricityCost extends Component {
                     ? <View>
                         {/* 峰平谷比例 */}
                         <AtCard
+                            className="card-group"
                             title="峰平谷比例"
                             isFull
                         >
@@ -176,12 +184,12 @@ export default class ElectricityCost extends Component {
                         </AtCard>
 
                         {/* 展示年度电量与用电均价 */}
-                        <AtList className="power-result-list">
+                        <AtList className="card-group power-result-list">
                             <AtListItem title="年度用电量" extraText={<span>{yearPower ? yearPower : ''}<span className="power-result-unit">万千瓦时</span></span>} />
                             <AtListItem title="用电均价" extraText={<span>{averagePrice ? averagePrice : ''}<span className="power-result-unit">元/千瓦时</span></span>} />
                         </AtList>
                     </View>
-                    : <AtList className="power-input-self">
+                    : <AtList className="card-group power-input-self">
                         <AtListItem title="年度用电量"  onClick={this.onListClick}
                             extraText={
                                 <View className="at-row at-row__justify--center at-row__align--center">
