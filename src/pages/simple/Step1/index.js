@@ -207,7 +207,7 @@ export default class Step1 extends Component {
             }
         }
         return (
-        <View>
+        <View className='step-one'>
             <AtList>
                 <AtListItem title='地区' arrow='right' extraText={address} onClick={this.handleClickList.bind(this,'address')} />
                 {/* <AtListItem title='用电分类' arrow='right' extraText={sort} onClick={this.handleClickList.bind(this,'sort')} /> */}

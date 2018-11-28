@@ -1,13 +1,14 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text } from '@tarojs/components'
+import { View } from '@tarojs/components'
+import Step1 from '../../simple/Step1';
 
-export default class Step1 extends Component {
+export default class Steph1 extends Component {
     componentDidMount() {
         this.props.onDidMount(this._rendered.dom);
     }
     render() {
         return (<View>
-            <Text>高级版基本信息</Text>
+            <Step1 />
         </View>)
     }
 }
