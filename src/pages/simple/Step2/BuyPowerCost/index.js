@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:13:09 
  * @Description: 参与市场时的购电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-28 11:14:23
+ * @Last Modified time: 2018-11-28 11:35:27
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -37,6 +37,9 @@ export default class BuyPowerCost extends Component {
         newestTransmissionPrice: { price: 0 },
         firePrice: {thermalPrice: 0},
         buyPowerCostData: {}
+    }
+    componentDidMount(){
+        reduxHelper('buyPowerCostData', this.state)
     }
     componentWillUnmount() {
         const { yearPower, averagePrice } = this.state
