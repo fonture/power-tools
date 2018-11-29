@@ -43,7 +43,7 @@ export default class Index extends Component {
       activeNode: edition,
     }, () => {
       setTimeout(() => {
-        reduxHelper('version', { value: edition })
+        reduxHelper('version', edition)
         Taro.redirectTo({ url: `pages/${edition}/index` })
         // 为显示loading 设置了延迟跳转。
       }, 1000);

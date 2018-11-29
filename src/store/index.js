@@ -3,7 +3,7 @@
  * @Date: 2018-11-15 09:04:57 
  * @Description: redux数据仓库
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-29 16:31:57
+ * @Last Modified time: 2018-11-29 17:36:25
  */
 import { createStore, applyMiddleware } from 'redux'
 import thunkMiddleware from 'redux-thunk'
