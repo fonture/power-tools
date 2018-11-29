@@ -5,45 +5,94 @@ import Proportion from '../../components/Proportion';
 import reduxHelper from '../../utils/reduxHelper'
 import inject from '../../utils/inject'
 import { AtList, AtListItem, AtDivider, AtCurtain } from 'taro-ui';
+import { keepDecimal } from '../../utils'
 import './index.less'
 
 const cryImage = require('../../assets/images/cry.png');
 const smlieImage = require('../../assets/images/smile.png');
-@inject()
-export default class Form extends Component {
+@inject('baseMessage', 'Partake', 'unPartake', 'powerCosts')
+export default class Result extends Component {
     config = {
         navigationBarTitleText: '结果页'
     }
+    data = {}
     tryAgain = () => {
         Taro.redirectTo({ url: 'pages/index' })
     }
     generateReport = () => {
         Taro.redirectTo({ url: 'pages/resultCanvas/index' })
     }
+    compAP = () => {
+        let { mart } = this.props.baseMessage;
+        let step2AP = this.props.powerCosts.averagePrice,
+            step3AP = 0;
+        if (mart === '参与') {
+            step3AP = this.props.Partake.averagePrice;
+        } else {
+            step3AP = this.props.unPartake.avPrice;
+        }
+        return keepDecimal(step2AP - step3AP, 5)
+    }
+    compTP = (ap) => {
+        let { mart } = this.props.baseMessage;
+        let tp;
+        if (mart === '参与') {
+            tp = this.props.Partake.yearPower * ap;
+        } else {
+            tp = this.props.unPartake.yearBuy * ap;
+        }
+        return keepDecimal(tp, 0)
+    }
+    getPowerChange = () => {
+        let { mart } = this.props.baseMessage;
+        let step2powerChange = this.props.powerCosts.yearPower;
+        let powerChange;
+        let ch;
+        if (mart === '参与') {
+            powerChange = step2powerChange - this.props.Partake.yearPower;
+        } else {
+            powerChange = step2powerChange - this.props.unPartake.yearBuy;
+        }
+        ch = powerChange > 0 ? '增加' : '减少';
+
+        return {
+            ch,
+            powerChange: Math.abs(powerChange)
+        }
+    }
+    componentWillUnmount() {
+        reduxHelper('result', this.data)
+    }
     render() {
+        let ap = this.compAP();
+        let tp = this.compTP(ap);
+        let { ch, powerChange } = this.getPowerChange();
+        this.data = { ap, tp, ch, powerChange }
         return (
             <View className='result page'>
                 <View className='result-wrp'>
                     <View className="result-header">
                         <Text className="title">根据您提供的数据，分析结果为</Text>
-                        <img src={cryImage} className="result-img"/>
-                        <h3>不建议参加市场化交易</h3>
+                        <img src={ap > 0 ? smlieImage : cryImage} className="result-img" />
+                        <h3 style={{ color: ap > 0 ? '#27F47A' : '#F85A24' }}>{ap > 0 ? '参加市场化交易很划算！' : '不建议参加市场化交易'}</h3>
                     </View>
                     <View className="card">
                         <AtList>
                             <AtListItem
-                                extraText="0.01204元"
+                                extraText={<span style={{ color: ap > 0 ? '#27F47A' : '#F85A24' }}>{ap}元</span>}
                                 title='平均每度电节约'
                             />
                             <AtListItem
-                                extraText="241021元"
+                                extraText={<span style={{ color: ap > 0 ? '#27F47A' : '#F85A24' }}>{tp}元</span>}
                                 title='预计节约年度电费'
                             />
-                            <AtListItem
-                                extraText="50万千瓦时"
-                                title='购电量增加'
-                                hasBorder={false}
-                            />
+                            {
+                                powerChange !== 0 && <AtListItem
+                                    extraText={`${powerChange}万千瓦时`}
+                                    title={`购电量${ch}`}
+                                    hasBorder={false}
+                                />
+                            }
                         </AtList>
                     </View>
                 </View>

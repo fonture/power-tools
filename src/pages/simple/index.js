@@ -3,13 +3,14 @@ import { View, ScrollView, AtToast } from '@tarojs/components'
 import reduxHelper from '../../utils/reduxHelper'
 import inject from '../../utils/inject'
 import { report } from '../../utils'
-import Steps from '../../components/steps'
+import Steps from '../../components/Steps'
 import Button from '../../components/Button'
 import './index.less'
 import TaroAmin from '../../components/taro-amin'
 import Step1 from './Step1';
 import Step2 from './Step2';
 import Step3 from './Step3';
+
 @inject('stepInfo', 'baseMessage')
 export default class Form extends Component {
 
@@ -35,17 +36,12 @@ export default class Form extends Component {
             });
     }
     nextStep = () => {
-        if(this.state.message){
-            Taro.showToast({
-                icon: 'none',
-                title: this.state.message
-            })
-            return
-        }
-        this.state.step === 3 ?
+        const {baseMessage} = this.props
+        const { step } = this.state
+        step === 3 ?
             Taro.redirectTo({ url: 'pages/result/index' }) :
-            this.setState({ step: this.state.step + 1, action: 'enter' });
-        reduxHelper('stepInfo', { current: this.state.step, items: this.props.baseMessage.mart === '参与' ? ['基础信息', '购电成本', '目录电价'] : ['基础信息', '用电成本', '购电计算']})
+            this.setState({ step: step + 1, action: 'enter' });
+        reduxHelper('stepInfo', { current: step, items: baseMessage.mart === '参与' ? ['基础信息', '购电成本', '目录电价'] : ['基础信息', '用电成本', '购电计算']})
     }
     render() {
         const { stepInfo } = this.props
