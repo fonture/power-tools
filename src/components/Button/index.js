@@ -7,10 +7,11 @@ export default class Btn extends Component {
         addGlobalClass: true
     }
     render() {
-        const { type, children, onClick, loading } = this.props;
+        const { type, children, onClick, loading, disabled=false } = this.props;
         return (
             <AtButton
                 onClick={onClick}
+                disabled={disabled}
                 type={type}
                 loading={loading}
                 className="stepBtn"

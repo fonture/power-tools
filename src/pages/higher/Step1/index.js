@@ -8,7 +8,7 @@ export default class Steph1 extends Component {
     }
     render() {
         return (<View>
-            <Step1 />
+            <Step1 version='higher' />
         </View>)
     }
 }
