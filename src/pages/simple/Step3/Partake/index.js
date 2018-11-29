@@ -14,6 +14,7 @@ import {
 } from '../../../../utils/formula'
 import inject from '../../../../utils/inject';
 import reduxHelper from '../../../../utils/reduxHelper';
+
 @inject('Partake', 'newestCataloguePrice', 'firePrice')
 export default class Partake extends Component {
     state = {

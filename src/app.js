@@ -6,7 +6,7 @@ import Index from './pages/index'
 
 import './app.less'
 
-const store = configStore()
+const store = configStore({a: 3})
 
 if (process.env.TARO_ENV === "weapp") {
   require("taro-ui/dist/weapp/css/index.css")

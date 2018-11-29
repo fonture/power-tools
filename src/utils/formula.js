@@ -95,6 +95,22 @@ export function powerAveragePriceOfNotJoin(high = 0, medium = 0, low = 0, highPr
  * @param {Array} yearCataloguePriceMap 每个月对应的基金和峰平谷电价
  * @param {*} collectionFund
  */
-export function computePowerOfHigh(data, yearCataloguePriceMap, collectionFund) {
-
+export function computePowerOfHigh(data, yearCataloguePriceMap) {
+    let averagePrice = 0, price = 0, yearPower = 0, highYearPower = 0, mediumYearPower = 0, lowYearPower = 0
+    data.forEach((item, index) => {
+        const { collectionFund, cataloguePriceVoMap: { peak, plain, valley } } = yearCataloguePriceMap[index + 1]
+        let { high, medium, low, finished } = item
+        if(finished) {
+            high = high === '' ? 0 : high
+            medium = medium === '' ? 0 : medium
+            low = low === '' ? 0 : low
+            highYearPower += high
+            mediumYearPower += medium
+            lowYearPower += low
+            price += (peak.price + collectionFund) * high + (plain.price + collectionFund) * medium + (valley.price + collectionFund) * low
+        }
+    })
+    yearPower = keepDecimal(highYearPower + mediumYearPower + lowYearPower, 4)
+    averagePrice = yearPower === 0 || yearPower === '' ? '' : keepDecimal(price / yearPower, 5)
+    return { averagePrice, yearPower, highYearPower, mediumYearPower, lowYearPower }
 }
