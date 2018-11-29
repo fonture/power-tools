@@ -23,7 +23,11 @@ export default class Proportion extends Component {
         return (
             <View className='proportion at-row'>
                 {
-                    data && data.map((item, index) => <View className='at-col at-col-auto' style={{ flexGrow: item.range }} key={index}>{item.title}({item.range}%)</View>)
+                    data && data.map((item, index) => 
+                        item.range
+                        ? <View className='at-col at-col-auto' style={{ flexGrow: item.range, background: index === 0 ? '#FC601C' : (index === 1 ? '#FCAA1C' : '#FCD41C')}} key={index}>{item.title}({item.range}%)</View>
+                        : null 
+                    )
                 }
             </View>
         )

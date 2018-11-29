@@ -11,7 +11,7 @@ import Step1 from './Step1';
 import Step2 from './Step2';
 import Step3 from './Step3';
 
-@inject('stepInfo', 'baseMessage')
+@inject('stepInfo', 'baseMessage', 'next')
 export default class Form extends Component {
 
     config = {
@@ -44,7 +44,8 @@ export default class Form extends Component {
         reduxHelper('stepInfo', { current: step, items: baseMessage.mart === '参与' ? ['基础信息', '购电成本', '目录电价'] : ['基础信息', '用电成本', '购电计算']})
     }
     render() {
-        const { stepInfo } = this.props
+        const { stepInfo ,next = {}} = this.props
+        console.log(!!next.next);
         return (
             <ScrollView className='form page'>
                 <Steps current={stepInfo.current} items={stepInfo.items} />
@@ -52,7 +53,7 @@ export default class Form extends Component {
                     step={this.state.step}
                     action={this.state.action} />
                 <Button onClick={this.preStep} type="secondary">上一步</Button>
-                <Button onClick={this.nextStep} type="primary">下一步</Button>
+                <Button onClick={this.nextStep} type="primary" disabled={!next.next}>下一步</Button>
             </ScrollView>
         )
     }

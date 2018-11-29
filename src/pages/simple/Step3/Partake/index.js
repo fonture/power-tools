@@ -15,6 +15,7 @@ import {
 import inject from '../../../../utils/inject';
 import reduxHelper from '../../../../utils/reduxHelper';
 import '../index.less';
+
 @inject('Partake', 'newestCataloguePrice', 'firePrice')
 class Partake extends Component {
     state = {

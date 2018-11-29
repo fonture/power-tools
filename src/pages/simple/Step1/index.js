@@ -7,14 +7,14 @@ import './index.less'
 import request from '../../../utils/request';
 import inject from '../../../utils/inject';
 
-@inject('baseMessage')
+@inject('baseMessage','next')
 export default class Step1 extends Component {
 
     state = {
         address: '请选择地区',
         // sort: '请选择用电分类',
         sort: null,
-        mart: '请选择是否参与市场',
+        mart: this.props.version === 'higher'? '未参与':'请选择是否参与市场',
         clickList: null,
         sheetShow: false,
         sorts: [[], []],
@@ -41,6 +41,19 @@ export default class Step1 extends Component {
         }
 
         reduxHelper('baseMessage', { address, adsWord, sort: sortValue, sortValue: sort, mart })
+    }
+    componentWillUpdate(nextProps, nextState) {
+            this.setNextTrue(nextState);
+    }
+    setNextTrue = (state)=> {
+        const {sort,mart,address} = state;
+        const { next } = this.props;
+        console.log(next)
+        if(sort !== null && mart !== '请选择是否参与市场' && address !== '请选择地区'){
+            if(!next.next){
+                reduxHelper('next',{next: true});
+            }
+        }
     }
     resorts = [
         {
@@ -116,12 +129,13 @@ export default class Step1 extends Component {
 
     initPicker = () => {
         const { address = '请选择地区', sortValue = null, mart = '请选择是否参与市场' } = this.props.baseMessage;
+        const {version} = this.props;
         this.setState({
             sorts: this.formatArr(0),
             address,
             sort: sortValue,
-            mart,
-        })
+            mart: version === 'higher' ? '未参与': mart,
+        },this.setNextTrue(this.state))
     }
 
     pickerColumnChange = (e) => {
@@ -142,7 +156,8 @@ export default class Step1 extends Component {
     }
 
     render() {
-        const addressList = ['四川地区', '重庆地区'];
+        // const addressList = ['四川地区', '重庆地区']; // 由于重庆地区暂未开放，所以只有四川地区
+        const addressList = ['四川地区'];
         const marts = ['参与', '未参与'];
         const { address, sort, mart, clickList, sheetShow, sorts } = this.state;
         const renderSheet = () => {
@@ -206,6 +221,13 @@ export default class Step1 extends Component {
                 return <AtListItem title='用电分类' arrow='right' extraText='请选择用电分类' />
             }
         }
+        const renderMartList  =() => {
+            if(this.props.version === 'higher'){
+                return <AtListItem title='是否参与市场' extraText={mart} />
+            } else {
+                return <AtListItem title='是否参与市场' arrow='right' extraText={mart} onClick={this.handleClickList.bind(this, 'mart')} />
+            }
+        }
         return (
             <View>
                 <View className='card'>
@@ -220,7 +242,7 @@ export default class Step1 extends Component {
                             >
                             {renderSort()}
                         </Picker>
-                        <AtListItem title='是否参与市场' arrow='right' extraText={mart} onClick={this.handleClickList.bind(this, 'mart')} />
+                        {renderMartList()}
                     </AtList>
                     {renderSheet()}
                 </View>
