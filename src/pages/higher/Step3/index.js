@@ -4,27 +4,8 @@ import { AtCard, AtList, AtListItem, AtActionSheet, AtActionSheetItem } from "ta
 import inject from '../../../utils/inject';
 import './index.less'
 
-const tradingVariety = [
-  {
-    name: '单一常规',
-    value: 1,
-  },
-  {
-    name: '单一长协',
-    value: 2,
-  },
-  {
-    name: '常规+富余电量',
-    value: 3,
-  },
-  {
-    name: '长协+富余电量',
-    value: 4,
-  }
-]
 
-
-// @inject('tradingVariety')
+@inject('tradingVariety')
 export default class Step3 extends Component {
 
   state = {
@@ -47,6 +28,7 @@ export default class Step3 extends Component {
   }
 
   render() {
+    const { tradingVariety } = this.props;
     const { isOpened } = this.state;
 
     return (
