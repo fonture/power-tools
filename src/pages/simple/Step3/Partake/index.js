@@ -14,11 +14,13 @@ import {
 } from '../../../../utils/formula'
 import inject from '../../../../utils/inject';
 import reduxHelper from '../../../../utils/reduxHelper';
+import '../index.less';
+
 @inject('Partake', 'newestCataloguePrice', 'firePrice')
-export default class Partake extends Component {
+class Partake extends Component {
     state = {
         isOpened: false,
-        method: this.props.Partake.method||'用电量',
+        method: this.props.Partake.method || '用电量',
         high: this.props.Partake.high || 0,
         medium: this.props.Partake.medium || 0,
         low: this.props.Partake.low || 0,
@@ -93,7 +95,7 @@ export default class Partake extends Component {
         })
     }
     handleValueChange = (...args) => {
-        const [key, value, ] = args;
+        const [key, value,] = args;
         this.setState({
             [key]: value
         })
@@ -202,7 +204,7 @@ export default class Partake extends Component {
                                             className="power-input"
                                             title="元/千瓦时"
                                             border={false}
-                                            value={averagePrice} 
+                                            value={averagePrice}
                                             onChange={this.handleValueChange.bind(null, 'averagePrice')} />
                                     }
                                 />
@@ -213,3 +215,5 @@ export default class Partake extends Component {
         )
     }
 }
+
+export default Partake;
