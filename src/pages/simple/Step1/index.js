@@ -48,7 +48,6 @@ export default class Step1 extends Component {
     setNextTrue = (state)=> {
         const {sort,mart,address} = state;
         const { next } = this.props;
-        console.log(next)
         if(sort !== null && mart !== '请选择是否参与市场' && address !== '请选择地区'){
             if(!next.next){
                 reduxHelper('next',{next: true});

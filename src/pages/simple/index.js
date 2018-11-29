@@ -45,7 +45,6 @@ export default class Form extends Component {
     }
     render() {
         const { stepInfo ,next = {}} = this.props
-        console.log(!!next.next);
         return (
             <ScrollView className='form page'>
                 <Steps current={stepInfo.current} items={stepInfo.items} />

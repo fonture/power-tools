@@ -19,7 +19,7 @@ import reduxHelper from '../../../../utils/reduxHelper';
 export default class Partake extends Component {
     state = {
         isOpened: false,
-        method: this.props.Partake.method||'用电量',
+        method: this.props.Partake.method || '用电量',
         high: this.props.Partake.high || 0,
         medium: this.props.Partake.medium || 0,
         low: this.props.Partake.low || 0,
