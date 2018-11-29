@@ -3,7 +3,7 @@
  * @Date: 2018-11-28 13:47:30 
  * @Description: 高级版第二步用电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-28 18:08:14
+ * @Last Modified time: 2018-11-29 10:02:45
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -27,7 +27,9 @@ import './index.less'
 export default class Step2 extends Component {
     state = {
         currMonth: this.props.powerCostsOfHigh.currMonth || 1,
-        monthPowerList: this.props.powerCostsOfHigh.monthPowerList || []
+        monthPowerList: this.props.powerCostsOfHigh.monthPowerList || [],
+        yearPower: this.props.powerCostsOfHigh.monthPowerList || '',
+        averagePrice: this.props.powerCostsOfHigh.averagePrice || '',
     }
     defaultProps = {
         powerCostsOfHigh: {},
@@ -46,7 +48,10 @@ export default class Step2 extends Component {
         if(this.state.monthPowerList.length === 0){
             for(let i = 0; i < 12; i++) {
                 this.state.monthPowerList.push({
-                    finished: false
+                    finished: false,
+                    high: '',
+                    medium: '',
+                    low: ''
                 })
             }
         }  
@@ -66,6 +71,7 @@ export default class Step2 extends Component {
         })
         catalogueprice && catalogueprice.data && reduxHelper('yearCataloguePriceMap', {...catalogueprice.data.yearCataloguePriceMap})
     }
+    
     componentWillUnmount() {
         reduxHelper('powerCostsOfHigh', this.state)
     }
@@ -107,9 +113,9 @@ export default class Step2 extends Component {
         const { currMonth, monthPowerList } = this.state
         const data = monthPowerList[currMonth - 1]
         const items = []
-        data.yearPower && items.push(keepDecimal(data.high * 100 / data.yearPower, 2))
-        data.yearPower && items.push(keepDecimal(data.medium * 100 / data.yearPower, 2))
-        data.yearPower && items.push(keepDecimal(data.valley * 100 / data.yearPower, 2))
+        data.yearPower && items.push(keepDecimal((data.high || 0) * 100 / data.yearPower, 2))
+        data.yearPower && items.push(keepDecimal((data.medium || 0) * 100 / data.yearPower, 2))
+        data.yearPower && items.push(keepDecimal((data.valley || 0) * 100 / data.yearPower, 2))
         return (
             <View className="elec-cost-high">
                 {/* 月份操作区 */}
@@ -121,7 +127,14 @@ export default class Step2 extends Component {
                         {
                             this.state.monthPowerList.map((item, index) => (
                                 <View key={index} className={`at-col at-col-2 month-item ${index > 5 ? 'secondLineMarginTop' : ''}`}>
-                                    <div className={`month-circle  ${item.finished ? 'finished': ''} ${index + 1 === this.state.currMonth ? 'current' : ''}`} onClick={this.onClickMonth.bind(this, index + 1)}>{index + 1}月</div>
+                                    <div className={`month-circle  ${item.finished ? 'finished': ''} ${index + 1 === this.state.currMonth ? 'current' : ''}`} onClick={this.onClickMonth.bind(this, index + 1)}>
+                                        {
+                                            item.finished
+                                            ? <div><img src={require('../../../assets/images/gou.png')} /></div>
+                                            : null
+                                        }
+                                        <div>{index + 1}月</div>
+                                    </div>
                                 </View>
                             ))
                         }
@@ -137,19 +150,19 @@ export default class Step2 extends Component {
                     <AtList>
                         <AtListItem title="峰时用电" extraText={
                             <View className="at-row at-row__justify--center at-row__align--center">
-                                <AtInput type="number" className="power-input" border={false} value={data.high ? data.high : ''} onChange={this.onChangeValue.bind(this, 'high')}/>
+                                <AtInput type="number" className="power-input" border={false} value={data.high} onChange={this.onChangeValue.bind(this, 'high')}/>
                                 <div className="unit">万千瓦时</div>
                             </View>
                         } />
                         <AtListItem title="平时用电" extraText={
                             <View className="at-row at-row__justify--center at-row__align--center">
-                                <AtInput type="number" className="power-input" border={false} value={data.medium ? data.medium : ''} onChange={this.onChangeValue.bind(this, 'medium')}/>
+                                <AtInput type="number" className="power-input" border={false} value={data.medium} onChange={this.onChangeValue.bind(this, 'medium')}/>
                                 <div className="unit">万千瓦时</div>
                             </View>
                         } />
                         <AtListItem title="谷时用电" extraText={
                             <View className="at-row at-row__justify--center at-row__align--center">
-                                <AtInput type="number" className="power-input" border={false} value={data.low ? data.low : ''} onChange={this.onChangeValue.bind(this, 'low')}/>
+                                <AtInput type="number" className="power-input" border={false} value={data.low} onChange={this.onChangeValue.bind(this, 'low')}/>
                                 <div className="unit">万千瓦时</div>
                             </View>
                         } />                    

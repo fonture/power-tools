@@ -87,3 +87,14 @@ export function powerAveragePriceOfNotJoin(high = 0, medium = 0, low = 0, highPr
     averagePrice = keepDecimal(averagePrice, 4)
     return { yearPower, averagePrice }
 }
+
+/**
+ * @description 计算高级版的年度用电量和用电均价
+ * @export
+ * @param {Array} data 每个月的数据组成的数组
+ * @param {Array} yearCataloguePriceMap 每个月对应的基金和峰平谷电价
+ * @param {*} collectionFund
+ */
+export function computePowerOfHigh(data, yearCataloguePriceMap, collectionFund) {
+
+}
