@@ -182,14 +182,14 @@ export default class Step1 extends Component {
                         <View className='at-list__item-extra item-extra'>
                             <View className='item-extra__info'>
                                 <Text
-                                    style={{
+                                  style={{
                                         display: 'block',
                                         fontSize: '16px',
                                         lineHeight: '1',
                                     }}
                                 >{sort[0]}</Text>
                                 <Text
-                                    style={{
+                                  style={{
                                         display: 'block',
                                         fontSize: '14px',
                                         lineHeight: '1',
@@ -208,16 +208,16 @@ export default class Step1 extends Component {
         }
         return (
             <View>
-                <View className="card">
+                <View className='card'>
                     <AtList>
                         <AtListItem title='地区' arrow='right' extraText={address} onClick={this.handleClickList.bind(this, 'address')} />
                         {/* <AtListItem title='用电分类' arrow='right' extraText={sort} onClick={this.handleClickList.bind(this,'sort')} /> */}
-                        <Picker
-                            mode='multiSelector'
-                            range={sorts}
-                            onChange={this.pickerChange}
-                            onColumnchange={this.pickerColumnChange}
-                        >
+                            <Picker
+                              mode='multiSelector'
+                              range={sorts}
+                              onChange={this.pickerChange}
+                              onColumnchange={this.pickerColumnChange}
+                            >
                             {renderSort()}
                         </Picker>
                         <AtListItem title='是否参与市场' arrow='right' extraText={mart} onClick={this.handleClickList.bind(this, 'mart')} />

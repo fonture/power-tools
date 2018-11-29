@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Image } from '@tarojs/components'
-import { AtModal, AtButton, AtForm, AtInput, AtModalContent } from "taro-ui"
+import { View, Button, Form, Image } from '@tarojs/components'
+import { AtModal, AtInput, AtModalContent } from "taro-ui"
 import reduxHelper from '../utils/reduxHelper'
 import './index.less'
 import request from '../utils/request';
@@ -113,7 +113,7 @@ export default class Index extends Component {
             className='formContent'
           >
             <AtModalContent>
-              <AtForm
+              <Form
                 onSubmit={this.handleSubmit}
                 className='formBoder'
               >
@@ -123,8 +123,8 @@ export default class Index extends Component {
                   type='number'
                   placeholder={`默认火电价格${firePrice}`}
                 />
-                <AtButton formType='submit' width='100px' className='sumitButton'>确定</AtButton>
-              </AtForm>
+                <Button formType='submit' width='100px' className='sumitButton' >确定</Button>
+              </Form>
             </AtModalContent>
           </AtModal>
         </View>
