@@ -3,7 +3,7 @@
  * @Date: 2018-11-28 13:47:30 
  * @Description: 高级版第二步用电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-29 10:02:45
+ * @Last Modified time: 2018-11-30 09:58:00
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -18,9 +18,10 @@ import {
 import request from '../../../utils/request'
 import inject from '../../../utils/inject'
 import reduxHelper from '../../../utils/reduxHelper'
-import { powerAveragePriceOfNotJoin } from '../../../utils/formula'
+import { computePowerOfHigh } from '../../../utils/formula'
 import { keepDecimal } from '../../../utils'
 import Proportion from '../../../components/Proportion'
+import MonthPlugin from '../MonthPlugin'
 import './index.less'
 
 @inject('yearCataloguePriceMap', 'powerCostsOfHigh')
@@ -30,6 +31,9 @@ export default class Step2 extends Component {
         monthPowerList: this.props.powerCostsOfHigh.monthPowerList || [],
         yearPower: this.props.powerCostsOfHigh.monthPowerList || '',
         averagePrice: this.props.powerCostsOfHigh.averagePrice || '',
+        highYearPower:this.props.powerCostsOfHigh.highYearPower || '',
+        mediumYearPower: this.props.powerCostsOfHigh.mediumYearPower || '', 
+        lowYearPower: this.props.powerCostsOfHigh.lowYearPower || '',
     }
     defaultProps = {
         powerCostsOfHigh: {},
@@ -48,6 +52,7 @@ export default class Step2 extends Component {
         if(this.state.monthPowerList.length === 0){
             for(let i = 0; i < 12; i++) {
                 this.state.monthPowerList.push({
+                    name: `${i + 1}月`,
                     finished: false,
                     high: '',
                     medium: '',
@@ -82,21 +87,20 @@ export default class Step2 extends Component {
      * @param {String} value 输入框的值
      */
     onChangeValue = (type, value) => {
-        const val = +value
-        const { currMonth } = this.state
+        const val = keepDecimal(+value, 4)
+        const { currMonth, monthPowerList } = this.state
         const { yearCataloguePriceMap } = this.props
-        // 取出当月峰平谷电价及基金
-        const { collectionFund, cataloguePriceVoMap: { peak, plain, valley } } = yearCataloguePriceMap[currMonth]
         if(!isNaN(val)){
-            const values = Object.assign({}, this.state.monthPowerList[currMonth - 1], {[type]: val})
+            const values = Object.assign({}, monthPowerList[currMonth - 1], {[type]: val})
             const { high, medium, low } = values
-            const result = powerAveragePriceOfNotJoin(high, medium, low, peak.price, plain.price, valley.price, collectionFund)
-            this.state.monthPowerList[currMonth - 1] = {
+            monthPowerList[currMonth - 1] = {
                 ...values,
-                ...result,
-                finished: high && medium && low ? true : false
+                finished: high || medium || low ? true : false
             }
-            this.setState({})
+            const result = computePowerOfHigh(monthPowerList, yearCataloguePriceMap)
+            this.setState({
+                ...result
+            })
         }
     }
 
@@ -110,36 +114,17 @@ export default class Step2 extends Component {
         })
     }
     render() {
-        const { currMonth, monthPowerList } = this.state
+        const { currMonth, monthPowerList, yearPower, averagePrice, lowYearPower, mediumYearPower, highYearPower } = this.state
         const data = monthPowerList[currMonth - 1]
         const items = []
-        data.yearPower && items.push(keepDecimal((data.high || 0) * 100 / data.yearPower, 2))
-        data.yearPower && items.push(keepDecimal((data.medium || 0) * 100 / data.yearPower, 2))
-        data.yearPower && items.push(keepDecimal((data.valley || 0) * 100 / data.yearPower, 2))
+        yearPower && items.push(keepDecimal((highYearPower || 0) * 100 / yearPower, 2))
+        yearPower && items.push(keepDecimal((mediumYearPower || 0) * 100 / yearPower, 2))
+        yearPower && items.push(keepDecimal((lowYearPower || 0) * 100 / yearPower, 2))
         return (
             <View className="elec-cost-high">
+            
                 {/* 月份操作区 */}
-                <AtCard
-                    isFull
-                    title="用电成本"
-                >
-                    <View className="at-row at-row--wrap">
-                        {
-                            this.state.monthPowerList.map((item, index) => (
-                                <View key={index} className={`at-col at-col-2 month-item ${index > 5 ? 'secondLineMarginTop' : ''}`}>
-                                    <div className={`month-circle  ${item.finished ? 'finished': ''} ${index + 1 === this.state.currMonth ? 'current' : ''}`} onClick={this.onClickMonth.bind(this, index + 1)}>
-                                        {
-                                            item.finished
-                                            ? <div><img src={require('../../../assets/images/gou.png')} /></div>
-                                            : null
-                                        }
-                                        <div>{index + 1}月</div>
-                                    </div>
-                                </View>
-                            ))
-                        }
-                    </View>
-                </AtCard>
+                <MonthPlugin title="用电成本" data={this.state.monthPowerList} onClick={this.onClickMonth} current={this.state.currMonth}/>
 
                 {/* 峰平谷电量输入区 */}
                 <AtCard
@@ -150,7 +135,7 @@ export default class Step2 extends Component {
                     <AtList>
                         <AtListItem title="峰时用电" extraText={
                             <View className="at-row at-row__justify--center at-row__align--center">
-                                <AtInput type="number" className="power-input" border={false} value={data.high} onChange={this.onChangeValue.bind(this, 'high')}/>
+                                <AtInput type="number" className="power-input" border={false} value={data.high} maxlength={5} onChange={this.onChangeValue.bind(this, 'high')}/>
                                 <div className="unit">万千瓦时</div>
                             </View>
                         } />
@@ -171,11 +156,19 @@ export default class Step2 extends Component {
 
                 {/* 结果展示区 */}
                 <AtList className="at-card">
-                    <AtListItem title="年度用电量" className="year-power" extraText={
-                        <div>{data.yearPower}<span className="unit">万千瓦时</span></div>
+                    <AtListItem title="年度用电量" className={`year-power ${lowYearPower || mediumYearPower || highYearPower ? 'show-proportion' : ''}`} extraText={
+                        <div>{yearPower}<span className="unit">万千瓦时</span></div>
                     }/>
-                    <View className="proporation at-list__item"><Proportion data={items} /></View>
-                    <AtListItem title="用电均价" extraText={<span>{data.averagePrice}<span className="unit">元/千瓦时</span></span>} />
+                    {
+                        
+                        <AtListItem title="" className="power-proporation" extraText={
+                            lowYearPower || mediumYearPower || highYearPower
+                            ? <View className="at-list__item"><Proportion data={items} /></View>
+                            : null
+                        }/>
+                        
+                    }
+                    <AtListItem title="用电均价" extraText={<span>{averagePrice}<span className="unit">元/千瓦时</span></span>} />
                 </AtList>
             </View>
         )

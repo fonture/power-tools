@@ -3,22 +3,22 @@ import { View } from '@tarojs/components'
 import {
     AtList,
     AtListItem,
-    AtInput,
     AtCheckbox
 } from 'taro-ui'
+import Input from '../../../../components/Input';
 import {
     getAvPriceOfElePur,
     getAllWaterAvPriceOfElePur
 } from '../../../../utils/formula';
 import inject from '../../../../utils/inject'
 import reduxHelper from '../../../../utils/reduxHelper'
-@inject('unPartake', 'firePrice', 'newestTransmissionPrice', 'newestCataloguePrice')
-export default class UnPartake extends Component {
+@inject('powerExpect', 'firePrice', 'newestTransmissionPrice', 'newestCataloguePrice')
+class UnPartake extends Component {
     state = {
-        checkedList: this.props.unPartake.checkedList || [],
-        yearBuy: this.props.unPartake.yearBuy || 0,
-        waterPrice: this.props.unPartake.waterPrice || 0,
-        avPrice: this.props.unPartake.avPrice || ''
+        checkedList: this.props.powerExpect.checkedList || [],
+        yearPower: this.props.powerExpect.yearPower || 0,
+        waterPrice: this.props.powerExpect.waterPrice || 0,
+        averagePrice: this.props.powerExpect.averagePrice || 0
     }
 
     checkboxOption = [
@@ -52,18 +52,18 @@ export default class UnPartake extends Component {
         const { price } = this.props.newestTransmissionPrice;
         const { thermalPrice } = this.props.firePrice;
         const { collectionFund } = this.props.newestCataloguePrice;
-        let avPrice;
+        let averagePrice;
         if (this.state.checkedList.length > 0) {
-            avPrice = getAllWaterAvPriceOfElePur(this.state.waterPrice, price, collectionFund)
+            averagePrice = getAllWaterAvPriceOfElePur(this.state.waterPrice, price, collectionFund)
         } else {
-            avPrice = getAvPriceOfElePur(this.state.waterPrice, thermalPrice, price, collectionFund)
+            averagePrice = getAvPriceOfElePur(this.state.waterPrice, thermalPrice, price, collectionFund)
         }
         this.setState({
-            avPrice
+            averagePrice
         })
     }
     componentWillUnmount() {
-        reduxHelper('unPartake', { ...this.state })
+        reduxHelper('powerExpect', { ...this.state })
     }
     render() {
         return (
@@ -73,25 +73,27 @@ export default class UnPartake extends Component {
                         <AtListItem
                             title='预计年度购电量'
                             extraText={
-                                <AtInput
+                                <Input
                                     type="number"
                                     className="power-input"
                                     title="万千瓦时"
                                     border={false}
-                                    value={this.state.yearBuy}
-                                    onChange={this.handleInputChange.bind(null, 'yearBuy')} />
+                                    value={this.state.yearPower}
+                                    digit={4}
+                                    onChange={this.handleInputChange.bind(null, 'yearPower')} />
                             }
                         />
                         <AtListItem
                             title='签约水电价格'
                             hasBorder={false}
                             extraText={
-                                <AtInput
+                                <Input
                                     type="number"
                                     className="power-input"
                                     title="万千瓦时"
                                     border={false}
                                     value={this.state.waterPrice}
+                                    digit={5}
                                     onChange={this.handleInputChange.bind(null, 'waterPrice')} />
                             }
                         />
@@ -108,13 +110,14 @@ export default class UnPartake extends Component {
                             title='购电均价'
                             hasBorder={false}
                             extraText={
-                                <AtInput
+                                <Input
                                     disabled
                                     type="number"
                                     className="power-input"
                                     title="元/千瓦时"
                                     border={false}
-                                    value={this.state.avPrice} />
+                                    digit={5}
+                                    value={this.state.averagePrice} />
                             }
                         />
                     </AtList>
@@ -122,3 +125,5 @@ export default class UnPartake extends Component {
             </View>)
     }
 }
+
+export default UnPartake;

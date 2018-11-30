@@ -6,27 +6,29 @@ import {
     AtActionSheet,
     AtActionSheetItem,
     AtCard,
-    AtInput,
 } from 'taro-ui'
+import Input from '../../../../components/Input'
 import PowerProportion from '../../../../components/PowerProportion'
 import {
     powerAveragePriceOfNotJoin,
 } from '../../../../utils/formula'
 import inject from '../../../../utils/inject';
 import reduxHelper from '../../../../utils/reduxHelper';
-@inject('Partake', 'newestCataloguePrice', 'firePrice')
-export default class Partake extends Component {
+import '../index.less';
+
+@inject('powerExpect', 'newestCataloguePrice', 'firePrice')
+class Partake extends Component {
     state = {
         isOpened: false,
-        method: this.props.Partake.method||'用电量',
-        high: this.props.Partake.high || 0,
-        medium: this.props.Partake.medium || 0,
-        low: this.props.Partake.low || 0,
+        method: this.props.powerExpect.method || '用电量',
+        high: this.props.powerExpect.high || 0,
+        medium: this.props.powerExpect.medium || 0,
+        low: this.props.powerExpect.low || 0,
         highPrice: 0.8234,
         mediumPrice: 0.5234,
         lowPrice: 0.3324,
-        averagePrice: this.props.Partake.averagePrice || 0,
-        yearPower: this.props.Partake.yearPower || 0
+        averagePrice: this.props.powerExpect.averagePrice || 0,
+        yearPower: this.props.powerExpect.yearPower || 0
     }
     componentDidMount() {
         const { thermalPrice } = this.props.firePrice;
@@ -49,7 +51,7 @@ export default class Partake extends Component {
      * @param {Object} e 事件对象
      */
     onClickSheet = (e) => {
-        if (this.state.method === e.target.innerHTML) return
+        // if (this.state.method === e.target.innerHTML) return
         this.setState({
             method: e.target.innerHTML,
             isOpened: false,
@@ -93,14 +95,19 @@ export default class Partake extends Component {
         })
     }
     handleValueChange = (...args) => {
-        const [key, value, ] = args;
+        const [key, value,] = args;
         this.setState({
             [key]: value
         })
     }
     componentWillUnmount() {
-        reduxHelper('Partake', { ...this.state })
+        reduxHelper('powerExpect', { ...this.state })
     }
+    handleClose = ()=> {
+        this.setState({
+            isOpened: false
+        })
+    }  
     render() {
         const { high, medium, low, highPrice, mediumPrice, lowPrice, method, yearPower, averagePrice } = this.state
         const items = [
@@ -129,7 +136,7 @@ export default class Partake extends Component {
                 </View>
 
                 {/* 选择输入方式时底部弹出的活动页 */}
-                <AtActionSheet isOpened={this.state.isOpened} title="请选择输入方式">
+                <AtActionSheet isOpened={this.state.isOpened} title="请选择输入方式" onClose={this.handleClose}>
                     <AtActionSheetItem onClick={this.onClickSheet}>
                         用电量
                     </AtActionSheetItem>
@@ -161,20 +168,22 @@ export default class Partake extends Component {
                             <View className="card">
                                 <AtList className="power-result-list">
                                     <AtListItem title="年度用电量" extraText={
-                                        <AtInput
+                                        <Input
                                             disabled
                                             type="number"
                                             className="power-input"
                                             title="万千瓦时"
+                                            digit={4}
                                             value={yearPower}
                                             border={false} />
                                     } />
                                     <AtListItem title="用电均价" hasBorder={false} extraText={
-                                        <AtInput
+                                        <Input
                                             disabled
                                             type="number"
                                             className="power-input"
                                             title="元/千瓦时"
+                                            digit={5}
                                             value={averagePrice}
                                             border={false} />
                                     } />
@@ -185,24 +194,26 @@ export default class Partake extends Component {
                             <AtList className="power-input-self">
                                 <AtListItem title="年度用电量"
                                     extraText={
-                                        <AtInput
+                                        <Input
                                             type="number"
                                             className="power-input"
                                             title="万千瓦时"
                                             border={false}
                                             value={yearPower}
+                                            digit={4}
                                             onChange={this.handleValueChange.bind(null, 'yearPower')} />
                                     }
                                 />
                                 <AtListItem title="用电均价"
                                     hasBorder={false}
                                     extraText={
-                                        <AtInput
+                                        <Input
                                             type="number"
                                             className="power-input"
                                             title="元/千瓦时"
                                             border={false}
-                                            value={averagePrice} 
+                                            value={averagePrice}
+                                            digit={5}
                                             onChange={this.handleValueChange.bind(null, 'averagePrice')} />
                                     }
                                 />
@@ -213,3 +224,5 @@ export default class Partake extends Component {
         )
     }
 }
+
+export default Partake;

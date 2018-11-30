@@ -3,7 +3,7 @@
  * @Date: 2018-11-15 10:03:25 
  * @Description: 封装redux数据流
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-28 16:59:14
+ * @Last Modified time: 2018-11-29 17:26:13
  */
 import createAction from './createAction'
 import {injectReducer} from '../store'
@@ -15,7 +15,7 @@ export default (argsName, args) => {
     const action = createAction(type, args)
 
     // 动态合并reducer
-    injectReducer(argsName, createReducer(type))
+    injectReducer(argsName, createReducer(type, args))
 
     // 触发action
     store.dispatch(action)

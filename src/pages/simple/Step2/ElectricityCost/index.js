@@ -2,8 +2,8 @@
  * @Author: ouyangdc 
  * @Date: 2018-11-23 16:11:35 
  * @Description:未参与市场时的用电成本
- * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-28 19:50:04
+ * @Last Modified by: mikey.zhaopeng
+ * @Last Modified time: 2018-11-30 15:02:27
  */
 
 import Taro, { Component } from '@tarojs/taro'
@@ -25,7 +25,7 @@ import './index.less'
 @inject('newestCataloguePrice', 'electricityCostData')
 export default class ElectricityCost extends Component {
     state = {
-        isOpened: this.props.electricityCostData.isOpened || false,
+        isOpened: false,
         method: this.props.electricityCostData.method || '用电量',
         high: this.props.electricityCostData.high || '',
         medium: this.props.electricityCostData.medium || '',
@@ -128,9 +128,15 @@ export default class ElectricityCost extends Component {
             })    
         }
     }
-
+    handleClose = ()=> {
+        this.setState({
+            isOpened: false
+        },()=>{
+            console.log('hello', this.state.isOpened);
+        })
+    }
     render() {
-        const { high, medium, low, method, yearPower, averagePrice} = this.state
+        const { high, medium, low, method, yearPower, averagePrice, isOpened} = this.state
         const items = [
             {
                 percent: yearPower && (high * 100 / yearPower).toFixed(2) + '%', 
@@ -155,7 +161,7 @@ export default class ElectricityCost extends Component {
                 </AtList>
 
                 {/* 选择输入方式时底部弹出的活动页 */}
-                <AtActionSheet isOpened={this.state.isOpened} title="请选择输入方式">
+                <AtActionSheet isOpened={isOpened} title="请选择输入方式" onClose={this.handleClose}>
                     <AtActionSheetItem onClick={this.onClickSheet}>
                     用电量
                     </AtActionSheetItem>
