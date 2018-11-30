@@ -3,9 +3,9 @@ import { View } from '@tarojs/components'
 import {
     AtList,
     AtListItem,
-    AtInput,
     AtCheckbox
 } from 'taro-ui'
+import Input from '../../../../components/Input';
 import {
     getAvPriceOfElePur,
     getAllWaterAvPriceOfElePur
@@ -18,7 +18,7 @@ class UnPartake extends Component {
         checkedList: this.props.powerExpect.checkedList || [],
         yearPower: this.props.powerExpect.yearPower || 0,
         waterPrice: this.props.powerExpect.waterPrice || 0,
-        averagePrice: this.props.powerExpect.averagePrice || ''
+        averagePrice: this.props.powerExpect.averagePrice || 0
     }
 
     checkboxOption = [
@@ -73,12 +73,13 @@ class UnPartake extends Component {
                         <AtListItem
                             title='预计年度购电量'
                             extraText={
-                                <AtInput
+                                <Input
                                     type="number"
                                     className="power-input"
                                     title="万千瓦时"
                                     border={false}
                                     value={this.state.yearPower}
+                                    digit={4}
                                     onChange={this.handleInputChange.bind(null, 'yearPower')} />
                             }
                         />
@@ -86,12 +87,13 @@ class UnPartake extends Component {
                             title='签约水电价格'
                             hasBorder={false}
                             extraText={
-                                <AtInput
+                                <Input
                                     type="number"
                                     className="power-input"
                                     title="万千瓦时"
                                     border={false}
                                     value={this.state.waterPrice}
+                                    digit={5}
                                     onChange={this.handleInputChange.bind(null, 'waterPrice')} />
                             }
                         />
@@ -108,12 +110,13 @@ class UnPartake extends Component {
                             title='购电均价'
                             hasBorder={false}
                             extraText={
-                                <AtInput
+                                <Input
                                     disabled
                                     type="number"
                                     className="power-input"
                                     title="元/千瓦时"
                                     border={false}
+                                    digit={5}
                                     value={this.state.averagePrice} />
                             }
                         />

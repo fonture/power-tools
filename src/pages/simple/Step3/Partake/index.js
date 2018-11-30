@@ -103,6 +103,11 @@ class Partake extends Component {
     componentWillUnmount() {
         reduxHelper('powerExpect', { ...this.state })
     }
+    handleClose = ()=> {
+        this.setState({
+            isOpened: false
+        })
+    }  
     render() {
         const { high, medium, low, highPrice, mediumPrice, lowPrice, method, yearPower, averagePrice } = this.state
         const items = [
@@ -131,7 +136,7 @@ class Partake extends Component {
                 </View>
 
                 {/* 选择输入方式时底部弹出的活动页 */}
-                <AtActionSheet isOpened={this.state.isOpened} title="请选择输入方式">
+                <AtActionSheet isOpened={this.state.isOpened} title="请选择输入方式" onClose={this.handleClose}>
                     <AtActionSheetItem onClick={this.onClickSheet}>
                         用电量
                     </AtActionSheetItem>

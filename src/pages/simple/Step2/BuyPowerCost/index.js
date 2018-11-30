@@ -2,8 +2,8 @@
  * @Author: ouyangdc 
  * @Date: 2018-11-23 16:13:09 
  * @Description: 参与市场时的购电成本
- * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-28 19:46:56
+ * @Last Modified by: mikey.zhaopeng
+ * @Last Modified time: 2018-11-30 15:03:13
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -23,7 +23,7 @@ import './index.less'
 @inject('newestCataloguePrice', 'newestTransmissionPrice', 'firePrice', 'buyPowerCostData')
 export default class BuyPowerCost extends Component {
     state = {
-        isOpened: this.props.buyPowerCostData.isOpened || false,
+        isOpened: false,
         method: this.props.buyPowerCostData.method || '年度用电量',
         checkedList: this.props.buyPowerCostData.checkedList || [],
         yearPower: this.props.buyPowerCostData.yearPower || '', 
@@ -122,6 +122,11 @@ export default class BuyPowerCost extends Component {
         e.preventDefault()
         e.currentTarget.getElementsByTagName('input')[0].focus()
     }
+    handleClose = ()=> {
+        this.setState({
+            isOpened: false
+        })
+    }    
     render() {
         const { method, yearPower, deviationCost, signedPrice, averagePrice} = this.state
 
@@ -134,7 +139,7 @@ export default class BuyPowerCost extends Component {
                 </AtList>
 
                 {/* 选择输入方式时底部弹出的活动页 */}
-                <AtActionSheet isOpened={this.state.isOpened} title="请选择输入方式">
+                <AtActionSheet isOpened={this.state.isOpened} title="请选择输入方式" onClose={this.handleClose}>
                     <AtActionSheetItem onClick={this.onClickSheet}>
                     年度用电量
                     </AtActionSheetItem>
