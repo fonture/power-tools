@@ -139,7 +139,6 @@ export default class Step1 extends Component {
     }
 
     pickerColumnChange = (e) => {
-        console.log(e.detail);
         const { column, value } = e.detail;
         if (column === 0) {
             this.setState({

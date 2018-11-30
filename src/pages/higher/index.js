@@ -9,7 +9,7 @@ import TaroAmin from '../../components/taro-amin'
 import Step1 from './Step1';
 import Step2 from './Step2';
 import Step3 from './Step3';
-@inject('stepInfo')
+@inject('stepInfo','next')
 export default class Form extends Component {
 
     config = {
@@ -36,13 +36,13 @@ export default class Form extends Component {
     }
     render() {
         const { edition } = this.$router.params
-        const { stepInfo } = this.props
+        const { stepInfo,next = {} } = this.props
         return (
             <ScrollView className='form page'>
                 <Steps current={stepInfo.current} items={stepInfo.items} />
                 <Content step={this.state.step} action={this.state.action} />
                 <Button onClick={this.preStep} type="secondary">上一步</Button>
-                <Button onClick={this.nextStep} type="primary">下一步</Button>
+                <Button onClick={this.nextStep} type="primary" disabled={!next.next}>下一步</Button>
             </ScrollView>
         )
     }
