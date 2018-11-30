@@ -6,8 +6,8 @@ import {
     AtActionSheet,
     AtActionSheetItem,
     AtCard,
-    AtInput,
 } from 'taro-ui'
+import Input from '../../../../components/Input'
 import PowerProportion from '../../../../components/PowerProportion'
 import {
     powerAveragePriceOfNotJoin,
@@ -51,7 +51,7 @@ class Partake extends Component {
      * @param {Object} e 事件对象
      */
     onClickSheet = (e) => {
-        if (this.state.method === e.target.innerHTML) return
+        // if (this.state.method === e.target.innerHTML) return
         this.setState({
             method: e.target.innerHTML,
             isOpened: false,
@@ -168,20 +168,22 @@ class Partake extends Component {
                             <View className="card">
                                 <AtList className="power-result-list">
                                     <AtListItem title="年度用电量" extraText={
-                                        <AtInput
+                                        <Input
                                             disabled
                                             type="number"
                                             className="power-input"
                                             title="万千瓦时"
+                                            digit={4}
                                             value={yearPower}
                                             border={false} />
                                     } />
                                     <AtListItem title="用电均价" hasBorder={false} extraText={
-                                        <AtInput
+                                        <Input
                                             disabled
                                             type="number"
                                             className="power-input"
                                             title="元/千瓦时"
+                                            digit={5}
                                             value={averagePrice}
                                             border={false} />
                                     } />
@@ -192,24 +194,26 @@ class Partake extends Component {
                             <AtList className="power-input-self">
                                 <AtListItem title="年度用电量"
                                     extraText={
-                                        <AtInput
+                                        <Input
                                             type="number"
                                             className="power-input"
                                             title="万千瓦时"
                                             border={false}
                                             value={yearPower}
+                                            digit={4}
                                             onChange={this.handleValueChange.bind(null, 'yearPower')} />
                                     }
                                 />
                                 <AtListItem title="用电均价"
                                     hasBorder={false}
                                     extraText={
-                                        <AtInput
+                                        <Input
                                             type="number"
                                             className="power-input"
                                             title="元/千瓦时"
                                             border={false}
                                             value={averagePrice}
+                                            digit={5}
                                             onChange={this.handleValueChange.bind(null, 'averagePrice')} />
                                     }
                                 />

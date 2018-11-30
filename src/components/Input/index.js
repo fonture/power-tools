@@ -5,7 +5,7 @@ import { keepDecimal } from '../../utils';
 // digit 小数位数
 class Input extends Component {
     render() {
-        let value = keepDecimal(this.props.value, this.props.digit);
+        let value = keepDecimal(Number(this.props.value), this.props.digit);
         let props = Object.assign(this.props, { value });
         return (
             <AtInput {...props} />
