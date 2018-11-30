@@ -3,7 +3,7 @@
  * @Date: 2018-11-28 13:47:30 
  * @Description: 高级版第二步用电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-29 14:36:42
+ * @Last Modified time: 2018-11-30 09:58:00
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -156,10 +156,18 @@ export default class Step2 extends Component {
 
                 {/* 结果展示区 */}
                 <AtList className="at-card">
-                    <AtListItem title="年度用电量" className="year-power" extraText={
+                    <AtListItem title="年度用电量" className={`year-power ${lowYearPower || mediumYearPower || highYearPower ? 'show-proportion' : ''}`} extraText={
                         <div>{yearPower}<span className="unit">万千瓦时</span></div>
                     }/>
-                    <View className="proporation at-list__item"><Proportion data={items} /></View>
+                    {
+                        
+                        <AtListItem title="" className="power-proporation" extraText={
+                            lowYearPower || mediumYearPower || highYearPower
+                            ? <View className="at-list__item"><Proportion data={items} /></View>
+                            : null
+                        }/>
+                        
+                    }
                     <AtListItem title="用电均价" extraText={<span>{averagePrice}<span className="unit">元/千瓦时</span></span>} />
                 </AtList>
             </View>
