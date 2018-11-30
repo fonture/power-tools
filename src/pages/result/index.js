@@ -79,16 +79,16 @@ export default class Result extends Component {
                     <View className="card">
                         <AtList>
                             <AtListItem
-                                extraText={<span style={{ color: ap > 0 ? '#27F47A' : '#F85A24' }}>{ap}元</span>}
+                                extraText={<span><span style={{ color: ap > 0 ? '#27F47A' : '#F85A24' }}>{ap}</span> 元</span>}
                                 title='平均每度电节约'
                             />
                             <AtListItem
-                                extraText={<span style={{ color: ap > 0 ? '#27F47A' : '#F85A24' }}>{tp}元</span>}
+                                extraText={<span><span style={{ color: ap > 0 ? '#27F47A' : '#F85A24' }}>{tp}</span> 元</span>}
                                 title='预计节约年度电费'
                             />
                             {
                                 powerChange !== 0 && <AtListItem
-                                    extraText={`${powerChange}万千瓦时`}
+                                    extraText={<span><span style={{ color:'#262828'}}>{powerChange}</span> 万千瓦时</span>}
                                     title={`购电量${ch}`}
                                     hasBorder={false}
                                 />

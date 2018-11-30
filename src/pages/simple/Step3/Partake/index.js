@@ -16,19 +16,19 @@ import inject from '../../../../utils/inject';
 import reduxHelper from '../../../../utils/reduxHelper';
 import '../index.less';
 
-@inject('Partake', 'newestCataloguePrice', 'firePrice')
+@inject('powerExpect', 'newestCataloguePrice', 'firePrice')
 class Partake extends Component {
     state = {
         isOpened: false,
-        method: this.props.Partake.method || '用电量',
-        high: this.props.Partake.high || 0,
-        medium: this.props.Partake.medium || 0,
-        low: this.props.Partake.low || 0,
+        method: this.props.powerExpect.method || '用电量',
+        high: this.props.powerExpect.high || 0,
+        medium: this.props.powerExpect.medium || 0,
+        low: this.props.powerExpect.low || 0,
         highPrice: 0.8234,
         mediumPrice: 0.5234,
         lowPrice: 0.3324,
-        averagePrice: this.props.Partake.averagePrice || 0,
-        yearPower: this.props.Partake.yearPower || 0
+        averagePrice: this.props.powerExpect.averagePrice || 0,
+        yearPower: this.props.powerExpect.yearPower || 0
     }
     componentDidMount() {
         const { thermalPrice } = this.props.firePrice;
@@ -101,7 +101,7 @@ class Partake extends Component {
         })
     }
     componentWillUnmount() {
-        reduxHelper('Partake', { ...this.state })
+        reduxHelper('powerExpect', { ...this.state })
     }
     render() {
         const { high, medium, low, highPrice, mediumPrice, lowPrice, method, yearPower, averagePrice } = this.state

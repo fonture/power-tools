@@ -10,7 +10,7 @@ import './index.less'
 
 const cryImage = require('../../assets/images/cry.png');
 const smlieImage = require('../../assets/images/smile.png');
-@inject('result', 'baseMessage', 'powerCosts', 'Partake', 'unPartake')
+@inject('result', 'baseMessage', 'powerCosts', 'powerExpect')
 class ResultCanvas extends Component {
     config = {
         navigationBarTitleText: '结果页'
@@ -29,15 +29,8 @@ class ResultCanvas extends Component {
     render() {
         const { ap, ch, powerChange, tp } = this.props.result; // 结果页数据
         const { mart } = this.props.baseMessage; // 参与未参与
-        const { averagePrice, yearPower } = this.props.powerCosts; // 第二步均价
-        let step3av, step3yp; // 第三步均价
-        if (mart === '参与') {
-            step3av = this.props.Partake.averagePrice;
-            step3yp = this.props.Partake.yearPower;
-        } else {
-            step3av = this.props.unPartake.avPrice
-            step3yp = this.props.Partake.yearBuy;
-        }
+        const { averagePrice: step2av, yearPower: step2yp } = this.props.powerCosts; // 第二步均价
+        const { averagePrice: step3av, yearPower: step3yp } = this.props.powerExpect; // 第三步均价
         let versionValue;
         if (this.props.version && Object.keys(this.props.version).length > 0) {
             versionValue = this.props.version.value;
@@ -82,11 +75,11 @@ class ResultCanvas extends Component {
                             {
                                 mart === '参与' ?
                                     <Text className="wenan">
-                                        <p>用户属于电压等级为<Text className="blue">1-10</Text>千伏的<Text className="blue">大工业用电</Text>用户，当前<Text className="blue">已参加</Text>市场化交易，购买<Text className="blue">{`常规直购电`}</Text>，年度用电均价为<Text className="blue">{averagePrice}元/千瓦时</Text>。</p>
+                                        <p>用户属于电压等级为<Text className="blue">1-10</Text>千伏的<Text className="blue">大工业用电</Text>用户，当前<Text className="blue">已参加</Text>市场化交易，购买<Text className="blue">{`常规直购电`}</Text>，年度用电均价为<Text className="blue">{step2av}元/千瓦时</Text>。</p>
                                         <p>如果不参与市场化交易，根据其峰平谷比例，预估购电均价为<Text className="blue">{step3av}元/千瓦时</Text>，平均每度电预计将<Text className="red">亏损{ap}元</Text>。根据预估的购电量情况，年度电费预计<Text className="red">亏损{tp}元</Text>。</p>
                                     </Text> :
                                     <Text className="wenan">
-                                        <p>用户属于电压等级为<Text className="blue">1-10</Text>千伏的<Text className="blue">大工业用电</Text>用户，当前<Text className="blue">没有参加</Text>市场化交易，年度用电均价为<Text className="blue">{averagePrice}元/千瓦时</Text>。</p>
+                                        <p>用户属于电压等级为<Text className="blue">1-10</Text>千伏的<Text className="blue">大工业用电</Text>用户，当前<Text className="blue">没有参加</Text>市场化交易，年度用电均价为<Text className="blue">{step2av}元/千瓦时</Text>。</p>
                                         <p>如果参与市场化交易，购买常规直购电，预估购电均价为<Text className="blue">{step3av}元/千瓦时</Text>，平均每度电预计将<Text className="red">亏损{ap}元</Text>。根据预估的购电量情况，年度电费预计<Text className="red">亏损{tp}元</Text>。</p>
                                     </Text>
                             }
@@ -109,7 +102,7 @@ class ResultCanvas extends Component {
                                         <div className="range" style={{ width: (yearPower > step3yp ? 1 : (yearPower / step3yp)) * 100 + '%' }}></div>
                                     </div>
                                 </View>
-                                <View className='at-col rangeText'>实际用量<Text className="rangeNum">{yearPower}</Text></View>
+                                <View className='at-col rangeText'>实际用量<Text className={`rangeNum ${yearPower < step3yp && 'pra'}`}>{yearPower}</Text></View>
                             </View>
                             <View className='at-row'>
                                 <View className='at-col at-col-1 at-col--auto rangefull'>
@@ -117,7 +110,7 @@ class ResultCanvas extends Component {
                                         <div className="range" style={{ width: (step3yp > yearPower ? 1 : (step3yp / yearPower)) * 100 + '%' }}></div>
                                     </div>
                                 </View>
-                                <View className='at-col rangeText'>预测用量<Text className="rangeNum pra">{step3yp}</Text></View>
+                                <View className='at-col rangeText'>预测用量<Text className={`rangeNum ${step3yp < yearPower && 'pra'}`}>{step3yp}</Text></View>
                             </View>
                         </View>
                         <View className="container dash-border">
