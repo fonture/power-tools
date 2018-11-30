@@ -29,12 +29,18 @@ class ResultCanvas extends Component {
     render() {
         const { ap, ch, powerChange, tp } = this.props.result; // 结果页数据
         const { mart } = this.props.baseMessage; // 参与未参与
-        const { averagePrice } = this.props.powerCosts; // 第二步均价
-        let step3av; // 第三步均价
-        if(mart ==='参与') {
-            step3av = this.props.Partake.averagePrice
-        }else{
+        const { averagePrice, yearPower } = this.props.powerCosts; // 第二步均价
+        let step3av, step3yp; // 第三步均价
+        if (mart === '参与') {
+            step3av = this.props.Partake.averagePrice;
+            step3yp = this.props.Partake.yearPower;
+        } else {
             step3av = this.props.unPartake.avPrice
+            step3yp = this.props.Partake.yearBuy;
+        }
+        let versionValue;
+        if (this.props.version && Object.keys(this.props.version).length > 0) {
+            versionValue = this.props.version.value;
         }
         return (
             <ScrollView className='result page'>
@@ -89,27 +95,29 @@ class ResultCanvas extends Component {
                             <Text>用电峰平谷比例：</Text>
                             <Proportion data={[67, 22, 11]} />
                         </View>
-                        <View className="reCharts-container">
-                            <ReCharts />
-                        </View>
-                        <AtDivider lineColor="#888888" height="5" />
+                        {
+                            versionValue === 'higher' && <View className="reCharts-container">
+                                <ReCharts />
+                                <AtDivider lineColor="#888888" height="5" />
+                            </View>
+                        }
                         <View className="container">
                             <Text>总用电量（千瓦时）：</Text>
                             <View className='at-row'>
                                 <View className='at-col at-col-1 at-col--auto'>
                                     <div className="rangefull" >
-                                        <div className="range" style={{ width: (2928 / 2928) * 100 + '%' }}></div>
+                                        <div className="range" style={{ width: (yearPower > step3yp ? 1 : (yearPower / step3yp)) * 100 + '%' }}></div>
                                     </div>
                                 </View>
-                                <View className='at-col rangeText'>实际用量<Text className="rangeNum">2928</Text></View>
+                                <View className='at-col rangeText'>实际用量<Text className="rangeNum">{yearPower}</Text></View>
                             </View>
                             <View className='at-row'>
                                 <View className='at-col at-col-1 at-col--auto rangefull'>
                                     <div className="rangefull" >
-                                        <div className="range" style={{ width: (2246 / 2928) * 100 + '%' }}></div>
+                                        <div className="range" style={{ width: (step3yp > yearPower ? 1 : (step3yp / yearPower)) * 100 + '%' }}></div>
                                     </div>
                                 </View>
-                                <View className='at-col rangeText'>预测用量<Text className="rangeNum pra">2246</Text></View>
+                                <View className='at-col rangeText'>预测用量<Text className="rangeNum pra">{step3yp}</Text></View>
                             </View>
                         </View>
                         <View className="container dash-border">
