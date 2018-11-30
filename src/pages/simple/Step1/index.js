@@ -39,7 +39,7 @@ export default class Step1 extends Component {
             const fistItem = this.resorts.find(item => item.categoryName === sort[0]);
             sortValue = [fistItem['categoryIdentify'], fistItem.voltageLevelVOList.find(item => item.voltageName === sort[1])['voltageIdentify']]
         }
-
+debugger
         reduxHelper('baseMessage', { address, adsWord, sort: sortValue, sortValue: sort, mart })
     }
     componentWillUpdate(nextProps, nextState) {

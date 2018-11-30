@@ -2,11 +2,12 @@ import Taro, { Component } from '@tarojs/taro'
 import '@tarojs/async-await'
 import { Provider } from '@tarojs/redux'
 import configStore from './store'
+import initialState from './store/initState'
 import Index from './pages/index'
 
 import './app.less'
 
-const store = configStore()
+const store = configStore(initialState)
 
 if (process.env.TARO_ENV === "weapp") {
   require("taro-ui/dist/weapp/css/index.css")
