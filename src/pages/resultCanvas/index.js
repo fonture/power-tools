@@ -54,12 +54,12 @@ class ResultCanvas extends Component {
                                 <AtListItem
                                     title={<Text><img src={require('../../assets/no1.png')} className="stepImg" />平均每度电节约</Text>}
                                     hasBorder={false}
-                                    extraText={<span style={{ color: ap > 0 ? '#27F47A' : '#F85A24' }}>{ap}元</span>}
+                                    extraText={<span style={{ color: ap > 0 ? '#27F47A' : '#F85A24' }}>{ap} 元</span>}
                                 />
                                 <AtListItem
                                     title={<Text><img src={require('../../assets/no2.png')} className="stepImg" />预计节约年度电费</Text>}
                                     hasBorder={false}
-                                    extraText={<span style={{ color: ap > 0 ? '#27F47A' : '#F85A24' }}>{tp}元</span>}
+                                    extraText={<span style={{ color: ap > 0 ? '#27F47A' : '#F85A24' }}>{tp} 元</span>}
                                 />
                                 {
                                     powerChange !== 0 && <AtListItem
@@ -99,18 +99,18 @@ class ResultCanvas extends Component {
                             <View className='at-row'>
                                 <View className='at-col at-col-1 at-col--auto'>
                                     <div className="rangefull" >
-                                        <div className="range" style={{ width: (yearPower > step3yp ? 1 : (yearPower / step3yp)) * 100 + '%' }}></div>
+                                        <div className="range" style={{ width: (step2yp > step3yp ? 1 : (step2yp / step3yp)) * 100 + '%' }}></div>
                                     </div>
                                 </View>
-                                <View className='at-col rangeText'>实际用量<Text className={`rangeNum ${yearPower < step3yp && 'pra'}`}>{yearPower}</Text></View>
+                                <View className='at-col rangeText'>实际用量<Text className={`rangeNum ${step2yp < step3yp && 'pra'}`}>{step2yp}</Text></View>
                             </View>
                             <View className='at-row'>
                                 <View className='at-col at-col-1 at-col--auto rangefull'>
                                     <div className="rangefull" >
-                                        <div className="range" style={{ width: (step3yp > yearPower ? 1 : (step3yp / yearPower)) * 100 + '%' }}></div>
+                                        <div className="range" style={{ width: (step3yp > step2yp ? 1 : (step3yp / step2yp)) * 100 + '%' }}></div>
                                     </div>
                                 </View>
-                                <View className='at-col rangeText'>预测用量<Text className={`rangeNum ${step3yp < yearPower && 'pra'}`}>{step3yp}</Text></View>
+                                <View className='at-col rangeText'>预测用量<Text className={`rangeNum ${step3yp < step2yp && 'pra'}`}>{step3yp}</Text></View>
                             </View>
                         </View>
                         <View className="container dash-border">

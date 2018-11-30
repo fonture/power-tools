@@ -79,7 +79,7 @@ class UnPartake extends Component {
                                     title="万千瓦时"
                                     border={false}
                                     value={this.state.yearPower}
-                                    onChange={this.handleInputChange.bind(null, 'yearBuy')} />
+                                    onChange={this.handleInputChange.bind(null, 'yearPower')} />
                             }
                         />
                         <AtListItem
