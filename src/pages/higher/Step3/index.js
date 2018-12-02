@@ -85,11 +85,11 @@ export default class Step3 extends Component {
               {/* 月份组件 */}
               {
                 powerCalc[type].isMonthlyFill
-                ? <MonthButton data={powerCalc} updateData={this.updateAllData}/>
+                ? <View className="month-panel"><MonthButton data={powerCalc} updateData={this.updateAllData}/></View>
                 : null
               }
               {/* 输入面板 */}
-                <InputPanel data={powerCalc} />
+                <InputPanel data={powerCalc}  updateData={this.updateAllData}/>
               {/* 结果展示 */}
           </AtCard>
           <AtActionSheet isOpened={isOpened}
