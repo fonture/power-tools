@@ -216,3 +216,27 @@ export function computeAvPrcieByMonthAllWaterOfHigh(transmissionPrice, collectio
     let res = a / d;
     return keepDecimal(res, 5);
 }
+
+/**
+ *
+ * @description 高级版 step3 丰枯比
+ * @export
+ * @param {*} [monthlyPower=[]] 月度购电量数组
+ * @returns
+ */
+export function gethighDryProportion(monthlyPower = []) {
+    let high = monthlyPower.filter((_, index) => {
+        return index >= 5 && index <= 9
+    })
+    let dry = monthlyPower.filter((_, index) => {
+        return (index >= 0 && index <= 3) || index == 11
+    })
+    let highPower = high.reduce((prev, item, index) => {
+        return prev + item.powerVolume
+    }, 0)
+    let dryPower = dry.reduce((prev, item, index) => {
+        return prev + item.powerVolume
+    }, 0)
+    let res = highPower / dryPower;
+    return keepDecimal(res, 2);
+}
