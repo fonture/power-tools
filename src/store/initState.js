@@ -106,130 +106,110 @@ const initialState =  {
   tradingVarieties: {
     singleRegular: '单一常规',
     singleProtocol: '单一长协',
-    RegularAndSurplus: '常规+富余电量',
+    regularAndSurplus: '常规+富余电量',
     protocolAndSurplus: '长协+富余电量'
   },
   powerCalc: {
     type: 'singleRegular',
     singleRegular: {
       isMonthlyFill: false,
-      yearlyPowerVolume: undefined,
-      yearlyHydropowerPrice: undefined,
+      yearlyData: {
+        powerVolume: {
+          name: '预计年度购电量',
+          unit: '万千瓦时',
+          value: undefined
+        },
+        hydropowerPrice: {
+          name: '签约水电价格',
+          unit: '元/千瓦时',
+          value: undefined
+        },
+      },
       monthlyPowerVolume: {
         current: 0,
-        // data: [{
-        //   month: 0,
-        //   finished: true,
-        //   powerVolume: undefined,
-        //   hydropowerPrice: undefined
-        // }]
-        data: new Array(12).fill({
-          month: 0,
-          finished: true,
-          powerVolume: undefined,
-          hydropowerPrice: undefined
-        })
+        data: []
       },
       ratio: undefined,
       average: undefined,
     },
     singleProtocol: {
       isMonthlyFill: false,
-      yearlyPowerVolume: undefined,
-      yearlyHydropowerPrice: undefined,
+      yearlyData: {
+        powerVolume: {
+          name: '预计年度购电量',
+          unit: '万千瓦时',
+          value: undefined
+        },
+        hydropowerPrice: {
+          name: '签约水电价格',
+          unit: '元/千瓦时',
+          value: undefined
+        },
+      },
       monthlyPowerVolume: {
         current: 0,
-        // data: [{
-        //   month: 0,
-        //   finished: true,
-        //   powerVolume: undefined,
-        //   hydropowerPrice: undefined,
-        // }],
-        data: new Array(12).fill({
-          month: 0,
-          finished: true,
-          powerVolume: undefined,
-          hydropowerPrice: undefined
-        })
+        data: []
       },
       isParticipate: false,
       ratio: undefined,
       average: undefined,
     },
-    RegularAndSurplus: {
+    regularAndSurplus: {
       isMonthlyFill: false,
-      yearlyPowerVolume: undefined,
-      yearlyHydropowerPrice: undefined,
-      yearlySurplusPowerPrice: undefined,
-      Surplus: {
+      yearlyData: {
+        powerVolume: {
+          name: '预计年度购电量',
+          unit: '万千瓦时',
+          value: undefined
+        },
+        hydropowerPrice: {
+          name: '签约水电价格',
+          unit: '元/千瓦时',
+          value: undefined
+        },
+        surplusPowerPrice: {
+          name: '签约富余电量价格',
+          unit: '元/千瓦时',
+          value: undefined
+        },
+      },
+      surplus: {
         current: 5,
-        data: [{
-          month: 5,
-          finished: true,
-          powerVolume: undefined,
-        }],
+        data: [],
       },
       monthlyPower:  {
         current: 0,
-        // data: [
-        //   {
-        //     month: 5,
-        //     finished: true,
-        //     powerVolume: undefined,
-        //     hydropowerPrice: undefined,
-        //     // 6 -> 10
-        //     surplusPowerVolume: undefined,
-        //     surplusPowerPrice: undefined,
-        //   }
-        // ]
-        data: new Array(12).fill({
-          month: 5,
-          finished: true,
-          powerVolume: undefined,
-          hydropowerPrice: undefined,
-          // 6 -> 10
-          surplusPowerVolume: undefined,
-          surplusPowerPrice: undefined,
-        })
+        data: []
       },
       ratio: undefined,
       average: undefined,
     },
     protocolAndSurplus: {
       isMonthlyFill: false,
-      yearlyPowerVolume: undefined,
-      yearlyHydropowerPrice: undefined,
-      yearlySurplusPowerPrice: undefined,
-      Surplus: {
+      yearlyData: {
+        powerVolume: {
+          name: '预计年度购电量',
+          unit: '万千瓦时',
+          value: undefined
+        },
+        hydropowerPrice: {
+          name: '签约水电价格',
+          unit: '元/千瓦时',
+          value: undefined
+        },
+        surplusPowerPrice: {
+          name: '签约富余电量价格',
+          unit: '元/千瓦时',
+          value: undefined
+        },
+      },
+      surplus: {
         current: 5,
-        data: [{
-          month: 5,
-          finished: true,
-          powerVolume: undefined,
-        }],
+        data: [],
       },
       monthlyPower:  {
         current: 0,
-        // data: [
-        //   {
-        //     month: 5,
-        //     finished: true,
-        //     powerVolume: undefined,
-        //     hydropowerPrice: undefined,
-        //     // 6 -> 10
-        //     surplusPowerVolume: undefined,
-        //     surplusPowerPrice: undefined,
-        //   }
-        // ]
-        data: new Array(12).fill({
-          month: 5,
-          finished: true,
-          powerVolume: undefined,
-          hydropowerPrice: undefined,
-          // 6 -> 10
-          surplusPowerVolume: undefined,
-          surplusPowerPrice: undefined,
-        })
+        data: []
       },
       isParticipate: false,
       ratio: undefined,
@@ -240,7 +220,104 @@ const initialState =  {
 
   powerCosts: {}
 }
+for(let i = 0; i < 12; i++) {
+  initialState.powerCalc.singleRegular.monthlyPowerVolume.data.push({
+    month: i,
+    finished: false,
+    data: {
+      powerVolume: {
+        name: '预计购电量',
+        unit: '万千瓦时',
+        value: undefined
+      },
+      hydropowerPrice: {
+        name: '签约水电价格',
+        unit: '元/千瓦时',
+        value: undefined
+      }
+    }
+  })
+  initialState.powerCalc.singleProtocol.monthlyPowerVolume.data.push({
+    month: i,
+    finished: false,
+    data: {
+      powerVolume: {
+        name: '预计购电量',
+        unit: '万千瓦时',
+        value: undefined
+      },
+      hydropowerPrice: {
+        name: '签约水电价格',
+        unit: '元/千瓦时',
+        value: undefined
+      }
+    }
+  })
+  initialState.powerCalc.regularAndSurplus.monthlyPower.data.push({
+    month: i,
+    finished: false,
+    data: {
+      powerVolume: {
+        name: '预计购电量',
+        unit: '万千瓦时',
+        value: undefined
+      },
+      hydropowerPrice: {
+        name: '签约水电价格',
+        unit: '元/千瓦时',
+        value: undefined
+      },
+      surplusPowerVolume: {
+        name: '富余电量',
+        unit: '万千瓦时',
+        value: undefined
+      },
+      surplusPowerPrice: {
+        name: '富余电量价格',
+        unit: '元/千瓦时',
+        value: undefined
+      },
+    }
+  })
+  initialState.powerCalc.protocolAndSurplus.monthlyPower.data.push({
+    month: i,
+    finished: false,
+    data: {
+      powerVolume: {
+        name: '预计购电量',
+        unit: '万千瓦时',
+        value: undefined
+      },
+      hydropowerPrice: {
+        name: '签约水电价格',
+        unit: '元/千瓦时',
+        value: undefined
+      },
+      surplusPowerVolume: {
+        name: '富余电量',
+        unit: '万千瓦时',
+        value: undefined
+      },
+      surplusPowerPrice: {
+        name: '富余电量价格',
+        unit: '元/千瓦时',
+        value: undefined
+      },
+    }
+  })
+}
 
-
+for(let j = 5; j < 10; j++) {
+  initialState.powerCalc.regularAndSurplus.surplus.data.push({
+    month: j + 1,
+    finished: false,
+    powerVolume: undefined,
+  })
+  initialState.powerCalc.protocolAndSurplus.surplus.data.push({
+    month: j + 1,
+    finished: false,
+    powerVolume: undefined,
+  })
+}
 
 export default initialState;

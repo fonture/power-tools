@@ -3,7 +3,7 @@
  * @Date: 2018-11-29 11:00:33 
  * @Description: 月份选择面板
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-12-02 13:57:35
+ * @Last Modified time: 2018-12-02 17:19:52
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -24,7 +24,7 @@ export default class Step2 extends Component {
                     <View className="at-row at-row--wrap">
                         {
                             this.props.data.map((item, index) => (
-                                <View key={index} className={`at-col at-col-2 month-item ${index > 5 ? 'secondLineMarginTop' : ''}`}>
+                                <View key={index} className={`at-col at-col-2 month-item ${index < 6 ? 'secondLineMarginBottom' : ''}`}>
                                     <div className={`month-circle  ${item.finished ? 'finished': ''} ${index + 1 === this.props.current ? 'current' : ''}`} onClick={this.props.onClick.bind(this, index + 1)}>
                                         {
                                             item.finished

@@ -4,6 +4,7 @@ import { AtCard, AtSwitch, AtList, AtListItem, AtActionSheet, AtActionSheetItem,
 import inject from '../../../utils/inject';
 import MonthButton from '../MonthPlugin/MonthButton';
 import reduxHelper from '../../../utils/reduxHelper'
+import InputPanel from './InputPanel'
 import './index.less'
 import { type } from 'os';
 
@@ -53,6 +54,10 @@ export default class Step3 extends Component {
     })
   }
 
+  updateAllData = () => {
+    this.setState({})
+  }
+
   render() {
     const { tradingVarieties } = this.props;
     const { isOpened, isChecked, powerCalc } = this.state;
@@ -79,10 +84,11 @@ export default class Step3 extends Component {
               {/* 月份组件 */}
               {
                 powerCalc[type].isMonthlyFill
-                ? <MonthButton data={powerCalc} />
+                ? <MonthButton data={powerCalc} updateData={this.updateAllData}/>
                 : null
               } 
               {/* 输入面板 */}
+                <InputPanel data={powerCalc} />
               {/* 结果展示 */}
           </AtCard>
 

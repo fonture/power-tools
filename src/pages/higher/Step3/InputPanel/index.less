@@ -1,0 +1,89 @@
+.input-panel{
+    /*列表右侧附加信息的内容太长会显示省略号，需要手动修改*/
+    .at-list__item .item-extra__info {
+        text-overflow: initial;
+        max-width: initial;
+        width: 90%;
+    }
+    .at-list__item::after {
+        left: 0;
+    }
+    .at-list__item:active{
+        background: transparent;
+    }
+    /* 强制不换行 */
+    .at-list__item-extra{
+        white-space: nowrap;
+        flex: 1;
+    }
+
+    .item-content__info-title{
+        font-size: 28px;
+        color: #494E54;
+    }
+
+    .at-checkbox__title{
+        color: #494E54;
+    }
+
+    .at-list__item-content {
+        flex: none;
+    }
+    &.noPadding{
+        .at-card-content {
+            padding: 0;
+        }
+    }
+
+    /*输入框样式*/
+    .power-input{
+        padding: 0;
+        margin: 0 auto;
+        width: 100%;
+        input{
+            text-align: right;
+            font-size: 28px;
+            color: #494E54;
+        }
+    }
+    /*单位样式*/
+    .unit {
+        margin-left: 10px;
+        color: #919191;
+        font-size: 28px;
+    }
+
+
+
+    .power-proporation {
+        padding: 0;
+        .at-list__item-content{
+            display: none;
+        }
+        .item-extra__info{
+            width: 100%;
+            .at-list__item{
+                height: 80px;
+                padding-top: 0;
+            }
+        }
+    }
+
+    .show-proportion {
+        &::after {
+            border-bottom: 0;
+        }
+    }
+
+    .at-card {
+        color: #494E54;
+        border: none;
+        box-shadow: 0 4px 8px -4px rgba(0,0,0,0.19);
+        margin: 0;
+        border-radius: 0;
+        margin-top: 20px;
+    }
+
+    
+}
+
