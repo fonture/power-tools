@@ -5,7 +5,7 @@
         position: relative;
         height: 100%;
         .page{
-            height: 100%;      
+            height: 100%;
             .card{
                 margin: 20px 0 20px 0;
                 .at-list::after{
@@ -24,7 +24,7 @@
                     color: #494E54;
                     border: none;
                     box-shadow: 0 4px 8px -4px rgba(0,0,0,0.19);
-                    
+
                     .at-card-header{
                         border: none;
                         &::after{
@@ -91,7 +91,13 @@
                         }
                     }
                 }
-            }     
+            }
+            .at-switch {
+              input {
+                border-color:#1BDCE3 !important;
+                background-color: #1BDCE3 !important;
+              }
+            }
         }
     }
 }
@@ -99,7 +105,7 @@
 .slide-in-enter {
     transform: translate3D(100%, 0, 0);
     transition: all 200ms linear;
-  
+
     &.slide-in-enter-active {
       transform: translate3D(0, 0, 0);
     }
@@ -108,7 +114,7 @@
 .slide-in-back {
     transform: translate3D(-100%, 0, 0);
     transition: all 200ms linear;
-  
+
     &.slide-in-back-active {
       transform: translate3D(0, 0, 0);
     }

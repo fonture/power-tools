@@ -1,15 +1,19 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
-import { AtCard, AtList, AtListItem, AtActionSheet, AtActionSheetItem } from "taro-ui"
+import { AtCard, AtSwitch, AtList, AtListItem, AtActionSheet, AtActionSheetItem, AtInput } from "taro-ui"
+import MonthPlugin from '../MonthPlugin'
 import inject from '../../../utils/inject';
+import MonthButton from '../MonthPlugin/monthButton';
 import './index.less'
 
 
-@inject('tradingVariety')
+@inject('tradingVarieties')
 export default class Step3 extends Component {
 
   state = {
     isOpened: false,
+    isChecked: false,
+    selectedTrading: this.props.tradingVarieties[0]['name'] || ''
   }
 
   componentDidMount() {
@@ -23,26 +27,74 @@ export default class Step3 extends Component {
     })
   }
 
+  toggleMonthlyCheck = (isChecked) => {
+    this.setState({
+      isChecked,
+    })
+  }
+
+
+  handleClose = () => {
+    this.setState({
+      isOpened: false,
+    })
+  }
+
   handleItemSelected = (e, value) => {
-    console.log(e, value);
+    this.setState({
+      selectedTrading: value,
+      isOpened: false
+    })
   }
 
   render() {
-    const { tradingVariety } = this.props;
-    const { isOpened } = this.state;
+    const { tradingVarieties } = this.props;
+    const { isOpened, selectedTrading, isChecked } = this.state;
 
     return (
       <View>
 
-        <div className='card'>
+        <div className="power-purchase-calculation card">
           <AtList>
-            <AtListItem title='交易品种' extraText={'xxx'} arrow='right' onClick={this.triggerActionSheet} />
+            <AtListItem title='交易品种' extraText={selectedTrading} arrow='right' onClick={this.triggerActionSheet} />
           </AtList>
+          <AtCard
+            isFull
+            extra={
+                <AtSwitch
+                  className="no-padding"
+                  checked={isChecked}
+                  onChange={this.toggleMonthlyCheck}
+                >
+                </AtSwitch>
+              }
+            title="分月度填写价格"
+          >
 
-          <AtActionSheet isOpened={isOpened}>
+
+            {/* {
+
+
+              isChecked
+              ? <MonthButton item={{
+                name: '123',
+                finished: true,
+                current: true,
+              }}/>
+              : <MonthButton item={{
+                name: '456',
+                finished: false,
+                current: false,
+              }}/>
+            } */}
+          </AtCard>
+
+          <AtActionSheet isOpened={isOpened}
+          onClose={this.handleClose}
+          >
             {
-              tradingVariety.map(({name, value}) => (
-                <AtActionSheetItem onClick={(e)=>this.handleItemSelected(e, value)}>
+              tradingVarieties.map(({name}) => (
+                <AtActionSheetItem onClick={(e)=>this.handleItemSelected(e, name)}>
                   {name}
                 </AtActionSheetItem>
               ))
@@ -51,8 +103,7 @@ export default class Step3 extends Component {
 
         </div>
 
-      </View >
-
+      </View>
     )
   }
 }
