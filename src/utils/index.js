@@ -19,6 +19,10 @@ export function keepDecimal(num, digit) {
     }
 }
 
+/**
+ * @param {*} args
+ * @returns {boolean} 
+ */
 export function validate(...args) {
     let length = args.length;
     for (let i = 0; i < length; i++) {
@@ -28,4 +32,21 @@ export function validate(...args) {
         }
     }
     return true
+}
+
+/**
+ * @param1 {any, object} o - obj needs to deeply check&grab isExist props
+ * @param2 {string} props - the chain props(use dot character), which needs deeply check&grab
+ * @return {any} field - return the prop value, if it not exist return undefined.
+ */
+export function deepExtract(o, props) {
+  const [first, ...remaining] = props.split('.');
+  return (
+    o == null
+    // when o is undefined or null return undefined directly
+      ? undefined
+      : (remaining.length)
+        ? deepExtract(o[first], remaining.join('.'))
+        : o[first]
+  );
 }
