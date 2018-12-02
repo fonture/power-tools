@@ -9,7 +9,7 @@ import TaroAmin from '../../components/taro-amin'
 import Step1 from './Step1';
 import Step2 from './Step2';
 import Step3 from './Step3';
-@inject('stepInfo')
+@inject('stepInfo','next')
 export default class Form extends Component {
 
     config = {
@@ -33,15 +33,16 @@ export default class Form extends Component {
             Taro.redirectTo({ url: 'pages/result/index' }) :
             this.setState({ step: this.state.step + 1, action: 'enter' });
         reduxHelper('stepInfo', { current: this.state.step, items: ['基础信息', '用电成本', '购电计算'] })
+        reduxHelper('next', false)
     }
     render() {
-        const { stepInfo } = this.props
+        const { stepInfo = {},next = false } = this.props
         return (
             <ScrollView className='form page'>
                 <Steps current={stepInfo.current} items={stepInfo.items} />
                 <Content step={this.state.step} action={this.state.action} />
                 <Button onClick={this.preStep} type="secondary">上一步</Button>
-                <Button onClick={this.nextStep} type="primary">下一步</Button>
+                <Button onClick={this.nextStep} type="primary" disabled={!next}>下一步</Button>
             </ScrollView>
         )
     }

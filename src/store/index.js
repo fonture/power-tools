@@ -3,7 +3,7 @@
  * @Date: 2018-11-15 09:04:57
  * @Description: redux数据仓库
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-30 15:35:23
+ * @Last Modified time: 2018-12-01 14:09:33
  */
 import { createStore, applyMiddleware } from 'redux'
 import thunkMiddleware from 'redux-thunk'
@@ -21,7 +21,8 @@ let store = {}
 
 const createInitReducer = (initialState) => {
     for(let key in initialState) {
-        const reducer = (state = initialState[key]) => state
+        const type = Symbol.for(key.toString())
+        const reducer = createReducer(type, initialState[key])
         injectReducer(key, reducer)
     }
 }
@@ -35,6 +36,7 @@ export default function configStore (initialState = {}) {
 
 
 export function injectReducer(name, asyncReducer) {
+    if(store.asyncReducers.hasOwnProperty(name)) return
     store.asyncReducers[name] = asyncReducer
     store.replaceReducer(rootReducer(store.asyncReducers))
 }

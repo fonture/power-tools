@@ -16,7 +16,7 @@ export default class Index extends Component {
       method: 'get',
       url: '/wechat/kit/thermal/price',
     });
-    reduxHelper('firePrice', {thermalPrice: data.thermalPrice || 0.4025});
+    reduxHelper('firePrice', data.thermalPrice || 0.4025);
     this.setState({
       firePrice: data.thermalPrice,
     })
@@ -43,7 +43,7 @@ export default class Index extends Component {
       activeNode: edition,
     }, () => {
       setTimeout(() => {
-        reduxHelper('version', {value: edition})
+        reduxHelper('version', edition)
         Taro.redirectTo({ url: `pages/${edition}/index` })
         // 为显示loading 设置了延迟跳转。
       }, 1000);
@@ -66,7 +66,7 @@ export default class Index extends Component {
   handleSubmit = (e)=> {
     //  注意，只是点击按钮，有可能会触发不了表单提交
     //  且，小程序有可能无法通过 e.detail.value 获取值，需要设置sate取值，taro和taro ui的 bug
-    reduxHelper('firePrice', {thermalPrice: e.detail.value});
+    reduxHelper('firePrice', Number(e.detail.value.value));
     this.handleClose();
   }
   handleClose = ()=>{

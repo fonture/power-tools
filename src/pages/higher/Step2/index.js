@@ -3,7 +3,7 @@
  * @Date: 2018-11-28 13:47:30 
  * @Description: 高级版第二步用电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-30 09:58:00
+ * @Last Modified time: 2018-12-01 17:25:56
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -27,43 +27,21 @@ import './index.less'
 @inject('yearCataloguePriceMap', 'powerCostsOfHigh')
 export default class Step2 extends Component {
     state = {
-        currMonth: this.props.powerCostsOfHigh.currMonth || 1,
-        monthPowerList: this.props.powerCostsOfHigh.monthPowerList || [],
-        yearPower: this.props.powerCostsOfHigh.monthPowerList || '',
-        averagePrice: this.props.powerCostsOfHigh.averagePrice || '',
-        highYearPower:this.props.powerCostsOfHigh.highYearPower || '',
-        mediumYearPower: this.props.powerCostsOfHigh.mediumYearPower || '', 
-        lowYearPower: this.props.powerCostsOfHigh.lowYearPower || '',
+        currMonth: this.props.powerCostsOfHigh.currMonth,
+        monthPowerList: this.props.powerCostsOfHigh.monthPowerList,
+        yearPower: this.props.powerCostsOfHigh.yearPower,
+        averagePrice: this.props.powerCostsOfHigh.averagePrice,
+        highYearPower:this.props.powerCostsOfHigh.highYearPower,
+        mediumYearPower: this.props.powerCostsOfHigh.mediumYearPower, 
+        lowYearPower: this.props.powerCostsOfHigh.lowYearPower,
     }
-    defaultProps = {
-        powerCostsOfHigh: {},
-        yearCataloguePriceMap: [
-            {
-                collectionFund: 0,
-                cataloguePriceVoMap: {
-                    peak: 0,
-                    plain: 0,
-                    valley: 0
-                }
-            }
-        ]
-    }
-    componentWillMount(){
-        if(this.state.monthPowerList.length === 0){
-            for(let i = 0; i < 12; i++) {
-                this.state.monthPowerList.push({
-                    name: `${i + 1}月`,
-                    finished: false,
-                    high: '',
-                    medium: '',
-                    low: ''
-                })
-            }
-        }  
+    componentWillMount() {
+        const next = this.state.monthPowerList.find(item => item.finished)
+        reduxHelper('next', next ? true : false)  
     }
     async componentDidMount(){
         reduxHelper('powerCostsOfHigh', this.state)
-
+        
         // 请求基金、峰平谷电价
         const catalogueprice = await request({
             method: 'GET',
@@ -100,6 +78,9 @@ export default class Step2 extends Component {
             const result = computePowerOfHigh(monthPowerList, yearCataloguePriceMap)
             this.setState({
                 ...result
+            }, () => {
+                const next = this.state.monthPowerList.find(item => item.finished)
+                reduxHelper('next', next ? true : false)     
             })
         }
     }
