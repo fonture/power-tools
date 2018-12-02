@@ -35,7 +35,6 @@ export default class Form extends Component {
         reduxHelper('stepInfo', { current: this.state.step, items: ['基础信息', '用电成本', '购电计算'] })
     }
     render() {
-        const { edition } = this.$router.params
         const { stepInfo,next = {} } = this.props
         return (
             <ScrollView className='form page'>
