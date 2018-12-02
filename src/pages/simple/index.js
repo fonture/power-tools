@@ -42,9 +42,10 @@ export default class Form extends Component {
             Taro.redirectTo({ url: 'pages/result/index' }) :
             this.setState({ step: step + 1, action: 'enter' });
         reduxHelper('stepInfo', { current: step, items: baseMessage.mart === '参与' ? ['基础信息', '购电成本', '目录电价'] : ['基础信息', '用电成本', '购电计算']})
+        reduxHelper('next', false)
     }
     render() {
-        const { stepInfo ,next = {}} = this.props
+        const { stepInfo = {} ,next = false } = this.props
         return (
             <ScrollView className='form page'>
                 <Steps current={stepInfo.current} items={stepInfo.items} />
@@ -52,7 +53,7 @@ export default class Form extends Component {
                     step={this.state.step}
                     action={this.state.action} />
                 <Button onClick={this.preStep} type="secondary">上一步</Button>
-                <Button onClick={this.nextStep} type="primary" disabled={!next.next}>下一步</Button>
+                <Button onClick={this.nextStep} type="primary" disabled={!next}>下一步</Button>
             </ScrollView>
         )
     }

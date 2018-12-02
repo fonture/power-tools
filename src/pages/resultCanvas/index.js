@@ -31,10 +31,10 @@ class ResultCanvas extends Component {
         const { mart } = this.props.baseMessage; // 参与未参与
         const { averagePrice: step2av, yearPower: step2yp } = this.props.powerCosts; // 第二步均价
         const { averagePrice: step3av, yearPower: step3yp } = this.props.powerExpect; // 第三步均价
-        let versionValue;
-        if (this.props.version && Object.keys(this.props.version).length > 0) {
-            versionValue = this.props.version.value;
-        }
+        let versionValue = this.props.version;
+        // if (this.props.version && Object.keys(this.props.version).length > 0) {
+        //     versionValue = this.props.version.value;
+        // }
         return (
             <ScrollView className='result page'>
                 <AtIcon className="close"
