@@ -138,7 +138,6 @@ debugger
     }
 
     pickerColumnChange = (e) => {
-        console.log(e.detail);
         const { column, value } = e.detail;
         if (column === 0) {
             this.setState({
