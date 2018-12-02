@@ -103,24 +103,12 @@ const initialState =  {
   },
 
 /* ------------------------------ higher step-3 ------------------------------------ */
-  tradingVarieties: [
-    {
-      value: 'singleRegular',
-      name: '单一常规',
-    },
-    {
-      value: 'singleProtocol',
-      name: '单一长协',
-    },
-    {
-      value: 'RegularAndSurplus',
-      name: '常规+富余电量',
-    },
-    {
-      value: 'protocolAndSurplus',
-      name: '长协+富余电量',
-    },
-  ],
+  tradingVarieties: {
+    singleRegular: '单一常规',
+    singleProtocol: '单一长协',
+    RegularAndSurplus: '常规+富余电量',
+    protocolAndSurplus: '长协+富余电量'
+  },
   powerCalc: {
     type: 'singleRegular',
     singleRegular: {

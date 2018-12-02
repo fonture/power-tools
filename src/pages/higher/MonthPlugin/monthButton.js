@@ -6,7 +6,8 @@ export default class MonthButton extends Component {
 
   onClick = (month) => {
     const {data} = this.props
-    switch(data.type) {
+    const type = data.type
+    switch(type) {
       case 'singleRegular':
       case 'singleProtocol':
         data[type].monthlyPowerVolume.current = month
@@ -19,8 +20,9 @@ export default class MonthButton extends Component {
 
   render() {
     const {data} = this.props
+    const type = data.type
     let dataSet = [], current = 0
-    switch(data.type) {
+    switch(type) {
       case 'singleRegular':
       case 'singleProtocol':
         current = data[type].monthlyPowerVolume.current
@@ -44,7 +46,7 @@ export default class MonthButton extends Component {
                               ? <div><img src={require('../../../assets/images/gou.png')} /></div>
                               : null
                           }
-                          <div>{item.name}</div>
+                          <div>{item.month}月</div>
                       </div>
                   </View>
               ))
