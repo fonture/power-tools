@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:11:35 
  * @Description:未参与市场时的用电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-28 19:50:04
+ * @Last Modified time: 2018-11-30 17:17:06
  */
 
 import Taro, { Component } from '@tarojs/taro'
@@ -14,18 +14,18 @@ import {
     AtActionSheet, 
     AtActionSheetItem, 
     AtCard, 
-    AtInput,
 } from 'taro-ui'
 import PowerProportion from '../../../../components/PowerProportion'
 import { powerAveragePriceOfNotJoin } from '../../../../utils/formula'
 import reduxHelper from '../../../../utils/reduxHelper'
 import inject from '../../../../utils/inject'
+import Input from '../../../../components/Input'
 import './index.less'
 
 @inject('newestCataloguePrice', 'electricityCostData')
 export default class ElectricityCost extends Component {
     state = {
-        isOpened: this.props.electricityCostData.isOpened || false,
+        isOpened: false,
         method: this.props.electricityCostData.method || '用电量',
         high: this.props.electricityCostData.high || '',
         medium: this.props.electricityCostData.medium || '',
@@ -67,7 +67,12 @@ export default class ElectricityCost extends Component {
      * @param {Object} e 事件对象
      */
     onClickSheet = (e) => {
-        if(this.state.method === e.target.innerHTML) return
+        if(this.state.method === e.target.innerHTML) {
+            this.setState({
+                isOpened: false
+            })
+            return
+        }
         this.setState({
             method: e.target.innerHTML,
             isOpened: false,
@@ -128,9 +133,15 @@ export default class ElectricityCost extends Component {
             })    
         }
     }
-
+    handleClose = ()=> {
+        this.setState({
+            isOpened: false
+        },()=>{
+            console.log('hello', this.state.isOpened);
+        })
+    }
     render() {
-        const { high, medium, low, method, yearPower, averagePrice} = this.state
+        const { high, medium, low, method, yearPower, averagePrice, isOpened} = this.state
         const items = [
             {
                 percent: yearPower && (high * 100 / yearPower).toFixed(2) + '%', 
@@ -155,7 +166,7 @@ export default class ElectricityCost extends Component {
                 </AtList>
 
                 {/* 选择输入方式时底部弹出的活动页 */}
-                <AtActionSheet isOpened={this.state.isOpened} title="请选择输入方式">
+                <AtActionSheet isOpened={isOpened} title="请选择输入方式" onClose={this.handleClose}>
                     <AtActionSheetItem onClick={this.onClickSheet}>
                     用电量
                     </AtActionSheetItem>
@@ -173,14 +184,40 @@ export default class ElectricityCost extends Component {
                             title="峰平谷比例"
                             isFull
                         >
-                            <View className="at-row at-row__justify--center at-row__align--center">
+                            {/* <View className="at-row at-row__justify--center at-row__align--center">
                             {
                                 items.map(item => {
                                     const { percent, value, itemName } = item
                                     return <PowerProportion percent={percent} value={value} itemName={itemName} showPercent={true} onChangeValue={this.onChangeValue.bind(this)}/>
                                 })
                             }    
-                            </View>
+                            </View> */}
+                            <AtList className="card-group power-input-list">
+                                <AtListItem title="峰时用电" onClick={this.onListClick}
+                                    extraText={
+                                        <View className="at-row at-row__justify--center at-row__align--center">
+                                            <Input type="number" digit={4}  className="power-input" border={false} value={yearPower} onChange={this.onChangeValue.bind(this, 'high')}/>
+                                            <div className="power-result-unit">万千瓦时</div>
+                                        </View>
+                                    } 
+                                />
+                                <AtListItem title="平时用电" onClick={this.onListClick}
+                                    extraText={
+                                        <View className="at-row at-row__justify--center at-row__align--center">
+                                            <Input type="number" digit={5} className="power-input" border={false} value={deviationCost} onChange={this.onChangeValue.bind(this, 'medium')}/>
+                                            <div className="power-result-unit">元</div>
+                                        </View>
+                                    } 
+                                />
+                                <AtListItem title="谷时用电" onClick={this.onListClick}
+                                    extraText={
+                                        <View className="at-row at-row__justify--center at-row__align--center">
+                                            <Input type="number" digit={5} className="power-input" border={false} value={signedPrice} onChange={this.onChangeValue.bind(this, 'low')}/>
+                                            <div className="power-result-unit">元/千瓦时</div>
+                                        </View>
+                                    } 
+                                />
+                            </AtList>
                         </AtCard>
 
                         {/* 展示年度电量与用电均价 */}
@@ -193,7 +230,7 @@ export default class ElectricityCost extends Component {
                         <AtListItem title="年度用电量"  onClick={this.onListClick}
                             extraText={
                                 <View className="at-row at-row__justify--center at-row__align--center">
-                                    <AtInput type="number" className="power-input" border={false} value={yearPower} onChange={this.onInput.bind(this, 'yearPower')}/>
+                                    <Input type="number" digit={4} className="power-input" border={false} value={yearPower} onChange={this.onInput.bind(this, 'yearPower')}/>
                                     <div className="power-result-unit">万千瓦时</div>
                                 </View>
                             } 
@@ -201,7 +238,7 @@ export default class ElectricityCost extends Component {
                         <AtListItem title="用电均价"  onClick={this.onListClick}
                             extraText={
                                 <View className="at-row at-row__justify--center at-row__align--center">
-                                    <AtInput type="number" className="power-input" border={false} value={averagePrice} onChange={this.onInput.bind(this, 'averagePrice')}/>
+                                    <Input type="number" digit={5} className="power-input" border={false} value={averagePrice} onChange={this.onInput.bind(this, 'averagePrice')}/>
                                     <div className="power-result-unit">元/千瓦时</div>
                                 </View>
                             } 

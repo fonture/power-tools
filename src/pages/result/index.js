@@ -10,7 +10,7 @@ import './index.less'
 
 const cryImage = require('../../assets/images/cry.png');
 const smlieImage = require('../../assets/images/smile.png');
-@inject('baseMessage', 'Partake', 'unPartake', 'powerCosts')
+@inject('baseMessage', 'powerExpect', 'powerCosts')
 export default class Result extends Component {
     config = {
         navigationBarTitleText: '结果页'
@@ -25,35 +25,19 @@ export default class Result extends Component {
     compAP = () => {
         let { mart } = this.props.baseMessage;
         let step2AP = this.props.powerCosts.averagePrice,
-            step3AP = 0;
-        if (mart === '参与') {
-            step3AP = this.props.Partake.averagePrice;
-        } else {
-            step3AP = this.props.unPartake.avPrice;
-        }
+            step3AP = this.props.powerExpect.averagePrice;
         return keepDecimal(step2AP - step3AP, 5)
     }
     compTP = (ap) => {
-        let { mart } = this.props.baseMessage;
-        let tp;
-        if (mart === '参与') {
-            tp = this.props.Partake.yearPower * ap;
-        } else {
-            tp = this.props.unPartake.yearBuy * ap;
-        }
+        let tp = this.props.powerExpect.yearPower * ap
         return keepDecimal(tp, 0)
     }
     getPowerChange = () => {
         let { mart } = this.props.baseMessage;
         let step2powerChange = this.props.powerCosts.yearPower;
-        let powerChange;
-        let ch;
-        if (mart === '参与') {
-            powerChange = step2powerChange - this.props.Partake.yearPower;
-        } else {
-            powerChange = step2powerChange - this.props.unPartake.yearBuy;
-        }
-        ch = powerChange > 0 ? '增加' : '减少';
+        let step3powerChange = this.props.powerExpect.yearPower;
+        let powerChange = step2powerChange - step3powerChange;
+        let ch = powerChange > 0 ? '增加' : '减少';
 
         return {
             ch,
@@ -79,16 +63,16 @@ export default class Result extends Component {
                     <View className="card">
                         <AtList>
                             <AtListItem
-                                extraText={<span style={{ color: ap > 0 ? '#27F47A' : '#F85A24' }}>{ap}元</span>}
+                                extraText={<span><span style={{ color: ap > 0 ? '#27F47A' : '#F85A24' }}>{ap}</span> 元</span>}
                                 title='平均每度电节约'
                             />
                             <AtListItem
-                                extraText={<span style={{ color: ap > 0 ? '#27F47A' : '#F85A24' }}>{tp}元</span>}
+                                extraText={<span><span style={{ color: ap > 0 ? '#27F47A' : '#F85A24' }}>{tp}</span> 元</span>}
                                 title='预计节约年度电费'
                             />
                             {
                                 powerChange !== 0 && <AtListItem
-                                    extraText={`${powerChange}万千瓦时`}
+                                    extraText={<span><span style={{ color:'#262828'}}>{powerChange}</span> 万千瓦时</span>}
                                     title={`购电量${ch}`}
                                     hasBorder={false}
                                 />

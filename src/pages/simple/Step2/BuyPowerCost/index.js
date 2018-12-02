@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:13:09 
  * @Description: 参与市场时的购电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-28 19:46:56
+ * @Last Modified time: 2018-11-30 17:03:49
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -12,18 +12,18 @@ import {
     AtListItem, 
     AtActionSheet, 
     AtActionSheetItem, 
-    AtInput,
     AtCheckbox,
 } from 'taro-ui'
 import { powerAveragePriceOfJoin } from '../../../../utils/formula'
 import reduxHelper from '../../../../utils/reduxHelper'
 import inject from '../../../../utils/inject'
+import Input from '../../../../components/Input'
 import './index.less'
 
 @inject('newestCataloguePrice', 'newestTransmissionPrice', 'firePrice', 'buyPowerCostData')
 export default class BuyPowerCost extends Component {
     state = {
-        isOpened: this.props.buyPowerCostData.isOpened || false,
+        isOpened: false,
         method: this.props.buyPowerCostData.method || '年度用电量',
         checkedList: this.props.buyPowerCostData.checkedList || [],
         yearPower: this.props.buyPowerCostData.yearPower || '', 
@@ -59,7 +59,12 @@ export default class BuyPowerCost extends Component {
      * @param {Object} e 事件对象
      */
     onClickSheet = (e) => {
-        if(this.state.method === e.target.innerHTML) return
+        if(this.state.method === e.target.innerHTML) {
+            this.setState({
+                isOpened: false
+            })
+            return
+        }
         this.setState({
             method: e.target.innerHTML,
             isOpened: false,
@@ -122,6 +127,11 @@ export default class BuyPowerCost extends Component {
         e.preventDefault()
         e.currentTarget.getElementsByTagName('input')[0].focus()
     }
+    handleClose = ()=> {
+        this.setState({
+            isOpened: false
+        })
+    }    
     render() {
         const { method, yearPower, deviationCost, signedPrice, averagePrice} = this.state
 
@@ -134,7 +144,7 @@ export default class BuyPowerCost extends Component {
                 </AtList>
 
                 {/* 选择输入方式时底部弹出的活动页 */}
-                <AtActionSheet isOpened={this.state.isOpened} title="请选择输入方式">
+                <AtActionSheet isOpened={this.state.isOpened} title="请选择输入方式" onClose={this.handleClose}>
                     <AtActionSheetItem onClick={this.onClickSheet}>
                     年度用电量
                     </AtActionSheetItem>
@@ -151,7 +161,7 @@ export default class BuyPowerCost extends Component {
                             <AtListItem title="年度用电量" onClick={this.onListClick}
                                 extraText={
                                     <View className="at-row at-row__justify--center at-row__align--center">
-                                        <AtInput type="number" className="power-input" border={false} value={yearPower} onChange={this.onChangeValue.bind(this, 'yearPower')}/>
+                                        <Input type="number" digit={4}  className="power-input" border={false} value={yearPower} onChange={this.onChangeValue.bind(this, 'yearPower')}/>
                                         <div className="power-result-unit">万千瓦时</div>
                                     </View>
                                 } 
@@ -159,7 +169,7 @@ export default class BuyPowerCost extends Component {
                             <AtListItem title="年度偏差考核费用" onClick={this.onListClick}
                                 extraText={
                                     <View className="at-row at-row__justify--center at-row__align--center">
-                                        <AtInput type="number" className="power-input" border={false} value={deviationCost} onChange={this.onChangeValue.bind(this, 'deviationCost')}/>
+                                        <Input type="number" digit={5} className="power-input" border={false} value={deviationCost} onChange={this.onChangeValue.bind(this, 'deviationCost')}/>
                                         <div className="power-result-unit">元</div>
                                     </View>
                                 } 
@@ -167,7 +177,7 @@ export default class BuyPowerCost extends Component {
                             <AtListItem title="签约水电价格" onClick={this.onListClick}
                                 extraText={
                                     <View className="at-row at-row__justify--center at-row__align--center">
-                                        <AtInput type="number" className="power-input" border={false} value={signedPrice} onChange={this.onChangeValue.bind(this, 'signedPrice')}/>
+                                        <Input type="number" digit={5} className="power-input" border={false} value={signedPrice} onChange={this.onChangeValue.bind(this, 'signedPrice')}/>
                                         <div className="power-result-unit">元/千瓦时</div>
                                     </View>
                                 } 
@@ -192,7 +202,7 @@ export default class BuyPowerCost extends Component {
                         <AtListItem title="年度用电量" onClick={this.onListClick}
                             extraText={
                                 <View className="at-row at-row__justify--center at-row__align--center">
-                                    <AtInput type="number" className="power-input" border={false} value={yearPower}  onChange={this.onChangeValue.bind(this, 'yearPower')}/>
+                                    <Input type="number" digit={4} className="power-input" border={false} value={yearPower}  onChange={this.onChangeValue.bind(this, 'yearPower')}/>
                                     <div className="power-result-unit">万千瓦时</div>
                                 </View>
                             } 
@@ -200,7 +210,7 @@ export default class BuyPowerCost extends Component {
                         <AtListItem title="购电均价" onClick={this.onListClick}
                             extraText={
                                 <View className="at-row at-row__justify--center at-row__align--center">
-                                    <AtInput type="number" className="power-input" border={false} value={averagePrice} onChange={this.onChangeValue.bind(this, 'averagePrice')}/>
+                                    <Input type="number" digit={5} className="power-input" border={false} value={averagePrice} onChange={this.onChangeValue.bind(this, 'averagePrice')}/>
                                     <div className="power-result-unit">元/千瓦时</div>
                                 </View>
                             } 

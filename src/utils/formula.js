@@ -59,6 +59,7 @@ export function getAllWaterAvPriceOfElePur(waterPrice, transmissionPrice, collec
  */
 export function powerAveragePriceOfJoin(firePrice, transmissionPrice, collectionFund, yearPower, deviationCost, signedPrice, isJoin) {
     if(!yearPower) return ''
+    yearPower *= 10000
     let price = 0
     if(isJoin) {
         price = signedPrice + transmissionPrice +  deviationCost/yearPower + collectionFund
@@ -82,7 +83,7 @@ export function powerAveragePriceOfJoin(firePrice, transmissionPrice, collection
  */
 export function powerAveragePriceOfNotJoin(high = 0, medium = 0, low = 0, highPrice, mediumPrice, lowPrice, collectionFund) {
     const yearPower = high + medium + low
-    if(!yearPower) return { yearPower, averagePrice }
+    if(!yearPower) return { yearPower, averagePrice: 0 }
     let averagePrice = ((high * highPrice + medium * mediumPrice + low * lowPrice) / yearPower + collectionFund)
     averagePrice = keepDecimal(averagePrice, 4)
     return { yearPower, averagePrice }
