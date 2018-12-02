@@ -24,7 +24,7 @@ export default class Form extends Component {
     }
     preStep = () => {
         this.state.step === 1 ?
-            Taro.redirectTo({ url: 'pages/index/index' }) :
+            Taro.redirectTo({ url: 'pages/index' }) :
             this.setState({ step: this.state.step - 1, action: 'back' });
         reduxHelper('stepInfo', { current: this.state.step - 2, items: ['基础信息', '用电成本', '购电计算'] })
     }

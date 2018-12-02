@@ -2,6 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtCard, AtSwitch, AtList, AtListItem, AtActionSheet, AtActionSheetItem, AtInput } from "taro-ui"
 import inject from '../../../utils/inject';
+import { deepExtract } from '../../../utils';
 import MonthButton from '../MonthPlugin/MonthButton';
 import reduxHelper from '../../../utils/reduxHelper'
 import InputPanel from './InputPanel'
@@ -14,7 +15,7 @@ export default class Step3 extends Component {
 
   state = {
     isOpened: false,
-    isChecked: false,
+    tradingVarieties: this.props.tradingVarieties,
     powerCalc: this.props.powerCalc
   }
 
@@ -29,12 +30,11 @@ export default class Step3 extends Component {
   }
 
   toggleMonthlyCheck = (isChecked) => {
-    const { powerCalc } = this.props;
+    const { powerCalc } = this.state;
     const { type } = powerCalc;
     powerCalc[type].isMonthlyFill = isChecked;
-    reduxHelper('powerCalc', powerCalc);
     this.setState({
-      isChecked,
+      powerCalc,
     })
   }
 
@@ -46,10 +46,10 @@ export default class Step3 extends Component {
   }
 
   handleItemSelected = (e, key) => {
-    const { powerCalc } = this.props;
+    const { powerCalc } = this.state;
     powerCalc.type = key
-    reduxHelper('powerCalc', powerCalc);
     this.setState({
+      powerCalc,
       isOpened: false
     })
   }
@@ -59,26 +59,27 @@ export default class Step3 extends Component {
   }
 
   render() {
-    const { tradingVarieties } = this.props;
-    const { isOpened, isChecked, powerCalc } = this.state;
-    const { type, singleRegular, singleProtocol, RegularAndSurplus, protocolAndSurplus } = powerCalc
+    const { isOpened, powerCalc, tradingVarieties } = this.state;
+    const { type, singleRegular, singleProtocol, RegularAndSurplus, protocolAndSurplus } = powerCalc;
+
     return (
       <View>
-
         <div className="power-purchase-calculation card">
           <AtList>
-            <AtListItem title='交易品种' extraText={tradingVarieties[powerCalc.type]} arrow='right' onClick={this.triggerActionSheet} />
+            <AtListItem title='交易品种' extraText={tradingVarieties[type]} arrow='right' onClick={this.triggerActionSheet} />
           </AtList>
           <AtCard
             isFull
             extra={
-                <AtSwitch
-                  className="no-padding"
-                  checked={isChecked}
-                  onChange={this.toggleMonthlyCheck}
-                >
-                </AtSwitch>
-              }
+              <AtSwitch
+                key={Symbol()}
+                ref={node => this.switch = node}
+                className="no-padding"
+                checked={deepExtract(powerCalc, `${type}.isMonthlyFill`)}
+                onChange={this.toggleMonthlyCheck}
+              >
+              </AtSwitch>
+            }
             title="分月度填写价格"
           >
               {/* 月份组件 */}
@@ -86,14 +87,13 @@ export default class Step3 extends Component {
                 powerCalc[type].isMonthlyFill
                 ? <MonthButton data={powerCalc} updateData={this.updateAllData}/>
                 : null
-              } 
+              }
               {/* 输入面板 */}
                 <InputPanel data={powerCalc} />
               {/* 结果展示 */}
           </AtCard>
-
           <AtActionSheet isOpened={isOpened}
-          onClose={this.handleClose}
+            onClose={this.handleClose}
           >
             {
               Object.keys(tradingVarieties).map(key => (

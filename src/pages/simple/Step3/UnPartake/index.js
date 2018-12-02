@@ -12,12 +12,14 @@ import {
 } from '../../../../utils/formula';
 import inject from '../../../../utils/inject'
 import reduxHelper from '../../../../utils/reduxHelper'
-@inject('powerExpect', 'firePrice', 'newestTransmissionPrice', 'newestCataloguePrice')
+import { validate } from '../../../../utils'
+
+@inject('powerExpect', 'firePrice', 'newestTransmissionPrice', 'newestCataloguePrice', 'next')
 class UnPartake extends Component {
     state = {
         checkedList: this.props.powerExpect.checkedList || [],
-        yearPower: this.props.powerExpect.yearPower || 0,
-        waterPrice: this.props.powerExpect.waterPrice || 0,
+        yearPower: this.props.powerExpect.yearPower || undefined,
+        waterPrice: this.props.powerExpect.waterPrice || undefined,
         averagePrice: this.props.powerExpect.averagePrice || 0
     }
 
@@ -62,8 +64,16 @@ class UnPartake extends Component {
             averagePrice
         })
     }
+    componentWillMount() {
+        const { yearPower, waterPrice } = this.state;
+        reduxHelper('next', validate(yearPower, waterPrice))
+    }
     componentWillUnmount() {
         reduxHelper('powerExpect', { ...this.state })
+    }
+    componentDidUpdate() {
+        const { yearPower, waterPrice } = this.state;
+        reduxHelper('next', validate(yearPower, waterPrice))
     }
     render() {
         return (
