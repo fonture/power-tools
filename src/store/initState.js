@@ -129,11 +129,18 @@ const initialState =  {
       yearlyHydropowerPrice: undefined,
       monthlyPowerVolume: {
         current: 0,
-        data: [{
+        // data: [{
+        //   month: 0,
+        //   finished: true,
+        //   powerVolume: undefined,
+        //   hydropowerPrice: undefined
+        // }]
+        data: new Array(12).fill({
           month: 0,
+          finished: true,
           powerVolume: undefined,
           hydropowerPrice: undefined
-        }]
+        })
       },
       ratio: undefined,
       average: undefined,
@@ -144,11 +151,18 @@ const initialState =  {
       yearlyHydropowerPrice: undefined,
       monthlyPowerVolume: {
         current: 0,
-        data: [{
+        // data: [{
+        //   month: 0,
+        //   finished: true,
+        //   powerVolume: undefined,
+        //   hydropowerPrice: undefined,
+        // }],
+        data: new Array(12).fill({
           month: 0,
+          finished: true,
           powerVolume: undefined,
-          hydropowerPrice: undefined,
-        }],
+          hydropowerPrice: undefined
+        })
       },
       isParticipate: false,
       ratio: undefined,
@@ -163,22 +177,32 @@ const initialState =  {
         current: 5,
         data: [{
           month: 5,
+          finished: true,
           powerVolume: undefined,
         }],
       },
       monthlyPower:  {
         current: 0,
-        data: [
-          {
-            month: 5,
-            current: true,
-            powerVolume: undefined,
-            hydropowerPrice: undefined,
-            // 6 -> 10
-            surplusPowerVolume: undefined,
-            surplusPowerPrice: undefined,
-          }
-        ]
+        // data: [
+        //   {
+        //     month: 5,
+        //     finished: true,
+        //     powerVolume: undefined,
+        //     hydropowerPrice: undefined,
+        //     // 6 -> 10
+        //     surplusPowerVolume: undefined,
+        //     surplusPowerPrice: undefined,
+        //   }
+        // ]
+        data: new Array(12).fill({
+          month: 5,
+          finished: true,
+          powerVolume: undefined,
+          hydropowerPrice: undefined,
+          // 6 -> 10
+          surplusPowerVolume: undefined,
+          surplusPowerPrice: undefined,
+        })
       },
       ratio: undefined,
       average: undefined,
@@ -192,22 +216,32 @@ const initialState =  {
         current: 5,
         data: [{
           month: 5,
+          finished: true,
           powerVolume: undefined,
         }],
       },
       monthlyPower:  {
         current: 0,
-        data: [
-          {
-            month: 5,
-            current: true,
-            powerVolume: undefined,
-            hydropowerPrice: undefined,
-            // 6 -> 10
-            surplusPowerVolume: undefined,
-            surplusPowerPrice: undefined,
-          }
-        ]
+        // data: [
+        //   {
+        //     month: 5,
+        //     finished: true,
+        //     powerVolume: undefined,
+        //     hydropowerPrice: undefined,
+        //     // 6 -> 10
+        //     surplusPowerVolume: undefined,
+        //     surplusPowerPrice: undefined,
+        //   }
+        // ]
+        data: new Array(12).fill({
+          month: 5,
+          finished: true,
+          powerVolume: undefined,
+          hydropowerPrice: undefined,
+          // 6 -> 10
+          surplusPowerVolume: undefined,
+          surplusPowerPrice: undefined,
+        })
       },
       isParticipate: false,
       ratio: undefined,
@@ -218,5 +252,7 @@ const initialState =  {
 
   powerCosts: {}
 }
+
+
 
 export default initialState;

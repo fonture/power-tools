@@ -1,19 +1,20 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtCard, AtSwitch, AtList, AtListItem, AtActionSheet, AtActionSheetItem, AtInput } from "taro-ui"
-import MonthPlugin from '../MonthPlugin'
 import inject from '../../../utils/inject';
-import MonthButton from '../MonthPlugin/monthButton';
+import MonthButton from '../MonthPlugin/MonthButton';
 import './index.less'
+import { type } from 'os';
 
 
-@inject('tradingVarieties')
+@inject('tradingVarieties', 'powerCalc')
 export default class Step3 extends Component {
 
   state = {
     isOpened: false,
     isChecked: false,
-    selectedTrading: this.props.tradingVarieties[0]['name'] || ''
+    selectedTrading: this.props.tradingVarieties[0]['name'] || '',
+    powerCalc: this.props.powerCalc
   }
 
   componentDidMount() {
@@ -49,7 +50,8 @@ export default class Step3 extends Component {
 
   render() {
     const { tradingVarieties } = this.props;
-    const { isOpened, selectedTrading, isChecked } = this.state;
+    const { isOpened, selectedTrading, isChecked, powerCalc } = this.state;
+    const { type, singleRegular, singleProtocol, RegularAndSurplus, protocolAndSurplus } = powerCalc
 
     return (
       <View>
@@ -70,23 +72,14 @@ export default class Step3 extends Component {
               }
             title="分月度填写价格"
           >
-
-
-            {/* {
-
-
-              isChecked
-              ? <MonthButton item={{
-                name: '123',
-                finished: true,
-                current: true,
-              }}/>
-              : <MonthButton item={{
-                name: '456',
-                finished: false,
-                current: false,
-              }}/>
-            } */}
+              {/* 月份组件 */}
+              {
+                powerCalc[type].isMonthlyFill
+                ? <MonthButton data={this.state.powerCalc} />
+                : null
+              } 
+              {/* 输入面板 */}
+              {/* 结果展示 */}
           </AtCard>
 
           <AtActionSheet isOpened={isOpened}

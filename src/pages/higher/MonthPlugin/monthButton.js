@@ -4,22 +4,52 @@ import './index.less'
 
 export default class MonthButton extends Component {
 
+  onClick = (month) => {
+    const {data} = this.props
+    switch(data.type) {
+      case 'singleRegular':
+      case 'singleProtocol':
+        data[type].monthlyPowerVolume.current = month
+        break
+      default:
+        data[type].monthlyPower.current = month
+        break
+    }
+  }
+
   render() {
-    const { item, onClick } =  this.props;
+    const {data} = this.props
+    let dataSet = [], current = 0
+    switch(data.type) {
+      case 'singleRegular':
+      case 'singleProtocol':
+        current = data[type].monthlyPowerVolume.current
+        dataSet = data[type].monthlyPowerVolume.data
+        break
+      default:
+        current = data[type].monthlyPower.current
+        dataSet = data[type].monthlyPower.data
+        break
+    }
+
     return (
       <View className="month-plugin">
-      <View className={'at-col at-col-2 month-item'}>
-        <div
-          className={`month-circle ${item.finished ? 'finished' : ''} ${item.current ? 'current' : ''}`}
-          onClick={onClick}>
+        <View className="at-row at-row--wrap">
           {
-            item.finished
-              ? <div><img src={require('../../../assets/images/gou.png')} /></div>
-              : null
+              dataSet.map((item, index) => (
+                  <View key={index} className={`at-col at-col-2 month-item ${index > 5 ? 'secondLineMarginTop' : ''}`}>
+                      <div className={`month-circle  ${item.finished ? 'finished': ''} ${index + 1 === current ? 'current' : ''}`} onClick={this.onClick.bind(this, index + 1)}>
+                          {
+                              item.finished
+                              ? <div><img src={require('../../../assets/images/gou.png')} /></div>
+                              : null
+                          }
+                          <div>{item.name}</div>
+                      </div>
+                  </View>
+              ))
           }
-          <div>{item.name}</div>
-        </div>
-      </View>
+        </View>
       </View>
     )
   }
