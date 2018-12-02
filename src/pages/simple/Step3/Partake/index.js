@@ -31,8 +31,8 @@ class Partake extends Component {
         yearPower: this.props.powerExpect.yearPower || 0
     }
     componentDidMount() {
-        const { thermalPrice } = this.props.firePrice;
-        if (!thermalPrice) {
+        const { firePrice } = this.props;
+        if (!firePrice) {
             Taro.redirectTo({
                 url: 'pages/index'
             });

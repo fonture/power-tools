@@ -3,17 +3,12 @@
  * @Date: 2018-11-29 11:00:33 
  * @Description: 月份选择面板
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-29 11:13:41
+ * @Last Modified time: 2018-12-02 13:57:35
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { 
-    AtList, 
-    AtListItem, 
-    AtActionSheet, 
-    AtActionSheetItem, 
-    AtCard, 
-    AtInput,
+    AtCard
 } from 'taro-ui'
 import './index.less'
 

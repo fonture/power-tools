@@ -7,7 +7,7 @@ import './index.less'
 import request from '../../../utils/request';
 import inject from '../../../utils/inject';
 
-@inject('baseMessage','next')
+@inject('baseMessage','next', 'version')
 export default class Step1 extends Component {
 
     state = {
@@ -28,7 +28,9 @@ export default class Step1 extends Component {
         this.resorts = data;
         this.initPicker();
     }
-    componentWillUnmount() {
+
+    // 更新baseMessage到redux的store中
+    storeData = () => {
         const { address, mart, sort } = this.state;
         let adsWord = '';
         if (address !== '请选择地区') {
@@ -39,18 +41,18 @@ export default class Step1 extends Component {
             const fistItem = this.resorts.find(item => item.categoryName === sort[0]);
             sortValue = [fistItem['categoryIdentify'], fistItem.voltageLevelVOList.find(item => item.voltageName === sort[1])['voltageIdentify']]
         }
-
         reduxHelper('baseMessage', { address, adsWord, sort: sortValue, sortValue: sort, mart })
     }
+
     componentWillUpdate(nextProps, nextState) {
-            this.setNextTrue(nextState);
+        this.setNextTrue(nextState);
     }
     setNextTrue = (state)=> {
         const {sort,mart,address} = state;
         const { next } = this.props;
         if(sort !== null && mart !== '请选择是否参与市场' && address !== '请选择地区'){
-            if(!next.next){
-                reduxHelper('next',{next: true});
+            if(!next){
+                reduxHelper('next',true);
             }
         }
     }
@@ -111,7 +113,7 @@ export default class Step1 extends Component {
         this.setState({
             clickList: e,
             sheetShow: true,
-        })
+        }, this.storeData)
     }
 
     handleClickSheetItem = (value) => {
@@ -123,7 +125,7 @@ export default class Step1 extends Component {
         this.setState({
             [clickList]: value,
             sheetShow: false,
-        })
+        }, this.storeData)
     }
 
     initPicker = () => {
@@ -150,9 +152,13 @@ export default class Step1 extends Component {
         const { resorts } = this;
         this.setState({
             sort: [resorts[value[0]]['categoryName'], resorts[value[0]]['voltageLevelVOList'][value[1]]['voltageName']]
-        })
+        }, this.storeData)
     }
-
+    handleClose = ()=> {
+        this.setState({
+            sheetShow: false
+        })
+    }    
     render() {
         // const addressList = ['四川地区', '重庆地区']; // 由于重庆地区暂未开放，所以只有四川地区
         const addressList = ['四川地区'];
@@ -170,7 +176,7 @@ export default class Step1 extends Component {
                 "mart": '请选择是否参与市场',
             }[clickList] || [];
             return (
-                <AtActionSheet isOpened={sheetShow} className='pickerSheet' title={sheetTitle}>
+                <AtActionSheet isOpened={sheetShow} className='pickerSheet' title={sheetTitle} onClose={this.handleClose}>
                     {wellList.map(item =>
                         <AtActionSheetItem key={item} onClick={this.handleClickSheetItem.bind(this, item)}>
                             {item}

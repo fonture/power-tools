@@ -59,13 +59,14 @@ export function getAllWaterAvPriceOfElePur(waterPrice, transmissionPrice, collec
  */
 export function powerAveragePriceOfJoin(firePrice, transmissionPrice, collectionFund, yearPower, deviationCost, signedPrice, isJoin) {
     if(!yearPower) return ''
+    yearPower *= 10000
     let price = 0
     if(isJoin) {
         price = signedPrice + transmissionPrice +  deviationCost/yearPower + collectionFund
     } else {
         price = signedPrice * 0.7 + firePrice * 0.3 + deviationCost/yearPower + transmissionPrice + collectionFund
     }
-    return keepDecimal(price, 4)
+    return keepDecimal(price, 5)
 }
 
 
@@ -81,10 +82,11 @@ export function powerAveragePriceOfJoin(firePrice, transmissionPrice, collection
  * @returns 年度用电量、用电均价
  */
 export function powerAveragePriceOfNotJoin(high = 0, medium = 0, low = 0, highPrice, mediumPrice, lowPrice, collectionFund) {
-    const yearPower = high + medium + low
-    if(!yearPower) return { yearPower, averagePrice }
-    let averagePrice = ((high * highPrice + medium * mediumPrice + low * lowPrice) / yearPower + collectionFund)
-    averagePrice = keepDecimal(averagePrice, 4)
+    let yearPower = high + medium + low
+    if(!yearPower) return { yearPower, averagePrice: 0 }
+    let averagePrice = ((high * highPrice + medium * mediumPrice + low * lowPrice) / (yearPower * 10000) + collectionFund)
+    averagePrice = keepDecimal(averagePrice, 5)
+    yearPower = keepDecimal(yearPower, 4)
     return { yearPower, averagePrice }
 }
 
@@ -111,6 +113,6 @@ export function computePowerOfHigh(data, yearCataloguePriceMap) {
         }
     })
     yearPower = keepDecimal(highYearPower + mediumYearPower + lowYearPower, 4)
-    averagePrice = yearPower === 0 || yearPower === '' ? '' : keepDecimal(price / yearPower, 5)
+    averagePrice = yearPower === 0 || yearPower === '' ? '' : keepDecimal(price / (yearPower * 10000), 5)
     return { averagePrice, yearPower, highYearPower, mediumYearPower, lowYearPower }
 }

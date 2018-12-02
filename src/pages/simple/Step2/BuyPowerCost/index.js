@@ -2,8 +2,8 @@
  * @Author: ouyangdc 
  * @Date: 2018-11-23 16:13:09 
  * @Description: 参与市场时的购电成本
- * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-11-30 15:03:13
+ * @Last Modified by: ouyangdc
+ * @Last Modified time: 2018-12-02 11:45:53
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -12,30 +12,32 @@ import {
     AtListItem, 
     AtActionSheet, 
     AtActionSheetItem, 
-    AtInput,
     AtCheckbox,
 } from 'taro-ui'
 import { powerAveragePriceOfJoin } from '../../../../utils/formula'
 import reduxHelper from '../../../../utils/reduxHelper'
 import inject from '../../../../utils/inject'
+import Input from '../../../../components/Input'
 import './index.less'
 
 @inject('newestCataloguePrice', 'newestTransmissionPrice', 'firePrice', 'buyPowerCostData')
 export default class BuyPowerCost extends Component {
     state = {
         isOpened: false,
-        method: this.props.buyPowerCostData.method || '年度用电量',
-        checkedList: this.props.buyPowerCostData.checkedList || [],
-        yearPower: this.props.buyPowerCostData.yearPower || '', 
-        deviationCost: this.props.buyPowerCostData.deviationCost || '', 
-        signedPrice: this.props.buyPowerCostData.signedPrice || '', 
-        averagePrice: this.props.buyPowerCostData.averagePrice || '',
+        method: this.props.buyPowerCostData.method ,
+        checkedList: this.props.buyPowerCostData.checkedList ,
+        yearPower: this.props.buyPowerCostData.yearPower, 
+        deviationCost: this.props.buyPowerCostData.deviationCost, 
+        signedPrice: this.props.buyPowerCostData.signedPrice, 
+        averagePrice: this.props.buyPowerCostData.averagePrice,
     }
-    defaultProps = { 
-        newestCataloguePrice: { collectionFund: 0 }, 
-        newestTransmissionPrice: { price: 0 },
-        firePrice: {thermalPrice: 0},
-        buyPowerCostData: {}
+    componentWillMount(){
+        const { yearPower, deviationCost, signedPrice, averagePrice, method } = this.state
+        if((yearPower && deviationCost && signedPrice) || (yearPower && averagePrice && method === '购电均价')){
+            reduxHelper('next', true)
+        }else{
+            reduxHelper('next', false)
+        }
     }
     componentDidMount(){
         reduxHelper('buyPowerCostData', this.state)
@@ -59,7 +61,25 @@ export default class BuyPowerCost extends Component {
      * @param {Object} e 事件对象
      */
     onClickSheet = (e) => {
-        if(this.state.method === e.target.innerHTML) return
+        // const { method, yearPower, deviationCost, signedPrice, averagePrice } = this.state
+
+        // 如果选择的项就是当前所在的，则将sheet隐藏即可
+        if(this.state.method === e.target.innerHTML) {
+            this.setState({
+                isOpened: false
+            })
+            return
+        }
+        // this.state.method = e.target.innerHTML
+        // if(e.target.innerHTML === '年度用电量') {
+        //     this.onChangeValue()
+        // }else {
+        //     this.setState({
+        //         averagePrice: '',
+        //         yearPower: '',
+        //         isOpened: false
+        //     })
+        // }
         this.setState({
             method: e.target.innerHTML,
             isOpened: false,
@@ -70,6 +90,12 @@ export default class BuyPowerCost extends Component {
             averagePrice: ''
         }, () => {
             reduxHelper('buyPowerCostData', this.state)
+            const { yearPower, deviationCost, signedPrice, averagePrice, method } = this.state
+            if((yearPower && deviationCost && signedPrice) || (yearPower && averagePrice && method === '购电均价')){
+                reduxHelper('next', true)
+            }else{
+                reduxHelper('next', false)
+            }
         })
     }
     /**
@@ -79,7 +105,7 @@ export default class BuyPowerCost extends Component {
      */
     onChangeValue = (type, value) => {
         const { yearPower, deviationCost, signedPrice, method, checkedList } = this.state
-        const { newestCataloguePrice: { collectionFund }, newestTransmissionPrice: { price }, firePrice: { thermalPrice } } = this.props
+        const { newestCataloguePrice: { collectionFund }, newestTransmissionPrice: { price }, firePrice } = this.props
         let values = { yearPower, deviationCost, signedPrice }
 
         // 如果type不为undefined，即不是点击是否参与全水电选项触发的
@@ -94,7 +120,7 @@ export default class BuyPowerCost extends Component {
             yearPower = yearPower === '' ? 0 : yearPower
             deviationCost = deviationCost === '' ? 0 : deviationCost
             signedPrice = signedPrice === '' ? 0 : signedPrice
-            values.averagePrice = powerAveragePriceOfJoin(thermalPrice, price, collectionFund, yearPower, deviationCost, signedPrice, checkedList.length)
+            values.averagePrice = powerAveragePriceOfJoin(firePrice, price, collectionFund, yearPower, deviationCost, signedPrice, checkedList.length)
         }
         
         this.setState({
@@ -102,6 +128,12 @@ export default class BuyPowerCost extends Component {
             isOpened: false
         }, () => {
             reduxHelper('buyPowerCostData', this.state)
+            const { yearPower, deviationCost, signedPrice, averagePrice } = this.state
+            if((yearPower && deviationCost && signedPrice) || (yearPower && averagePrice && method === '购电均价')){
+                reduxHelper('next', true)
+            }else{
+                reduxHelper('next', false)
+            }
         })
     }
 
@@ -129,7 +161,6 @@ export default class BuyPowerCost extends Component {
     }    
     render() {
         const { method, yearPower, deviationCost, signedPrice, averagePrice} = this.state
-
         return (
             <View className="power-cost">
 
@@ -156,7 +187,7 @@ export default class BuyPowerCost extends Component {
                             <AtListItem title="年度用电量" onClick={this.onListClick}
                                 extraText={
                                     <View className="at-row at-row__justify--center at-row__align--center">
-                                        <AtInput type="number" className="power-input" border={false} value={yearPower} onChange={this.onChangeValue.bind(this, 'yearPower')}/>
+                                        <Input type="number" digit={4}  className="power-input" border={false} value={yearPower} onChange={this.onChangeValue.bind(this, 'yearPower')}/>
                                         <div className="power-result-unit">万千瓦时</div>
                                     </View>
                                 } 
@@ -164,7 +195,7 @@ export default class BuyPowerCost extends Component {
                             <AtListItem title="年度偏差考核费用" onClick={this.onListClick}
                                 extraText={
                                     <View className="at-row at-row__justify--center at-row__align--center">
-                                        <AtInput type="number" className="power-input" border={false} value={deviationCost} onChange={this.onChangeValue.bind(this, 'deviationCost')}/>
+                                        <Input type="number" digit={5} className="power-input" border={false} value={deviationCost} onChange={this.onChangeValue.bind(this, 'deviationCost')}/>
                                         <div className="power-result-unit">元</div>
                                     </View>
                                 } 
@@ -172,7 +203,7 @@ export default class BuyPowerCost extends Component {
                             <AtListItem title="签约水电价格" onClick={this.onListClick}
                                 extraText={
                                     <View className="at-row at-row__justify--center at-row__align--center">
-                                        <AtInput type="number" className="power-input" border={false} value={signedPrice} onChange={this.onChangeValue.bind(this, 'signedPrice')}/>
+                                        <Input type="number" digit={5} className="power-input" border={false} value={signedPrice} onChange={this.onChangeValue.bind(this, 'signedPrice')}/>
                                         <div className="power-result-unit">元/千瓦时</div>
                                     </View>
                                 } 
@@ -197,7 +228,7 @@ export default class BuyPowerCost extends Component {
                         <AtListItem title="年度用电量" onClick={this.onListClick}
                             extraText={
                                 <View className="at-row at-row__justify--center at-row__align--center">
-                                    <AtInput type="number" className="power-input" border={false} value={yearPower}  onChange={this.onChangeValue.bind(this, 'yearPower')}/>
+                                    <Input type="number" digit={4} className="power-input" border={false} value={yearPower}  onChange={this.onChangeValue.bind(this, 'yearPower')}/>
                                     <div className="power-result-unit">万千瓦时</div>
                                 </View>
                             } 
@@ -205,7 +236,7 @@ export default class BuyPowerCost extends Component {
                         <AtListItem title="购电均价" onClick={this.onListClick}
                             extraText={
                                 <View className="at-row at-row__justify--center at-row__align--center">
-                                    <AtInput type="number" className="power-input" border={false} value={averagePrice} onChange={this.onChangeValue.bind(this, 'averagePrice')}/>
+                                    <Input type="number" digit={5} className="power-input" border={false} value={averagePrice} onChange={this.onChangeValue.bind(this, 'averagePrice')}/>
                                     <div className="power-result-unit">元/千瓦时</div>
                                 </View>
                             } 

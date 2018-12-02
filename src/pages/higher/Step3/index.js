@@ -1,19 +1,23 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
-import { AtCard, AtList, AtListItem, AtActionSheet, AtActionSheetItem } from "taro-ui"
+import { AtCard, AtSwitch, AtList, AtListItem, AtActionSheet, AtActionSheetItem, AtInput } from "taro-ui"
 import inject from '../../../utils/inject';
+import MonthButton from '../MonthPlugin/MonthButton';
+import reduxHelper from '../../../utils/reduxHelper'
 import './index.less'
+import { type } from 'os';
 
 
-@inject('tradingVariety')
+@inject('tradingVarieties', 'powerCalc')
 export default class Step3 extends Component {
 
   state = {
     isOpened: false,
+    isChecked: false,
+    powerCalc: this.props.powerCalc
   }
 
   componentDidMount() {
-    console.log(this);
     this.props.onDidMount(this._rendered.dom);
   }
 
@@ -23,27 +27,72 @@ export default class Step3 extends Component {
     })
   }
 
-  handleItemSelected = (e, value) => {
-    console.log(e, value);
+  toggleMonthlyCheck = (isChecked) => {
+    const { powerCalc } = this.props;
+    const { type } = powerCalc;
+    powerCalc[type].isMonthlyFill = isChecked;
+    reduxHelper('powerCalc', powerCalc);
+    this.setState({
+      isChecked,
+    })
+  }
+
+
+  handleClose = () => {
+    this.setState({
+      isOpened: false,
+    })
+  }
+
+  handleItemSelected = (e, key) => {
+    const { powerCalc } = this.props;
+    powerCalc.type = key
+    reduxHelper('powerCalc', powerCalc);
+    this.setState({
+      isOpened: false
+    })
   }
 
   render() {
-    const { tradingVariety } = this.props;
-    const { isOpened } = this.state;
-
+    const { tradingVarieties } = this.props;
+    const { isOpened, isChecked, powerCalc } = this.state;
+    const { type, singleRegular, singleProtocol, RegularAndSurplus, protocolAndSurplus } = powerCalc
     return (
       <View>
 
-        <div className='card'>
+        <div className="power-purchase-calculation card">
           <AtList>
-            <AtListItem title='交易品种' extraText={'xxx'} arrow='right' onClick={this.triggerActionSheet} />
+            <AtListItem title='交易品种' extraText={tradingVarieties[powerCalc.type]} arrow='right' onClick={this.triggerActionSheet} />
           </AtList>
+          <AtCard
+            isFull
+            extra={
+                <AtSwitch
+                  className="no-padding"
+                  checked={isChecked}
+                  onChange={this.toggleMonthlyCheck}
+                >
+                </AtSwitch>
+              }
+            title="分月度填写价格"
+          >
+              {/* 月份组件 */}
+              {
+                powerCalc[type].isMonthlyFill
+                ? <MonthButton data={powerCalc} />
+                : null
+              } 
+              {/* 输入面板 */}
+              {/* 结果展示 */}
+          </AtCard>
 
-          <AtActionSheet isOpened={isOpened}>
+          <AtActionSheet isOpened={isOpened}
+          onClose={this.handleClose}
+          >
             {
-              tradingVariety.map(({name, value}) => (
-                <AtActionSheetItem onClick={(e)=>this.handleItemSelected(e, value)}>
-                  {name}
+              Object.keys(tradingVarieties).map(key => (
+                <AtActionSheetItem onClick={(e)=>this.handleItemSelected(e, key)}>
+                  {tradingVarieties[key]}
                 </AtActionSheetItem>
               ))
             }
@@ -51,8 +100,7 @@ export default class Step3 extends Component {
 
         </div>
 
-      </View >
-
+      </View>
     )
   }
 }
