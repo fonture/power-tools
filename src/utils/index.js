@@ -18,3 +18,20 @@ export function keepDecimal(num, digit) {
         return num
     }
 }
+
+/**
+ * @param1 {any, object} o - obj needs to deeply check&grab isExist props
+ * @param2 {string} props - the chain props(use dot character), which needs deeply check&grab
+ * @return {any} field - return the prop value, if it not exist return undefined.
+ */
+export function deepExtract(o, props) {
+  const [first, ...remaining] = props.split('.');
+  return (
+    o == null
+    // when o is undefined or null return undefined directly
+      ? undefined
+      : (remaining.length)
+        ? deepExtract(o[first], remaining.join('.'))
+        : o[first]
+  );
+}
