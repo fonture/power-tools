@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:13:09 
  * @Description: 参与市场时的购电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-11-30 17:03:49
+ * @Last Modified time: 2018-12-02 11:45:53
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -24,18 +24,20 @@ import './index.less'
 export default class BuyPowerCost extends Component {
     state = {
         isOpened: false,
-        method: this.props.buyPowerCostData.method || '年度用电量',
-        checkedList: this.props.buyPowerCostData.checkedList || [],
-        yearPower: this.props.buyPowerCostData.yearPower || '', 
-        deviationCost: this.props.buyPowerCostData.deviationCost || '', 
-        signedPrice: this.props.buyPowerCostData.signedPrice || '', 
-        averagePrice: this.props.buyPowerCostData.averagePrice || '',
+        method: this.props.buyPowerCostData.method ,
+        checkedList: this.props.buyPowerCostData.checkedList ,
+        yearPower: this.props.buyPowerCostData.yearPower, 
+        deviationCost: this.props.buyPowerCostData.deviationCost, 
+        signedPrice: this.props.buyPowerCostData.signedPrice, 
+        averagePrice: this.props.buyPowerCostData.averagePrice,
     }
-    defaultProps = { 
-        newestCataloguePrice: { collectionFund: 0 }, 
-        newestTransmissionPrice: { price: 0 },
-        firePrice: {thermalPrice: 0},
-        buyPowerCostData: {}
+    componentWillMount(){
+        const { yearPower, deviationCost, signedPrice, averagePrice, method } = this.state
+        if((yearPower && deviationCost && signedPrice) || (yearPower && averagePrice && method === '购电均价')){
+            reduxHelper('next', true)
+        }else{
+            reduxHelper('next', false)
+        }
     }
     componentDidMount(){
         reduxHelper('buyPowerCostData', this.state)
@@ -59,12 +61,25 @@ export default class BuyPowerCost extends Component {
      * @param {Object} e 事件对象
      */
     onClickSheet = (e) => {
+        // const { method, yearPower, deviationCost, signedPrice, averagePrice } = this.state
+
+        // 如果选择的项就是当前所在的，则将sheet隐藏即可
         if(this.state.method === e.target.innerHTML) {
             this.setState({
                 isOpened: false
             })
             return
         }
+        // this.state.method = e.target.innerHTML
+        // if(e.target.innerHTML === '年度用电量') {
+        //     this.onChangeValue()
+        // }else {
+        //     this.setState({
+        //         averagePrice: '',
+        //         yearPower: '',
+        //         isOpened: false
+        //     })
+        // }
         this.setState({
             method: e.target.innerHTML,
             isOpened: false,
@@ -75,6 +90,12 @@ export default class BuyPowerCost extends Component {
             averagePrice: ''
         }, () => {
             reduxHelper('buyPowerCostData', this.state)
+            const { yearPower, deviationCost, signedPrice, averagePrice, method } = this.state
+            if((yearPower && deviationCost && signedPrice) || (yearPower && averagePrice && method === '购电均价')){
+                reduxHelper('next', true)
+            }else{
+                reduxHelper('next', false)
+            }
         })
     }
     /**
@@ -84,7 +105,7 @@ export default class BuyPowerCost extends Component {
      */
     onChangeValue = (type, value) => {
         const { yearPower, deviationCost, signedPrice, method, checkedList } = this.state
-        const { newestCataloguePrice: { collectionFund }, newestTransmissionPrice: { price }, firePrice: { thermalPrice } } = this.props
+        const { newestCataloguePrice: { collectionFund }, newestTransmissionPrice: { price }, firePrice } = this.props
         let values = { yearPower, deviationCost, signedPrice }
 
         // 如果type不为undefined，即不是点击是否参与全水电选项触发的
@@ -99,7 +120,7 @@ export default class BuyPowerCost extends Component {
             yearPower = yearPower === '' ? 0 : yearPower
             deviationCost = deviationCost === '' ? 0 : deviationCost
             signedPrice = signedPrice === '' ? 0 : signedPrice
-            values.averagePrice = powerAveragePriceOfJoin(thermalPrice, price, collectionFund, yearPower, deviationCost, signedPrice, checkedList.length)
+            values.averagePrice = powerAveragePriceOfJoin(firePrice, price, collectionFund, yearPower, deviationCost, signedPrice, checkedList.length)
         }
         
         this.setState({
@@ -107,6 +128,12 @@ export default class BuyPowerCost extends Component {
             isOpened: false
         }, () => {
             reduxHelper('buyPowerCostData', this.state)
+            const { yearPower, deviationCost, signedPrice, averagePrice } = this.state
+            if((yearPower && deviationCost && signedPrice) || (yearPower && averagePrice && method === '购电均价')){
+                reduxHelper('next', true)
+            }else{
+                reduxHelper('next', false)
+            }
         })
     }
 
@@ -134,7 +161,6 @@ export default class BuyPowerCost extends Component {
     }    
     render() {
         const { method, yearPower, deviationCost, signedPrice, averagePrice} = this.state
-
         return (
             <View className="power-cost">
 

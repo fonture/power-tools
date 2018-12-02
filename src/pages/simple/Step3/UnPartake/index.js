@@ -28,8 +28,8 @@ class UnPartake extends Component {
         }
     ]
     componentDidMount() {
-        const { thermalPrice } = this.props.firePrice;
-        if (thermalPrice) {
+        const { firePrice } = this.props;
+        if (firePrice) {
             this.getAvPrice();
         } else {
             Taro.redirectTo({
@@ -50,13 +50,13 @@ class UnPartake extends Component {
     }
     getAvPrice = () => {
         const { price } = this.props.newestTransmissionPrice;
-        const { thermalPrice } = this.props.firePrice;
+        const { firePrice } = this.props;
         const { collectionFund } = this.props.newestCataloguePrice;
         let averagePrice;
         if (this.state.checkedList.length > 0) {
             averagePrice = getAllWaterAvPriceOfElePur(this.state.waterPrice, price, collectionFund)
         } else {
-            averagePrice = getAvPriceOfElePur(this.state.waterPrice, thermalPrice, price, collectionFund)
+            averagePrice = getAvPriceOfElePur(this.state.waterPrice, firePrice, price, collectionFund)
         }
         this.setState({
             averagePrice
