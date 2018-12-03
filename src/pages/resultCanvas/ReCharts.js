@@ -91,7 +91,7 @@ export default class ReCharts extends Component {
             xAxis: {
                 type: 'category',
                 boundaryGap: false,
-                data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+                data: this.props.monthList,
                 axisTick: {
                     show: false
                 },
@@ -127,7 +127,7 @@ export default class ReCharts extends Component {
                     name: '实际电量',
                     type: 'line',
                     stack: '总量',
-                    data: [120, 132, 101, 134,120, 132, 101, 134,120, 132, 101, 134],
+                    data: this.props.actualValue,
                     lineStyle: {
                         color: '#3dcca6',
                         width: 1
@@ -142,7 +142,7 @@ export default class ReCharts extends Component {
                     name: '预计电量',
                     type: 'line',
                     stack: '总量',
-                    data: [220, 182, 191, 234, 290,220, 182, 191, 234, 290,220, 182, 191, 234, 290],
+                    data: this.props.expectValue,
                     lineStyle: {
                         color: '#4a9df2',
                         width: 1

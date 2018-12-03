@@ -241,18 +241,18 @@ export function computeAvPrcieByMonthAllWaterOfHigh(transmissionPrice = [], coll
     return keepDecimal(res, 5);
 }
 
-export function extractDryAndHighData({data}) {
-  const extra = (prop) => ({data}) => deepExtract(data, `${prop}.value`);
+export function extractDryAndHighData({ data }) {
+    const extra = (prop) => ({ data }) => deepExtract(data, `${prop}.value`);
 
-  const dry = data.filter((_, index) => {
-    return (index >= 0 && index <= 3) || index == 11
-  }).map(extra('powerVolume'))
+    const dry = data.filter((_, index) => {
+        return (index >= 0 && index <= 3) || index == 11
+    }).map(extra('powerVolume'))
 
-  const high = data.filter((_, index) => {
-    return index >= 5 && index <= 9
-  }).map(extra('powerVolume'))
+    const high = data.filter((_, index) => {
+        return index >= 5 && index <= 9
+    }).map(extra('powerVolume'))
 
-	return [dry,high]
+    return [dry, high]
 }
 
 /**
@@ -271,10 +271,16 @@ export function gethighDryProportion(data) {
         return prev + (+item)
     }, 0)
     return (
-      dryPower === 0
-        ? '--'
-        : highPower === 0
-          ? 0
-          : keepDecimal(highPower / dryPower, 2)
+        dryPower === 0
+            ? '--'
+            : highPower === 0
+                ? 0
+                : keepDecimal(highPower / dryPower, 2)
     )
+}
+
+export function getKvalue(plain, drain) {
+    let a = 288 * (2 / 12 - plain);
+    let b = 288 * (1 + 0.245) * (5 / 12 - drain);
+    return keepDecimal((a + b), 2);
 }

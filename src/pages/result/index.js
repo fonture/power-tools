@@ -10,7 +10,7 @@ import './index.less'
 
 const cryImage = require('../../assets/images/cry.png');
 const smlieImage = require('../../assets/images/smile.png');
-@inject('baseMessage', 'powerExpect', 'powerCosts')
+@inject('baseMessage', 'powerExpect', 'powerCosts', 'powerCalc', 'powerCostsOfHigh', 'version')
 export default class Result extends Component {
     config = {
         navigationBarTitleText: '结果页'
@@ -23,25 +23,53 @@ export default class Result extends Component {
         Taro.redirectTo({ url: 'pages/resultCanvas/index' })
     }
     compAP = () => {
-        let { mart } = this.props.baseMessage;
-        let step2AP = this.props.powerCosts.averagePrice,
-            step3AP = this.props.powerExpect.averagePrice;
-        return keepDecimal(step2AP - step3AP, 5)
+        if (this.props.version === 'higher') {
+            let step2AP = Number(this.props.powerCostsOfHigh.averagePrice),
+                step3AP = Number(this.props.powerCalc[this.props.powerCalc.type].average) || 0;
+            return keepDecimal(step2AP - step3AP, 5)
+        } else {
+            let step2AP = Number(this.props.powerCosts.averagePrice),
+                step3AP = Number(this.props.powerExpect.averagePrice);
+            return keepDecimal(step2AP - step3AP, 5)
+        }
     }
     compTP = (ap) => {
-        let tp = this.props.powerExpect.yearPower * ap
-        return keepDecimal(tp, 0)
+        let data = this.props.powerCalc[this.props.powerCalc.type];
+        let yearPower;
+        if (data.isMonthlyFill) {
+            yearPower = data.monthlyPower.data.reduce((pre, item) => {
+                return pre + (item.finished ? Number(item.data.powerVolume.value) : 0)
+            }, 0)
+        } else {
+            yearPower = Number(data.yearlyData.powerVolume.value)
+        }
+        let tp = yearPower * ap
+        return {
+            tp: keepDecimal(tp, 0),
+            step3yp: yearPower
+        }
     }
     getPowerChange = () => {
-        let { mart } = this.props.baseMessage;
-        let step2powerChange = this.props.powerCosts.yearPower;
-        let step3powerChange = this.props.powerExpect.yearPower;
-        let powerChange = step2powerChange - step3powerChange;
-        let ch = powerChange > 0 ? '增加' : '减少';
+        if (this.props.version !== 'higher') {
+            let step2powerChange = this.props.powerCosts.yearPower;
+            let step3powerChange = this.props.powerExpect.yearPower;
+            let powerChange = step2powerChange - step3powerChange;
+            let ch = powerChange > 0 ? '增加' : '减少';
 
-        return {
-            ch,
-            powerChange: Math.abs(powerChange)
+            return {
+                ch,
+                powerChange: Math.abs(powerChange)
+            }
+        } else {
+            let step2powerChange = Number(this.props.powerCostsOfHigh.yearPower);
+            let step3powerChange = Number(this.props.powerCalc[this.props.powerCalc.type].yearlyData.powerVolume.value);
+            let powerChange = step2powerChange - step3powerChange;
+            let ch = powerChange > 0 ? '增加' : '减少';
+
+            return {
+                ch,
+                powerChange: Math.abs(powerChange)
+            }
         }
     }
     componentWillUnmount() {
@@ -49,9 +77,9 @@ export default class Result extends Component {
     }
     render() {
         let ap = this.compAP();
-        let tp = this.compTP(ap);
+        let {tp, step3yp} = this.compTP(ap);
         let { ch, powerChange } = this.getPowerChange();
-        this.data = { ap, tp, ch, powerChange }
+        this.data = { ap, tp, ch, powerChange, step3yp }
         return (
             <View className='result page'>
                 <View className='result-wrp'>
@@ -72,7 +100,7 @@ export default class Result extends Component {
                             />
                             {
                                 powerChange !== 0 && <AtListItem
-                                    extraText={<span><span style={{ color:'#262828'}}>{powerChange}</span> 万千瓦时</span>}
+                                    extraText={<span><span style={{ color: '#262828' }}>{powerChange}</span> 万千瓦时</span>}
                                     title={`购电量${ch}`}
                                     hasBorder={false}
                                 />

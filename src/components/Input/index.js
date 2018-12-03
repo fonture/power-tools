@@ -2,7 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { AtInput } from 'taro-ui';
 
 // digit 小数位数
-const keepDecimalOfString = (str, digit) => {
+const keepDecimalOfString = (str, digit=4) => {
     if (str) {
         if (str.includes('.')) {
             const [a, b] = str.split('.');
