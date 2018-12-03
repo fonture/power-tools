@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:11:35 
  * @Description:未参与市场时的用电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-12-03 15:55:02
+ * @Last Modified time: 2018-12-03 16:12:20
  */
 
 import Taro, { Component } from '@tarojs/taro'
@@ -45,8 +45,8 @@ export default class ElectricityCost extends Component {
         reduxHelper('electricityCostData', this.state)
     }
     componentWillUnmount() {
-        const { yearPower, averagePrice } = this.state
-        reduxHelper('powerCosts', { yearPower, averagePrice })
+        const { yearPower, averagePrice, high, medium, low } = this.state
+        reduxHelper('powerCosts', { yearPower, averagePrice, high, medium, low })
     }
 
     /**
