@@ -106,9 +106,7 @@ export default class Step3 extends Component {
 
   render() {
     const { isOpened, powerCalc, tradingVarieties } = this.state;
-    const { type, singleRegular, singleProtocol, RegularAndSurplus, protocolAndSurplus } = powerCalc;
-
-    console.log('-----', catalogueprice, transmissionprice);
+    const { type } = powerCalc;
 
     const className = classNames(
       'at-col',
