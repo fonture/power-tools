@@ -198,7 +198,7 @@ export function computeAvPrcieByMonthOfHigh(firePrice = 1, transmissionPrice=[],
         const { powerVolume:_powerVolume = {}, hydropowerPrice:_hydropowerPrice= {}, surplusPowerVolume:_surplusPowerVolume={}, surplusPowerPrice:_surplusPowerPrice= {} } = item
         const [ {value: powerVolume = 0}, {value: hydropowerPrice = 0}, {value: surplusPowerVolume = 0} , {value: surplusPowerPrice = 0} ]= [_powerVolume , _hydropowerPrice, _surplusPowerVolume, _surplusPowerPrice];
         let b = (hydropowerPrice * 0.7 + firePrice * 0.3 + transmissionPrice[0][index] + collectionFund[index]) * powerVolume * 10000;
-        let c = surplusPowerVolume * 10000 * (surplusPowerPrice + transmissionPrice[1][index] + collectionFund[index])
+        let c = surplusPowerVolume * 10000 * ((+surplusPowerPrice) + transmissionPrice[1][index] + collectionFund[index])
         return prev + (b + c)
     }, 0)
     let d = monthlyPower.reduce((prev, item, index) => {
