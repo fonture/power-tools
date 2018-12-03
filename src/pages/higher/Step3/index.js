@@ -2,6 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtCard, AtSwitch, AtList, AtListItem, AtActionSheet, AtActionSheetItem, AtInput } from "taro-ui"
 import classNames from 'classnames';
+import { compact } from 'lodash/array';
 import inject from '../../../utils/inject';
 import { deepExtract } from '../../../utils';
 import MonthButton from '../MonthPlugin/monthButton';
@@ -9,17 +10,30 @@ import reduxHelper from '../../../utils/reduxHelper';
 import Card from '../../../components/Card';
 import InputPanel from './InputPanel';
 import './index.less'
-import { extractDryAndHighData, gethighDryProportion, computeAvPrcieByMonthAllWaterOfHigh } from '../../../utils/formula';
+import { extractDryAndHighData, computeAvPrcieByMonthOfHigh, gethighDryProportion, computeAvPrcieByMonthAllWaterOfHigh, computeAvPrcieByYearOfHigh, computeAvPrcieByYearAllWaterOfHigh } from '../../../utils/formula';
 
-@inject('tradingVarieties', 'powerCalc' , 'catalogueprice', 'transmissionprice' )
+@inject('tradingVarieties', 'powerCalc' , 'catalogueprice', 'transmissionprice', 'firePrice' )
 export default class Step3 extends Component {
 
   state = {
     isOpened: false,
     tradingVarieties: this.props.tradingVarieties,
     powerCalc: this.props.powerCalc,
-    catalogueprice: this.props.catalogueprice,
-    transmissionprice: this.props.transmissionprice,
+    firePrice: this.props.firePrice,
+    collectionFund: [
+      this.props.catalogueprice.newestCataloguePrice.collectionFund,
+      Object.keys(this.props.catalogueprice.yearCataloguePriceMap).map(item => this.props.catalogueprice.yearCataloguePriceMap[item].collectionFund)
+    ],
+    transmissionPrice: [
+      // 年度输配电价
+      this.props.transmissionprice.newestTransmissionPrice.price,
+      // 年度富余输配电价
+      this.props.transmissionprice.newestSurplusTransmissionPrice.price,
+      // 月度输配电价
+      Object.keys(this.props.transmissionprice.yearTransmissionPriceMap).map(item => this.props.transmissionprice.yearTransmissionPriceMap[item].price),
+      // 月度富余输配电价
+      Object.keys(this.props.transmissionprice.yearSurplusTransmissionPriceMap).map(item => this.props.transmissionprice.yearSurplusTransmissionPriceMap[item].price)
+    ]
   }
   componentDidMount() {
     reduxHelper('next', true)
@@ -39,6 +53,7 @@ export default class Step3 extends Component {
     this.setState({
       powerCalc,
     })
+    this.updateAllData();
   }
 
 
@@ -70,33 +85,26 @@ export default class Step3 extends Component {
       powerCalc[type].ratio = ratio;
     }
 
+
     if(seletedData.isMonthlyFill) {
-      const [firePrice, transmissionPrice, collectionFund, monthlyPower] = [
-        firePrice,
-        transmissionPrice,
-        collectionFund,
-        seletedData['monthlyPower']['data']
-      ]
+      const monthlyPower = seletedData['monthlyPower']['data'].map(item => item.data)
       if(!seletedData.isMonthlyParticipate) {
-        average = computeAvPrcieByMonthOfHigh(firePrice, transmissionPrice, collectionFund, monthlyPower)
+        average = computeAvPrcieByMonthOfHigh(firePrice, [transmissionPrice[2], transmissionPrice[3]], collectionFund[1], monthlyPower)
       } else {
-        average = computeAvPrcieByMonthAllWaterOfHigh(transmissionPrice, collectionFund, monthlyPower )
+        average = computeAvPrcieByMonthAllWaterOfHigh([transmissionPrice[2], transmissionPrice[3]], collectionFund[1], monthlyPower )
       }
     } else {
-      const [ waterPrice, firePrice, transmissionPrice, collectionFund, yearPower, surplusaPowerList = [], surplusaPrice ]
+      const [ waterPrice, yearPower, surplusaPowerList = [], surplusaPrice ]
         = [
-          powerCalc[type]['yearlyData']['hydropowerPrice']['value'],
-          firePrice,
-          transmissionPrice,
-          collectionFund,
-          deepExtract(powerCalc, `${type}.yearlyData.powerVolume.value`)
-          (deepExtract(powerCalc, `${type}.monthlyPower.data`) || []).map(({data}) => data.powerVolume.value ),
-          deepExtract(powerCalc, `${type}.surplusaPrice.value`)
+          deepExtract(powerCalc, `${type}.yearlyData.hydropowerPrice.value`),
+          deepExtract(powerCalc, `${type}.yearlyData.powerVolume.value`),
+          compact((deepExtract(powerCalc, `${type}.surplus.data`) || []).map((data) => data.powerVolume )),
+          deepExtract(powerCalc, `${type}.yearlyData.surplusPowerPrice.value`)
         ]
       if(!seletedData.isYearlyParticipate) {
-        computeAvPrcieByYearOfHigh(waterPrice, firePrice, transmissionPrice, collectionFund, yearPower, surplusaPowerList, surplusaPrice)
+        average = computeAvPrcieByYearOfHigh(waterPrice, firePrice, [transmissionPrice[0], transmissionPrice[1]], collectionFund[0], yearPower, surplusaPowerList, surplusaPrice)
       } else {
-        average = computeAvPrcieByYearAllWaterOfHigh(waterPrice, transmissionPrice, collectionFund, yearPower, surplusaPowerList, surplusaPrice)
+        average = computeAvPrcieByYearAllWaterOfHigh(waterPrice, [transmissionPrice[0], transmissionPrice[1]], collectionFund[0], yearPower, surplusaPowerList, surplusaPrice)
       }
     }
     powerCalc[type].average = average
@@ -107,8 +115,6 @@ export default class Step3 extends Component {
   render() {
     const { isOpened, powerCalc, tradingVarieties } = this.state;
     const { type, singleRegular, singleProtocol, RegularAndSurplus, protocolAndSurplus } = powerCalc;
-
-    console.log('-----', catalogueprice, transmissionprice);
 
     const className = classNames(
       'at-col',
@@ -159,7 +165,7 @@ export default class Step3 extends Component {
                 <span>丰枯比：{deepExtract(powerCalc, `${type}.ratio`)}</span>
               </View>
               <View className='at-col at-col-6'>
-                <span>购电均价：{deepExtract(powerCalc, `${type}.ratio`)}<span style={{float: 'right'}}>元/千瓦时</span></span>
+                <span>购电均价：{deepExtract(powerCalc , `${type}.average`)}<span style={{float: 'right'}}>元/千瓦时</span></span>
               </View>
             </View>
           </Card>
