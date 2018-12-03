@@ -132,12 +132,13 @@ export function computePowerOfHigh(data, yearCataloguePriceMap) {
  * @returns
  */
 export function computeAvPrcieByYearOfHigh(waterPrice, firePrice, transmissionPrice, collectionFund, yearPower, surplusaPowerList = [], surplusaPrice) {
+    yearPower = yearPower * 10000;
     let a = (waterPrice * 0.7 + firePrice * 0.3 + transmissionPrice + collectionFund) * yearPower;
     let b = surplusaPowerList.reduce((prev, item, index) => {
-        return prev + item * (surplusaPrice, transmissionPrice, collectionFund)
+        return prev + item * (surplusaPrice + transmissionPrice + collectionFund) * 10000
     }, 0)
     let c = surplusaPowerList.reduce((prev, item) => {
-        return prev + item
+        return prev + item * 10000
     }, yearPower)
     let res = (a + b) / c;
     return keepDecimal(res, 5);
@@ -156,12 +157,13 @@ export function computeAvPrcieByYearOfHigh(waterPrice, firePrice, transmissionPr
  * @returns
  */
 export function computeAvPrcieByYearAllWaterOfHigh(waterPrice, transmissionPrice, collectionFund, yearPower, surplusaPowerList = [], surplusaPrice) {
+    yearPower = yearPower * 10000;
     let a = (waterPrice + transmissionPrice + collectionFund) * yearPower;
     let b = surplusaPowerList.reduce((prev, item, index) => {
-        return prev + item * (surplusaPrice, transmissionPrice, collectionFund)
+        return prev + item * (surplusaPrice + transmissionPrice + collectionFund) * 10000
     }, 0)
     let c = surplusaPowerList.reduce((prev, item) => {
-        return prev + item
+        return prev + item * 10000
     }, yearPower)
     let res = (a + b) / c;
     return keepDecimal(res, 5);
@@ -180,13 +182,13 @@ export function computeAvPrcieByYearAllWaterOfHigh(waterPrice, transmissionPrice
 export function computeAvPrcieByMonthOfHigh(firePrice, transmissionPrice, collectionFund, monthlyPower = []) {
     let a = monthlyPower.reduce((prev, item, index) => {
         const { powerVolume, hydropowerPrice, surplusPowerVolume = 0, surplusPowerPrice = 0 } = item;
-        let b = (hydropowerPrice * 0.7 + firePrice * 0.3 + transmissionPrice + collectionFund) * powerVolume;
-        let c = surplusPowerVolume * (surplusPowerPrice + transmissionPrice + collectionFund)
+        let b = (hydropowerPrice * 0.7 + firePrice * 0.3 + transmissionPrice + collectionFund) * powerVolume * 10000;
+        let c = surplusPowerVolume * 10000 * (surplusPowerPrice + transmissionPrice + collectionFund)
         return prev + (b + c)
     }, 0)
     let d = monthlyPower.reduce((prev, item, index) => {
         const { powerVolume, surplusPowerVolume = 0 } = item;
-        return prev + powerVolume + surplusPowerVolume
+        return prev + powerVolume * 10000 + surplusPowerVolume * 10000
     }, 0)
     let res = a / d;
     return keepDecimal(res, 5);
@@ -205,13 +207,13 @@ export function computeAvPrcieByMonthOfHigh(firePrice, transmissionPrice, collec
 export function computeAvPrcieByMonthAllWaterOfHigh(transmissionPrice, collectionFund, monthlyPower = []) {
     let a = monthlyPower.reduce((prev, item, index) => {
         const { powerVolume, hydropowerPrice, surplusPowerVolume = 0, surplusPowerPrice = 0 } = item;
-        let b = (hydropowerPrice + transmissionPrice + collectionFund) * powerVolume;
-        let c = surplusPowerVolume * (surplusPowerPrice + transmissionPrice + collectionFund)
+        let b = (hydropowerPrice + transmissionPrice + collectionFund) * powerVolume * 10000;
+        let c = surplusPowerVolume * 10000 * (surplusPowerPrice + transmissionPrice + collectionFund)
         return prev + (b + c)
     }, 0)
     let d = monthlyPower.reduce((prev, item, index) => {
         const { powerVolume, surplusPowerVolume = 0 } = item;
-        return prev + powerVolume + surplusPowerVolume
+        return prev + powerVolume * 10000 + surplusPowerVolume * 10000
     }, 0)
     let res = a / d;
     return keepDecimal(res, 5);
