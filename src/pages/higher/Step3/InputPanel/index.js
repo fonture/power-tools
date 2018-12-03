@@ -3,13 +3,14 @@
  * @Date: 2018-12-02 16:21:02 
  * @Description: 输入面板
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-12-03 14:55:14
+ * @Last Modified time: 2018-12-03 16:10:01
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
-import { AtList, AtListItem, AtInput, AtCheckbox } from "taro-ui"
+import { AtList, AtListItem, AtCheckbox } from "taro-ui"
 import { keepDecimal } from '../../../../utils'
 import FiveMonth from '../../MonthPlugin/FiveMonth'
+import Input from '../../../../components/Input'
 import './index.less'
 
 export default class InputPanel extends Component {
@@ -19,7 +20,6 @@ export default class InputPanel extends Component {
      * @param {String} value 属性值
      */
     onChangeValue = (key, value) => {
-        value = keepDecimal(+value, 4)
         const { data, updateData } = this.props
         const type = data.type
         let dataSet = {}, current = 0
@@ -46,7 +46,6 @@ export default class InputPanel extends Component {
      * @param {string} value 输入框的值
      */
     onChangeSurplusValue = (value) => {
-        value = keepDecimal(+value, 4)
         const { data, updateData } = this.props
         const type = data.type
         const current = data[type].surplus.current - 5
@@ -89,7 +88,7 @@ export default class InputPanel extends Component {
         for(let key in dataSet) {
             const data = dataSet[key]
             data.key = key
-            if((type === 'regularAndSurplus' || type === 'protocolAndSurplus') && (current < 5 || current > 9) && (key == 'surplusPowerVolume' || key == 'surplusPowerPrice')) continue
+            if((type === 'regularAndSurplus' || type === 'protocolAndSurplus') && (current < 5 || current > 9) && (key == 'surplusPowerVolume')) continue
             dataSets.push(data)
         }
         return (
@@ -98,7 +97,7 @@ export default class InputPanel extends Component {
                     dataSets.map((item, index) => 
                         <AtListItem title={item.name} key={index} extraText={
                             <View className="at-row at-row__justify--center at-row__align--center">
-                                <AtInput type="number" className="power-input" border={false} value={item.value} onChange={this.onChangeValue.bind(this, item.key)}/>
+                                <Input type="number" className="power-input" border={false} value={item.value} onChange={this.onChangeValue.bind(this, item.key)} digit={item.unit === '万千瓦时' ? 4 : 5}/>
                                 <div className="unit">{item.unit}</div>
                             </View>
                         } />
@@ -113,7 +112,7 @@ export default class InputPanel extends Component {
                             } />
                             <AtListItem title="富余电量" extraText={
                                 <View className="at-row at-row__justify--center at-row__align--center">
-                                    <AtInput type="number" className="power-input" border={false} value={surplusData[surplusCurr - 5].powerVolume} onChange={this.onChangeSurplusValue.bind(this)}/>
+                                    <Input type="number" className="power-input" digit={4} border={false} value={surplusData[surplusCurr - 5].powerVolume} onChange={this.onChangeSurplusValue.bind(this)}/>
                                     <div className="unit">万千瓦时</div>
                                 </View>
                             } />

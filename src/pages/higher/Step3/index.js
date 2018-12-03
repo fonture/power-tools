@@ -22,8 +22,8 @@ export default class Step3 extends Component {
     transmissionprice: this.props.transmissionprice,
   }
   componentDidMount() {
-    this.props.onDidMount(this._rendered.dom);
     reduxHelper('next', true)
+    this.props.onDidMount(this._rendered.dom);
   }
 
   triggerActionSheet = (bool = true) => {
