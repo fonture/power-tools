@@ -309,12 +309,12 @@ for(let i = 0; i < 12; i++) {
 
 for(let j = 5; j < 10; j++) {
   initialState.powerCalc.regularAndSurplus.surplus.data.push({
-    month: j + 1,
+    month: j,
     finished: false,
     powerVolume: undefined,
   })
   initialState.powerCalc.protocolAndSurplus.surplus.data.push({
-    month: j + 1,
+    month: j,
     finished: false,
     powerVolume: undefined,
   })

@@ -40,7 +40,7 @@ export default class MonthButton extends Component {
         <View className="at-row at-row--wrap">
           {
               dataSet.map((item, index) => (
-                  <View key={index} className={`at-col at-col-2 month-item secondLineMarginBottom`}>
+                  <View key={index} className={`at-col at-col-2 month-item lineMarginBottom`}>
                       <div className={`month-circle  ${item.finished ? 'finished': ''} ${index === current ? 'current' : ''}`} onClick={this.onClick.bind(this, index)}>
                           {
                               item.finished
