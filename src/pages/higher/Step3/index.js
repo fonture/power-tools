@@ -3,7 +3,7 @@ import { View } from '@tarojs/components'
 import { AtCard, AtSwitch, AtList, AtListItem, AtActionSheet, AtActionSheetItem, AtInput } from "taro-ui"
 import inject from '../../../utils/inject';
 import { deepExtract } from '../../../utils';
-import MonthButton from '../MonthPlugin/MonthButton';
+import MonthButton from '../MonthPlugin/monthButton';
 import reduxHelper from '../../../utils/reduxHelper';
 import Card from '../../../components/Card';
 import InputPanel from './InputPanel';
