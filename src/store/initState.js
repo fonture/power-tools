@@ -150,7 +150,8 @@ const initialState =  {
         current: 0,
         data: []
       },
-      isParticipate: false,
+      isYearlyParticipate: false,
+      isMonthlyParticipate: false,
       ratio: undefined,
       average: undefined,
     },
@@ -211,7 +212,8 @@ const initialState =  {
         current: 0,
         data: []
       },
-      isParticipate: false,
+      isYearlyParticipate: false,
+      isMonthlyParticipate: false,
       ratio: undefined,
       average: undefined,
     }
