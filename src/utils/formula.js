@@ -223,11 +223,11 @@ export function extractDryAndHighData({data}) {
   const extra = (prop) => ({data}) => deepExtract(data, `${prop}.value`);
 
   const dry = data.filter((_, index) => {
-    return index >= 5 && index <= 9
+    return (index >= 0 && index <= 3) || index == 11
   }).map(extra('powerVolume'))
 
   const high = data.filter((_, index) => {
-    return (index >= 0 && index <= 3) || index == 11
+    return index >= 5 && index <= 9
   }).map(extra('powerVolume'))
 
 	return [dry,high]
@@ -242,12 +242,17 @@ export function extractDryAndHighData({data}) {
  */
 export function gethighDryProportion(data) {
     const [dry, high] = data;
-    let dryPower = dry.reduce((prev, item, index) => {
+    let dryPower = dry.reduce((prev, item = 0) => {
         return prev + item
     }, 0)
-    let highPower = high.reduce((prev, item, index) => {
+    let highPower = high.reduce((prev, item = 0) => {
         return prev + item
     }, 0)
-    let res = highPower / dryPower;
-    return keepDecimal(res, 2);
+    return (
+      dryPower === 0
+        ? '--'
+        : highPower === 0
+          ? 0
+          : keepDecimal(highPower / dryPower, 2)
+    )
 }

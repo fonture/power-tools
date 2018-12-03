@@ -4,7 +4,7 @@ import { AtCard, AtSwitch, AtList, AtListItem, AtActionSheet, AtActionSheetItem,
 import classNames from 'classnames';
 import inject from '../../../utils/inject';
 import { deepExtract } from '../../../utils';
-import MonthButton from '../MonthPlugin/MonthButton';
+import MonthButton from '../MonthPlugin/monthButton';
 import reduxHelper from '../../../utils/reduxHelper';
 import Card from '../../../components/Card';
 import InputPanel from './InputPanel';
@@ -19,9 +19,9 @@ export default class Step3 extends Component {
     tradingVarieties: this.props.tradingVarieties,
     powerCalc: this.props.powerCalc
   }
-
   componentDidMount() {
     this.props.onDidMount(this._rendered.dom);
+    reduxHelper('next', true)
   }
 
   triggerActionSheet = (bool = true) => {
@@ -58,12 +58,13 @@ export default class Step3 extends Component {
   updateAllData = () => {
     const { powerCalc, powerCalc: { type } } = this.state;
     const seletedData = powerCalc[type];
+
     if(seletedData.isMonthlyFill === true) {
       const data = extractDryAndHighData(powerCalc[type]['monthlyPower'])
-      const radio = gethighDryProportion(data)
-      powerCalc[type].radio = radio;
-    }
+      const ratio = gethighDryProportion(data)
+      powerCalc[type].ratio = ratio;
 
+    }
     this.setState({})
   }
 
