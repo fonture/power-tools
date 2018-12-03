@@ -1,6 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtCard, AtSwitch, AtList, AtListItem, AtActionSheet, AtActionSheetItem, AtInput } from "taro-ui"
+import classNames from 'classnames';
 import inject from '../../../utils/inject';
 import { deepExtract } from '../../../utils';
 import MonthButton from '../MonthPlugin/MonthButton';
@@ -8,8 +9,7 @@ import reduxHelper from '../../../utils/reduxHelper';
 import Card from '../../../components/Card';
 import InputPanel from './InputPanel';
 import './index.less'
-import { type } from 'os';
-
+import { extractDryAndHighData, gethighDryProportion, computeAvPrcieByMonthAllWaterOfHigh } from '../../../utils/formula';
 
 @inject('tradingVarieties', 'powerCalc')
 export default class Step3 extends Component {
@@ -56,12 +56,28 @@ export default class Step3 extends Component {
   }
 
   updateAllData = () => {
+    const { powerCalc, powerCalc: { type } } = this.state;
+    const seletedData = powerCalc[type];
+    if(seletedData.isMonthlyFill === true) {
+      const data = extractDryAndHighData(powerCalc[type]['monthlyPower'])
+      const radio = gethighDryProportion(data)
+      powerCalc[type].radio = radio;
+    }
+
     this.setState({})
   }
 
   render() {
     const { isOpened, powerCalc, tradingVarieties } = this.state;
     const { type, singleRegular, singleProtocol, RegularAndSurplus, protocolAndSurplus } = powerCalc;
+
+    const className = classNames(
+      'at-col',
+      'at-col-4',
+      {
+        'hidden': !powerCalc[type].isMonthlyFill,
+      }
+    );
 
     return (
       <View>
@@ -100,7 +116,7 @@ export default class Step3 extends Component {
             showBody
           >
             <View className='at-row at-row__justify--between'>
-              <View className='at-col at-col-4'>
+              <View className={className}>
                 <span>丰枯比：{deepExtract(powerCalc, `${type}.ratio`)}</span>
               </View>
               <View className='at-col at-col-6'>
