@@ -11,13 +11,15 @@ import InputPanel from './InputPanel';
 import './index.less'
 import { extractDryAndHighData, gethighDryProportion, computeAvPrcieByMonthAllWaterOfHigh } from '../../../utils/formula';
 
-@inject('tradingVarieties', 'powerCalc')
+@inject('tradingVarieties', 'powerCalc' , 'catalogueprice', 'transmissionprice' )
 export default class Step3 extends Component {
 
   state = {
     isOpened: false,
     tradingVarieties: this.props.tradingVarieties,
-    powerCalc: this.props.powerCalc
+    powerCalc: this.props.powerCalc,
+    catalogueprice: this.props.catalogueprice,
+    transmissionprice: this.props.transmissionprice,
   }
   componentDidMount() {
     this.props.onDidMount(this._rendered.dom);
@@ -55,22 +57,58 @@ export default class Step3 extends Component {
     })
   }
 
+
   updateAllData = () => {
+    const { firePrice, transmissionPrice, collectionFund } = this.state;
     const { powerCalc, powerCalc: { type } } = this.state;
     const seletedData = powerCalc[type];
+    let average;
 
-    if(seletedData.isMonthlyFill === true) {
+    if(seletedData.isMonthlyFill) {
       const data = extractDryAndHighData(powerCalc[type]['monthlyPower'])
       const ratio = gethighDryProportion(data)
       powerCalc[type].ratio = ratio;
-
     }
+
+    if(seletedData.isMonthlyFill) {
+      const [firePrice, transmissionPrice, collectionFund, monthlyPower] = [
+        firePrice,
+        transmissionPrice,
+        collectionFund,
+        seletedData['monthlyPower']['data']
+      ]
+      if(!seletedData.isMonthlyParticipate) {
+        average = computeAvPrcieByMonthOfHigh(firePrice, transmissionPrice, collectionFund, monthlyPower)
+      } else {
+        average = computeAvPrcieByMonthAllWaterOfHigh(transmissionPrice, collectionFund, monthlyPower )
+      }
+    } else {
+      const [ waterPrice, firePrice, transmissionPrice, collectionFund, yearPower, surplusaPowerList = [], surplusaPrice ]
+        = [
+          powerCalc[type]['yearlyData']['hydropowerPrice']['value'],
+          firePrice,
+          transmissionPrice,
+          collectionFund,
+          deepExtract(powerCalc, `${type}.yearlyData.powerVolume.value`)
+          (deepExtract(powerCalc, `${type}.monthlyPower.data`) || []).map(({data}) => data.powerVolume.value ),
+          deepExtract(powerCalc, `${type}.surplusaPrice.value`)
+        ]
+      if(!seletedData.isYearlyParticipate) {
+        computeAvPrcieByYearOfHigh(waterPrice, firePrice, transmissionPrice, collectionFund, yearPower, surplusaPowerList, surplusaPrice)
+      } else {
+        average = computeAvPrcieByYearAllWaterOfHigh(waterPrice, transmissionPrice, collectionFund, yearPower, surplusaPowerList, surplusaPrice)
+      }
+    }
+    powerCalc[type].average = average
+
     this.setState({})
   }
 
   render() {
     const { isOpened, powerCalc, tradingVarieties } = this.state;
     const { type, singleRegular, singleProtocol, RegularAndSurplus, protocolAndSurplus } = powerCalc;
+
+    console.log('-----', catalogueprice, transmissionprice);
 
     const className = classNames(
       'at-col',
