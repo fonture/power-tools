@@ -19,9 +19,9 @@ export default class Step3 extends Component {
     tradingVarieties: this.props.tradingVarieties,
     powerCalc: this.props.powerCalc
   }
-
   componentDidMount() {
     this.props.onDidMount(this._rendered.dom);
+    reduxHelper('next', true)
   }
 
   triggerActionSheet = (bool = true) => {

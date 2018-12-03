@@ -3,7 +3,7 @@
  * @Date: 2018-12-02 16:21:02 
  * @Description: 输入面板
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-12-03 14:17:07
+ * @Last Modified time: 2018-12-03 14:55:14
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -13,9 +13,6 @@ import FiveMonth from '../../MonthPlugin/FiveMonth'
 import './index.less'
 
 export default class InputPanel extends Component {
-    state = {
-        checkedList: []
-    }
     /**
      * @description 一般输入框的回调调用
      * @param {String} key 属性名
@@ -30,16 +27,7 @@ export default class InputPanel extends Component {
         if(!isMonthlyFill) {
             dataSet = data[type].yearlyData
         }else {
-            let power = {}
-            switch(type) {
-                case 'singleRegular':
-                case 'singleProtocol':
-                    power = data[type].monthlyPowerVolume
-                    break
-                default:
-                    power = data[type].monthlyPower
-                    break
-            }
+            const power = data[type].monthlyPower
             current = power.current
             dataSet = power.data[current].data
             power.data[current].finished = false
@@ -93,17 +81,8 @@ export default class InputPanel extends Component {
                 surplusData = surplus.data
             }
         }else {
-            switch(type) {
-                case 'singleRegular':
-                case 'singleProtocol':
-                    current = data[type].monthlyPowerVolume.current
-                    dataSet = data[type].monthlyPowerVolume.data[current].data
-                    break
-                default:
-                    current = data[type].monthlyPower.current
-                    dataSet = data[type].monthlyPower.data[current].data
-                    break
-            }
+            current = data[type].monthlyPower.current
+            dataSet = data[type].monthlyPower.data[current].data
         }
         
         const dataSets = []
