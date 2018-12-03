@@ -1,14 +1,28 @@
 import Taro, { Component } from '@tarojs/taro'
 import { AtInput } from 'taro-ui';
-import { keepDecimal } from '../../utils';
 
 // digit 小数位数
+const keepDecimalOfString = (str, digit) => {
+    if (str) {
+        if (str.includes('.')) {
+            const [a, b] = str.split('.');
+            return `${a}.${b.substring(0, digit)}`;
+        } else {
+            return str
+        }
+    } else {
+        return ''
+    }
+}
 class Input extends Component {
+
+    onChange = (value) => {
+        this.props.onChange(keepDecimalOfString(value, this.props.digit));
+    }
     render() {
-        let value = keepDecimal(Number(this.props.value), this.props.digit);
-        let props = Object.assign(this.props, { value });
+        const { onChange, ...porps } = this.props;
         return (
-            <AtInput {...props} />
+            <AtInput {...porps} onChange={this.onChange} />
         )
     }
 }

@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:13:09 
  * @Description: 参与市场时的购电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-12-02 11:45:53
+ * @Last Modified time: 2018-12-03 15:12:56
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -110,7 +110,7 @@ export default class BuyPowerCost extends Component {
 
         // 如果type不为undefined，即不是点击是否参与全水电选项触发的
         if(type) {
-            value = +value
+            // value = +value
             values = Object.assign({}, values, {[type]: value})
         }
         // 年度用电量需要计算。如果购电均价是手动输入的，不需要重新计算

@@ -3,17 +3,14 @@
  * @Date: 2018-11-28 13:47:30 
  * @Description: 高级版第二步用电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-12-01 17:25:56
+ * @Last Modified time: 2018-12-03 15:29:55
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { 
     AtList, 
     AtListItem, 
-    AtActionSheet, 
-    AtActionSheetItem, 
-    AtCard, 
-    AtInput,
+    AtCard,
 } from 'taro-ui'
 import request from '../../../utils/request'
 import inject from '../../../utils/inject'
@@ -22,6 +19,7 @@ import { computePowerOfHigh } from '../../../utils/formula'
 import { keepDecimal } from '../../../utils'
 import Proportion from '../../../components/Proportion'
 import MonthPlugin from '../MonthPlugin'
+import Input from '../../../components/Input'
 import './index.less'
 
 @inject('yearCataloguePriceMap', 'powerCostsOfHigh')
@@ -65,24 +63,21 @@ export default class Step2 extends Component {
      * @param {String} value 输入框的值
      */
     onChangeValue = (type, value) => {
-        const val = keepDecimal(+value, 4)
         const { currMonth, monthPowerList } = this.state
         const { yearCataloguePriceMap } = this.props
-        if(!isNaN(val)){
-            const values = Object.assign({}, monthPowerList[currMonth - 1], {[type]: val})
-            const { high, medium, low } = values
-            monthPowerList[currMonth - 1] = {
-                ...values,
-                finished: high || medium || low ? true : false
-            }
-            const result = computePowerOfHigh(monthPowerList, yearCataloguePriceMap)
-            this.setState({
-                ...result
-            }, () => {
-                const next = this.state.monthPowerList.find(item => item.finished)
-                reduxHelper('next', next ? true : false)     
-            })
+        const values = Object.assign({}, monthPowerList[currMonth - 1], {[type]: value})
+        const { high, medium, low } = values
+        monthPowerList[currMonth - 1] = {
+            ...values,
+            finished: high || medium || low ? true : false
         }
+        const result = computePowerOfHigh(monthPowerList, yearCataloguePriceMap)
+        this.setState({
+            ...result
+        }, () => {
+            const next = this.state.monthPowerList.find(item => item.finished)
+            reduxHelper('next', next ? true : false)     
+        })
     }
 
     /**
@@ -116,19 +111,19 @@ export default class Step2 extends Component {
                     <AtList>
                         <AtListItem title="峰时用电" extraText={
                             <View className="at-row at-row__justify--center at-row__align--center">
-                                <AtInput type="number" className="power-input" border={false} value={data.high} maxlength={5} onChange={this.onChangeValue.bind(this, 'high')}/>
+                                <Input type="number" className="power-input" digit={4} border={false} value={data.high} maxlength={5} onChange={this.onChangeValue.bind(this, 'high')}/>
                                 <div className="unit">万千瓦时</div>
                             </View>
                         } />
                         <AtListItem title="平时用电" extraText={
                             <View className="at-row at-row__justify--center at-row__align--center">
-                                <AtInput type="number" className="power-input" border={false} value={data.medium} onChange={this.onChangeValue.bind(this, 'medium')}/>
+                                <Input type="number" className="power-input" digit={4} border={false} value={data.medium} onChange={this.onChangeValue.bind(this, 'medium')}/>
                                 <div className="unit">万千瓦时</div>
                             </View>
                         } />
                         <AtListItem title="谷时用电" extraText={
                             <View className="at-row at-row__justify--center at-row__align--center">
-                                <AtInput type="number" className="power-input" border={false} value={data.low} onChange={this.onChangeValue.bind(this, 'low')}/>
+                                <Input type="number" className="power-input" digit={4} border={false} value={data.low} onChange={this.onChangeValue.bind(this, 'low')}/>
                                 <div className="unit">万千瓦时</div>
                             </View>
                         } />                    

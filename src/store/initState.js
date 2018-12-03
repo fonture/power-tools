@@ -125,7 +125,7 @@ const initialState =  {
           value: undefined
         },
       },
-      monthlyPowerVolume: {
+      monthlyPower: {
         current: 0,
         data: []
       },
@@ -146,11 +146,12 @@ const initialState =  {
           value: undefined
         },
       },
-      monthlyPowerVolume: {
+      monthlyPower: {
         current: 0,
         data: []
       },
-      isParticipate: false,
+      isYearlyParticipate: false,
+      isMonthlyParticipate: false,
       ratio: undefined,
       average: undefined,
     },
@@ -211,7 +212,8 @@ const initialState =  {
         current: 0,
         data: []
       },
-      isParticipate: false,
+      isYearlyParticipate: false,
+      isMonthlyParticipate: false,
       ratio: undefined,
       average: undefined,
     }
@@ -221,7 +223,7 @@ const initialState =  {
   powerCosts: {}
 }
 for(let i = 0; i < 12; i++) {
-  initialState.powerCalc.singleRegular.monthlyPowerVolume.data.push({
+  initialState.powerCalc.singleRegular.monthlyPower.data.push({
     month: i,
     finished: false,
     data: {
@@ -237,7 +239,7 @@ for(let i = 0; i < 12; i++) {
       }
     }
   })
-  initialState.powerCalc.singleProtocol.monthlyPowerVolume.data.push({
+  initialState.powerCalc.singleProtocol.monthlyPower.data.push({
     month: i,
     finished: false,
     data: {
@@ -309,12 +311,12 @@ for(let i = 0; i < 12; i++) {
 
 for(let j = 5; j < 10; j++) {
   initialState.powerCalc.regularAndSurplus.surplus.data.push({
-    month: j + 1,
+    month: j,
     finished: false,
     powerVolume: undefined,
   })
   initialState.powerCalc.protocolAndSurplus.surplus.data.push({
-    month: j + 1,
+    month: j,
     finished: false,
     powerVolume: undefined,
   })

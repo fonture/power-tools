@@ -4,7 +4,7 @@
 *   输配电价： transmissionPrice
 *   水电价格： waterPrice
 */
-import { keepDecimal } from './index';
+import { keepDecimal, deepExtract } from './index';
 
 
 // 购电均价
@@ -21,9 +21,9 @@ export class noMart {
      * @description 未参与市场 基金计算  对象包含值
      * @param {string} prce 平水期峰段目录电价
      * @param {string} scale
-     * 
-     * 
-     * 
+     *
+     *
+     *
      */
     buyCost = (args) => {
         const { } = args;
@@ -58,6 +58,9 @@ export function getAllWaterAvPriceOfElePur(waterPrice, transmissionPrice, collec
  * @param {Float} isJoin 是否参与全水电交易品种
  */
 export function powerAveragePriceOfJoin(firePrice, transmissionPrice, collectionFund, yearPower, deviationCost, signedPrice, isJoin) {
+    yearPower = +yearPower
+    deviationCost = +deviationCost
+    signedPrice = +signedPrice
     if (!yearPower) return ''
     yearPower *= 10000
     let price = 0
@@ -82,6 +85,9 @@ export function powerAveragePriceOfJoin(firePrice, transmissionPrice, collection
  * @returns 年度用电量、用电均价
  */
 export function powerAveragePriceOfNotJoin(high = 0, medium = 0, low = 0, highPrice, mediumPrice, lowPrice, collectionFund) {
+    high = +high
+    medium = +medium
+    low = +low
     let yearPower = high + medium + low
     if (!yearPower) return { yearPower, averagePrice: 0 }
     let averagePrice = ((high * highPrice + medium * mediumPrice + low * lowPrice) / (yearPower * 10000) + collectionFund)
@@ -103,9 +109,9 @@ export function computePowerOfHigh(data, yearCataloguePriceMap) {
         const { collectionFund, cataloguePriceVoMap: { peak, plain, valley } } = yearCataloguePriceMap[index + 1]
         let { high, medium, low, finished } = item
         if (finished) {
-            high = high === '' ? 0 : high
-            medium = medium === '' ? 0 : medium
-            low = low === '' ? 0 : low
+            high = high === '' ? 0 : +high
+            medium = medium === '' ? 0 : +medium
+            low = low === '' ? 0 : +low
             highYearPower += high
             mediumYearPower += medium
             lowYearPower += low
@@ -219,26 +225,40 @@ export function computeAvPrcieByMonthAllWaterOfHigh(transmissionPrice, collectio
     return keepDecimal(res, 5);
 }
 
+export function extractDryAndHighData({data}) {
+  const extra = (prop) => ({data}) => deepExtract(data, `${prop}.value`);
+
+  const dry = data.filter((_, index) => {
+    return (index >= 0 && index <= 3) || index == 11
+  }).map(extra('powerVolume'))
+
+  const high = data.filter((_, index) => {
+    return index >= 5 && index <= 9
+  }).map(extra('powerVolume'))
+
+	return [dry,high]
+}
+
 /**
  *
  * @description 高级版 step3 丰枯比
  * @export
- * @param {*} [monthlyPower=[]] 月度购电量数组
+ * @param {Array} data [[dry], [high]]
  * @returns
  */
-export function gethighDryProportion(monthlyPower = []) {
-    let high = monthlyPower.filter((_, index) => {
-        return index >= 5 && index <= 9
-    })
-    let dry = monthlyPower.filter((_, index) => {
-        return (index >= 0 && index <= 3) || index == 11
-    })
-    let highPower = high.reduce((prev, item, index) => {
-        return prev + item.powerVolume
+export function gethighDryProportion(data) {
+    const [dry, high] = data;
+    let dryPower = dry.reduce((prev, item = 0) => {
+        return prev + item
     }, 0)
-    let dryPower = dry.reduce((prev, item, index) => {
-        return prev + item.powerVolume
+    let highPower = high.reduce((prev, item = 0) => {
+        return prev + item
     }, 0)
-    let res = highPower / dryPower;
-    return keepDecimal(res, 2);
+    return (
+      dryPower === 0
+        ? '--'
+        : highPower === 0
+          ? 0
+          : keepDecimal(highPower / dryPower, 2)
+    )
 }
