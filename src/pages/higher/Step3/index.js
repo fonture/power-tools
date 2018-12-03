@@ -4,8 +4,9 @@ import { AtCard, AtSwitch, AtList, AtListItem, AtActionSheet, AtActionSheetItem,
 import inject from '../../../utils/inject';
 import { deepExtract } from '../../../utils';
 import MonthButton from '../MonthPlugin/MonthButton';
-import reduxHelper from '../../../utils/reduxHelper'
-import InputPanel from './InputPanel'
+import reduxHelper from '../../../utils/reduxHelper';
+import Card from '../../../components/Card';
+import InputPanel from './InputPanel';
 import './index.less'
 import { type } from 'os';
 
@@ -70,6 +71,7 @@ export default class Step3 extends Component {
             <AtListItem title='交易品种' extraText={tradingVarieties[type]} arrow='right' onClick={this.triggerActionSheet} />
           </AtList>
           <AtCard
+            className="partical"
             isFull
             extra={
               <AtSwitch
@@ -90,9 +92,24 @@ export default class Step3 extends Component {
                 : null
               }
               {/* 输入面板 */}
-                <InputPanel data={powerCalc}  updateData={this.updateAllData}/>
-              {/* 结果展示 */}
+              <InputPanel data={powerCalc}  updateData={this.updateAllData}/>
           </AtCard>
+          {/* 结果展示 */}
+          <Card
+            className="margin-top-10"
+            isFull
+            showBody
+          >
+            <View className='at-row at-row__justify--between'>
+              <View className='at-col at-col-4'>
+                <span>丰枯比：{deepExtract(powerCalc, `${type}.ratio`)}</span>
+              </View>
+              <View className='at-col at-col-6'>
+                <span>购电均价：{deepExtract(powerCalc, `${type}.ratio`)}<span style={{float: 'right'}}>元/千瓦时</span></span>
+              </View>
+            </View>
+          </Card>
+
           <AtActionSheet isOpened={isOpened}
             onClose={this.handleClose}
           >

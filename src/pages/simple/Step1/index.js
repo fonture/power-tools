@@ -130,6 +130,7 @@ export default class Step1 extends Component {
 
     initPicker = () => {
         const { address = '请选择地区', sortValue = null, mart = '请选择是否参与市场' } = this.props.baseMessage;
+        reduxHelper('next',false);
         const {version} = this.props;
         this.setState({
             sorts: this.formatArr(0),
