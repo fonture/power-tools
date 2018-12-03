@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:11:35 
  * @Description:未参与市场时的用电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-12-01 16:56:36
+ * @Last Modified time: 2018-12-03 15:16:28
  */
 
 import Taro, { Component } from '@tarojs/taro'
@@ -94,32 +94,30 @@ export default class ElectricityCost extends Component {
      * @param {String} value 输入框的值
      */
     onChangeValue = (type, value) => {
-        const val = +value
+        // const val = +value
         const { newestCataloguePrice: {cataloguePriceVoMap: {peak, plain, valley}, collectionFund} } = this.props
-        if(!isNaN(val)){
-            const values = Object.assign({}, this.state, {[type]: val})
-            let result = {}
-            if(this.state.method === '用电量') {
-                let { high, medium, low } = values
-                high = high === '' ? 0 : high
-                medium = medium === '' ? 0 : medium
-                low = low === '' ? 0 : low
-                result = powerAveragePriceOfNotJoin(high, medium, low, peak.price, plain.price, valley.price, collectionFund)
-            }
-            this.setState({
-                ...values,
-                ...result,
-                isOpened: false
-            }, () => {
-                reduxHelper('electricityCostData', this.state)
-                const { yearPower, averagePrice, high, medium, low, method } = this.state
-                if((yearPower && averagePrice && method === '电度电价') || (high && medium && low)){
-                    reduxHelper('next', true)
-                }else{
-                    reduxHelper('next', false)
-                }
-            })
+        const values = Object.assign({}, this.state, {[type]: value})
+        let result = {}
+        if(this.state.method === '用电量') {
+            let { high, medium, low } = values
+            high = high === '' ? 0 : high
+            medium = medium === '' ? 0 : medium
+            low = low === '' ? 0 : low
+            result = powerAveragePriceOfNotJoin(high, medium, low, peak.price, plain.price, valley.price, collectionFund)
         }
+        this.setState({
+            ...values,
+            ...result,
+            isOpened: false
+        }, () => {
+            reduxHelper('electricityCostData', this.state)
+            const { yearPower, averagePrice, high, medium, low, method } = this.state
+            if((yearPower && averagePrice && method === '电度电价') || (high && medium && low)){
+                reduxHelper('next', true)
+            }else{
+                reduxHelper('next', false)
+            }
+        })
     }
     /**
      * @description 点击每一个列表项时将光标聚集到该行的输入框中

@@ -58,6 +58,9 @@ export function getAllWaterAvPriceOfElePur(waterPrice, transmissionPrice, collec
  * @param {Float} isJoin 是否参与全水电交易品种
  */
 export function powerAveragePriceOfJoin(firePrice, transmissionPrice, collectionFund, yearPower, deviationCost, signedPrice, isJoin) {
+    yearPower = +yearPower
+    deviationCost = +deviationCost
+    signedPrice = +signedPrice
     if (!yearPower) return ''
     yearPower *= 10000
     let price = 0
@@ -82,6 +85,9 @@ export function powerAveragePriceOfJoin(firePrice, transmissionPrice, collection
  * @returns 年度用电量、用电均价
  */
 export function powerAveragePriceOfNotJoin(high = 0, medium = 0, low = 0, highPrice, mediumPrice, lowPrice, collectionFund) {
+    high = +high
+    medium = +medium
+    low = +low
     let yearPower = high + medium + low
     if (!yearPower) return { yearPower, averagePrice: 0 }
     let averagePrice = ((high * highPrice + medium * mediumPrice + low * lowPrice) / (yearPower * 10000) + collectionFund)
@@ -103,9 +109,9 @@ export function computePowerOfHigh(data, yearCataloguePriceMap) {
         const { collectionFund, cataloguePriceVoMap: { peak, plain, valley } } = yearCataloguePriceMap[index + 1]
         let { high, medium, low, finished } = item
         if (finished) {
-            high = high === '' ? 0 : high
-            medium = medium === '' ? 0 : medium
-            low = low === '' ? 0 : low
+            high = high === '' ? 0 : +high
+            medium = medium === '' ? 0 : +medium
+            low = low === '' ? 0 : +low
             highYearPower += high
             mediumYearPower += medium
             lowYearPower += low
