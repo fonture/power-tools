@@ -69,7 +69,6 @@ class Partake extends Component {
      * @param {String} value 输入框的值
      */
     onChangeValue = (type, value) => {
-        value = +value
         if (!isNaN(value)) {
             const { isOpened, ...state } = this.state;
             const values = Object.assign({}, state, { [type]: value })

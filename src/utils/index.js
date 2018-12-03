@@ -10,7 +10,7 @@ export const report = {
         this.evens.forEach(e => e());
     }
 }
-
+// 保留小数
 export function keepDecimal(num, digit) {
     if (typeof num === 'number') {
         return Math.round(num * Math.pow(10, digit)) / Math.pow(10, digit)
@@ -18,7 +18,6 @@ export function keepDecimal(num, digit) {
         return num
     }
 }
-
 /**
  * @param {*} args
  * @returns {boolean} 
@@ -40,13 +39,13 @@ export function validate(...args) {
  * @return {any} field - return the prop value, if it not exist return undefined.
  */
 export function deepExtract(o, props) {
-  const [first, ...remaining] = props.split('.');
-  return (
-    o == null
-    // when o is undefined or null return undefined directly
-      ? undefined
-      : (remaining.length)
-        ? deepExtract(o[first], remaining.join('.'))
-        : o[first]
-  );
+    const [first, ...remaining] = props.split('.');
+    return (
+        o == null
+            // when o is undefined or null return undefined directly
+            ? undefined
+            : (remaining.length)
+                ? deepExtract(o[first], remaining.join('.'))
+                : o[first]
+    );
 }

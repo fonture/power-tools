@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:11:35 
  * @Description:未参与市场时的用电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-12-03 15:16:28
+ * @Last Modified time: 2018-12-03 15:55:02
  */
 
 import Taro, { Component } from '@tarojs/taro'
@@ -220,7 +220,7 @@ export default class ElectricityCost extends Component {
                                 <AtListItem title="平时用电" onClick={this.onListClick}
                                     extraText={
                                         <View className="at-row at-row__justify--center at-row__align--center">
-                                            <Input type="number" digit={5} className="power-input" border={false} value={medium} onChange={this.onChangeValue.bind(this, 'medium')}/>
+                                            <Input type="number" digit={4} className="power-input" border={false} value={medium} onChange={this.onChangeValue.bind(this, 'medium')}/>
                                             <div className="power-result-unit">万千瓦时</div>
                                         </View>
                                     } 
@@ -228,7 +228,7 @@ export default class ElectricityCost extends Component {
                                 <AtListItem title="谷时用电" onClick={this.onListClick}
                                     extraText={
                                         <View className="at-row at-row__justify--center at-row__align--center">
-                                            <Input type="number" digit={5} className="power-input" border={false} value={low} onChange={this.onChangeValue.bind(this, 'low')}/>
+                                            <Input type="number" digit={4} className="power-input" border={false} value={low} onChange={this.onChangeValue.bind(this, 'low')}/>
                                             <div className="power-result-unit">万千瓦时</div>
                                         </View>
                                     } 

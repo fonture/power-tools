@@ -3,7 +3,7 @@
  * @Date: 2018-11-28 13:47:30 
  * @Description: 高级版第二步用电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-12-03 15:24:05
+ * @Last Modified time: 2018-12-03 15:29:55
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -111,19 +111,19 @@ export default class Step2 extends Component {
                     <AtList>
                         <AtListItem title="峰时用电" extraText={
                             <View className="at-row at-row__justify--center at-row__align--center">
-                                <Input type="number" className="power-input" border={false} value={data.high} maxlength={5} onChange={this.onChangeValue.bind(this, 'high')}/>
+                                <Input type="number" className="power-input" digit={4} border={false} value={data.high} maxlength={5} onChange={this.onChangeValue.bind(this, 'high')}/>
                                 <div className="unit">万千瓦时</div>
                             </View>
                         } />
                         <AtListItem title="平时用电" extraText={
                             <View className="at-row at-row__justify--center at-row__align--center">
-                                <Input type="number" className="power-input" border={false} value={data.medium} onChange={this.onChangeValue.bind(this, 'medium')}/>
+                                <Input type="number" className="power-input" digit={4} border={false} value={data.medium} onChange={this.onChangeValue.bind(this, 'medium')}/>
                                 <div className="unit">万千瓦时</div>
                             </View>
                         } />
                         <AtListItem title="谷时用电" extraText={
                             <View className="at-row at-row__justify--center at-row__align--center">
-                                <Input type="number" className="power-input" border={false} value={data.low} onChange={this.onChangeValue.bind(this, 'low')}/>
+                                <Input type="number" className="power-input" digit={4} border={false} value={data.low} onChange={this.onChangeValue.bind(this, 'low')}/>
                                 <div className="unit">万千瓦时</div>
                             </View>
                         } />                    
