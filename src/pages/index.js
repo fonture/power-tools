@@ -120,7 +120,7 @@ export default class Index extends Component {
                 <AtInput
                   name='value'
                   title='火电价格'
-                  type='number'
+                  type='digit'
                   placeholder={`默认火电价格${firePrice}`}
                 />
                 <Button formType='submit' width='100px' className='sumitButton' >确定</Button>

@@ -185,15 +185,15 @@ export function computeAvPrcieByYearAllWaterOfHigh(waterPrice, transmissionPrice
  * @param {*} [monthlyPower=[]] 月度购电量数组
  * @returns
  */
-export function computeAvPrcieByMonthOfHigh(firePrice, transmissionPrice, collectionFund, monthlyPower = []) {
+export function computeAvPrcieByMonthOfHigh(firePrice, transmissionPrice=[], collectionFund =[], monthlyPower = []) {
     let a = monthlyPower.reduce((prev, item, index) => {
-        const { powerVolume, hydropowerPrice, surplusPowerVolume = 0, surplusPowerPrice = 0 } = item;
-        let b = (hydropowerPrice * 0.7 + firePrice * 0.3 + transmissionPrice + collectionFund) * powerVolume * 10000;
-        let c = surplusPowerVolume * 10000 * (surplusPowerPrice + transmissionPrice + collectionFund)
+        const { powerVolume:{value: powerVolume = 0}, hydropowerPrice:{value: hydropowerPrice = 0}, surplusPowerVolume:{value: surplusPowerVolume = 0} , surplusPowerPrice:{value: surplusPowerPrice = 0}  } = item;
+        let b = (hydropowerPrice * 0.7 + firePrice * 0.3 + transmissionPrice[index] + collectionFund[index]) * powerVolume * 10000;
+        let c = surplusPowerVolume * 10000 * (surplusPowerPrice + transmissionPrice[index] + collectionFund[index])
         return prev + (b + c)
     }, 0)
     let d = monthlyPower.reduce((prev, item, index) => {
-        const { powerVolume, surplusPowerVolume = 0 } = item;
+      const { powerVolume:{value: powerVolume = 0}, surplusPowerVolume:{value: surplusPowerVolume = 0} } = item;
         return prev + powerVolume * 10000 + surplusPowerVolume * 10000
     }, 0)
     let res = a / d;
@@ -210,15 +210,15 @@ export function computeAvPrcieByMonthOfHigh(firePrice, transmissionPrice, collec
  * @param {*} [monthlyPower=[]] 月度购电量数组
  * @returns
  */
-export function computeAvPrcieByMonthAllWaterOfHigh(transmissionPrice, collectionFund, monthlyPower = []) {
+export function computeAvPrcieByMonthAllWaterOfHigh(transmissionPrice = [], collectionFund=[], monthlyPower = []) {
     let a = monthlyPower.reduce((prev, item, index) => {
-        const { powerVolume, hydropowerPrice, surplusPowerVolume = 0, surplusPowerPrice = 0 } = item;
-        let b = (hydropowerPrice + transmissionPrice + collectionFund) * powerVolume * 10000;
-        let c = surplusPowerVolume * 10000 * (surplusPowerPrice + transmissionPrice + collectionFund)
+        const { powerVolume:{value: powerVolume = 0}, hydropowerPrice:{value: hydropowerPrice = 0}, surplusPowerVolume:{value: surplusPowerVolume = 0} , surplusPowerPrice:{value: surplusPowerPrice = 0}  } = item;
+        let b = (hydropowerPrice + transmissionPrice[index] + collectionFund[index]) * powerVolume * 10000;
+        let c = surplusPowerVolume * 10000 * (surplusPowerPrice + transmissionPrice[index] + collectionFund[index])
         return prev + (b + c)
     }, 0)
     let d = monthlyPower.reduce((prev, item, index) => {
-        const { powerVolume, surplusPowerVolume = 0 } = item;
+        const { powerVolume:{value: powerVolume = 0}, surplusPowerVolume:{value: surplusPowerVolume = 0} } = item;
         return prev + powerVolume * 10000 + surplusPowerVolume * 10000
     }, 0)
     let res = a / d;

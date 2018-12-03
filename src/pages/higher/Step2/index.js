@@ -3,7 +3,7 @@
  * @Date: 2018-11-28 13:47:30 
  * @Description: 高级版第二步用电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-12-03 15:29:55
+ * @Last Modified time: 2018-12-03 18:58:23
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -22,7 +22,7 @@ import MonthPlugin from '../MonthPlugin'
 import Input from '../../../components/Input'
 import './index.less'
 
-@inject('yearCataloguePriceMap', 'powerCostsOfHigh')
+@inject('baseMessage', 'catalogueprice', 'powerCostsOfHigh')
 export default class Step2 extends Component {
     state = {
         currMonth: this.props.powerCostsOfHigh.currMonth,
@@ -39,18 +39,32 @@ export default class Step2 extends Component {
     }
     async componentDidMount(){
         reduxHelper('powerCostsOfHigh', this.state)
+        const { adsWord, sort } = this.props.baseMessage
         
         // 请求基金、峰平谷电价
         const catalogueprice = await request({
             method: 'GET',
             url: '/wechat/kit/catalogueprice/year',
             data: {
-                tradeCenter: 'sichuan', 
-                category: 'a',
-                voltage: 'a'
+                tradeCenter: adsWord, 
+                category: sort[0],
+                voltage: sort[1]
             }
         })
-        catalogueprice && catalogueprice.data && reduxHelper('yearCataloguePriceMap', {...catalogueprice.data.yearCataloguePriceMap})
+        // 请求输配电价
+        const transmissionprice = await request({
+            method: 'GET',
+            url: '/wechat/kit/transmissionprice/year',
+            data: {
+                tradeCenter: adsWord, 
+                category: sort[0],
+                voltage: sort[1]
+            }
+        })
+        // 基金、峰平谷电价
+        catalogueprice && catalogueprice.data && reduxHelper('catalogueprice', catalogueprice.data)
+        // 输配电价
+        transmissionprice && transmissionprice.data && reduxHelper('transmissionprice', transmissionprice.data)
     }
     
     componentWillUnmount() {
@@ -64,7 +78,7 @@ export default class Step2 extends Component {
      */
     onChangeValue = (type, value) => {
         const { currMonth, monthPowerList } = this.state
-        const { yearCataloguePriceMap } = this.props
+        const { catalogueprice: { yearCataloguePriceMap } } = this.props
         const values = Object.assign({}, monthPowerList[currMonth - 1], {[type]: value})
         const { high, medium, low } = values
         monthPowerList[currMonth - 1] = {

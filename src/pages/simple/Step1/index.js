@@ -41,12 +41,13 @@ export default class Step1 extends Component {
             const fistItem = this.resorts.find(item => item.categoryName === sort[0]);
             sortValue = [fistItem['categoryIdentify'], fistItem.voltageLevelVOList.find(item => item.voltageName === sort[1])['voltageIdentify']]
         }
+        this.setNextTrue(this.state);
         reduxHelper('baseMessage', { address, adsWord, sort: sortValue, sortValue: sort, mart })
     }
 
-    componentWillUpdate(nextProps, nextState) {
-        this.setNextTrue(nextState);
-    }
+    // componentWillUpdate(nextProps, nextState) {
+    //     this.setNextTrue(nextState);
+    // }
     setNextTrue = (state)=> {
         const {sort,mart,address} = state;
         const { next } = this.props;
@@ -128,16 +129,20 @@ export default class Step1 extends Component {
         }, this.storeData)
     }
 
-    initPicker = () => {
+    initPicker = async () => {
         const { address = '请选择地区', sortValue = null, mart = '请选择是否参与市场' } = this.props.baseMessage;
-        reduxHelper('next',false);
+        await reduxHelper('next',false);
         const {version} = this.props;
         this.setState({
             sorts: this.formatArr(0),
             address,
             sort: sortValue,
             mart: version === 'higher' ? '未参与': mart,
-        },this.setNextTrue(this.state))
+        },this.setNextTrue({
+            address,
+            sort: sortValue,
+            mart: version === 'higher' ? '未参与': mart
+        }))
     }
 
     pickerColumnChange = (e) => {
