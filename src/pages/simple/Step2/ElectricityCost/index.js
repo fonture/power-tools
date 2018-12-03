@@ -2,8 +2,8 @@
  * @Author: ouyangdc 
  * @Date: 2018-11-23 16:11:35 
  * @Description:未参与市场时的用电成本
- * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-12-01 16:56:36
+ * @Last Modified by: mikey.zhaopeng
+ * @Last Modified time: 2018-12-03 15:30:29
  */
 
 import Taro, { Component } from '@tarojs/taro'
@@ -94,7 +94,7 @@ export default class ElectricityCost extends Component {
      * @param {String} value 输入框的值
      */
     onChangeValue = (type, value) => {
-        const val = +value
+        const val = value
         const { newestCataloguePrice: {cataloguePriceVoMap: {peak, plain, valley}, collectionFund} } = this.props
         if(!isNaN(val)){
             const values = Object.assign({}, this.state, {[type]: val})
