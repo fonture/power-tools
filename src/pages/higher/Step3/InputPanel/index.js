@@ -3,7 +3,7 @@
  * @Date: 2018-12-02 16:21:02 
  * @Description: 输入面板
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-12-03 13:50:21
+ * @Last Modified time: 2018-12-03 14:55:14
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -13,9 +13,6 @@ import FiveMonth from '../../MonthPlugin/FiveMonth'
 import './index.less'
 
 export default class InputPanel extends Component {
-    state = {
-        checkedList: []
-    }
     /**
      * @description 一般输入框的回调调用
      * @param {String} key 属性名
@@ -30,16 +27,7 @@ export default class InputPanel extends Component {
         if(!isMonthlyFill) {
             dataSet = data[type].yearlyData
         }else {
-            let power = {}
-            switch(type) {
-                case 'singleRegular':
-                case 'singleProtocol':
-                    power = data[type].monthlyPowerVolume
-                    break
-                default:
-                    power = data[type].monthlyPower
-                    break
-            }
+            const power = data[type].monthlyPower
             current = power.current
             dataSet = power.data[current].data
             power.data[current].finished = false
@@ -71,11 +59,11 @@ export default class InputPanel extends Component {
      * @description 参与全水电交易品种的选中事件
      * @param {Array} value 由选中的项的value组成的数组，这时只有一项，所以数组长度最多是1
      */
-    handleJoinChange = value => {
+    handleJoinChange = (argName, value) => {
         const length = value.length
         const { data, updateData } = this.props
         const type = data.type
-        data[type].isParticipate = length ? true : false
+        data[type][argName] = length ? true : false
         updateData()
     }
 
@@ -93,17 +81,8 @@ export default class InputPanel extends Component {
                 surplusData = surplus.data
             }
         }else {
-            switch(type) {
-                case 'singleRegular':
-                case 'singleProtocol':
-                    current = data[type].monthlyPowerVolume.current
-                    dataSet = data[type].monthlyPowerVolume.data[current].data
-                    break
-                default:
-                    current = data[type].monthlyPower.current
-                    dataSet = data[type].monthlyPower.data[current].data
-                    break
-            }
+            current = data[type].monthlyPower.current
+            dataSet = data[type].monthlyPower.data[current].data
         }
         
         const dataSets = []
@@ -143,16 +122,30 @@ export default class InputPanel extends Component {
                     : null
                 }
                 {
+                    (type === 'singleProtocol' || type === 'protocolAndSurplus') && !isMonthlyFill
+                    ? <AtCheckbox
+                        options={[{
+                            value: 'isYearlyParticipate',
+                            label: '使用全水电',
+                            desc: '',
+                            disabled: false
+                        }]}
+                        selectedList={data[type].isYearlyParticipate ? ['isYearlyParticipate'] : []}
+                        onChange={this.handleJoinChange.bind(this, 'isYearlyParticipate')}
+                    />
+                    : null
+                }
+                {
                     (type === 'singleProtocol' || type === 'protocolAndSurplus') && isMonthlyFill
                     ? <AtCheckbox
                         options={[{
-                            value: 'joinAllPower',
+                            value: 'isMonthlyParticipate',
                             label: '参与全水电交易品种',
                             desc: '',
                             disabled: false
                         }]}
-                        selectedList={data[type].isParticipate ? ['joinAllPower'] : []}
-                        onChange={this.handleJoinChange.bind(this)}
+                        selectedList={data[type].isMonthlyParticipate ? ['isMonthlyParticipate'] : []}
+                        onChange={this.handleJoinChange.bind(this, 'isMonthlyParticipate')}
                     />
                     : null
                 }
