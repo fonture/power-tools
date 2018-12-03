@@ -20,6 +20,21 @@ export function keepDecimal(num, digit) {
 }
 
 /**
+ * @param {*} args
+ * @returns {boolean} 
+ */
+export function validate(...args) {
+    let length = args.length;
+    for (let i = 0; i < length; i++) {
+        let value = args[i];
+        if (value === undefined || value === null || value === '') {
+            return false
+        }
+    }
+    return true
+}
+
+/**
  * @param1 {any, object} o - obj needs to deeply check&grab isExist props
  * @param2 {string} props - the chain props(use dot character), which needs deeply check&grab
  * @return {any} field - return the prop value, if it not exist return undefined.

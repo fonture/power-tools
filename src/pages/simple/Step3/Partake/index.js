@@ -15,20 +15,21 @@ import {
 import inject from '../../../../utils/inject';
 import reduxHelper from '../../../../utils/reduxHelper';
 import '../index.less';
+import { validate } from '../../../../utils'
 
-@inject('powerExpect', 'newestCataloguePrice', 'firePrice')
+@inject('powerExpect', 'newestCataloguePrice', 'firePrice', 'next')
 class Partake extends Component {
     state = {
         isOpened: false,
         method: this.props.powerExpect.method || '用电量',
-        high: this.props.powerExpect.high || 0,
-        medium: this.props.powerExpect.medium || 0,
-        low: this.props.powerExpect.low || 0,
+        high: this.props.powerExpect.high || undefined,
+        medium: this.props.powerExpect.medium || undefined,
+        low: this.props.powerExpect.low || undefined,
         highPrice: 0.8234,
         mediumPrice: 0.5234,
         lowPrice: 0.3324,
-        averagePrice: this.props.powerExpect.averagePrice || 0,
-        yearPower: this.props.powerExpect.yearPower || 0
+        averagePrice: this.props.powerExpect.averagePrice || undefined,
+        yearPower: this.props.powerExpect.yearPower || undefined
     }
     componentDidMount() {
         const { firePrice } = this.props;
@@ -55,11 +56,11 @@ class Partake extends Component {
         this.setState({
             method: e.target.innerHTML,
             isOpened: false,
-            high: 0,
-            medium: 0,
-            low: 0,
-            yearPower: 0,
-            averagePrice: 0
+            high: undefined,
+            medium: undefined,
+            low: undefined,
+            yearPower: undefined,
+            averagePrice: undefined
         })
     }
     /**
@@ -100,14 +101,28 @@ class Partake extends Component {
             [key]: value
         })
     }
+    componentWillMount() {
+        this.validate();
+    }
     componentWillUnmount() {
         reduxHelper('powerExpect', { ...this.state })
     }
-    handleClose = ()=> {
+    handleClose = () => {
         this.setState({
             isOpened: false
         })
-    }  
+    }
+    componentDidUpdate() {
+        this.validate();
+    }
+    validate = ()=> {
+        const { averagePrice, yearPower, high, medium, low, method } = this.state;
+        if (method === '用电量') {
+            reduxHelper('next', validate(high, medium, low))
+        } else {
+            reduxHelper('next', validate(averagePrice, yearPower))
+        }
+    }
     render() {
         const { high, medium, low, highPrice, mediumPrice, lowPrice, method, yearPower, averagePrice } = this.state
         const items = [
@@ -151,17 +166,44 @@ class Partake extends Component {
                             {/* 峰平谷比例 */}
                             <View className="card">
                                 <AtCard
+                                    className="card-group"
                                     title="峰平谷比例"
                                     isFull
                                 >
-                                    <View className="at-row at-row__justify--center at-row__align--center">
-                                        {
-                                            items.map(item => {
-                                                const { percent, value, itemName } = item
-                                                return <PowerProportion percent={percent} value={value} itemName={itemName} onChangeValue={this.onChangeValue} />
-                                            })
-                                        }
-                                    </View>
+                                    {/* <View className="at-row at-row__justify--center at-row__align--center">
+                            {
+                                items.map(item => {
+                                    const { percent, value, itemName } = item
+                                    return <PowerProportion percent={percent} value={value} itemName={itemName} showPercent={true} onChangeValue={this.onChangeValue.bind(this)}/>
+                                })
+                            }    
+                            </View> */}
+                                    <AtList className="">
+                                        <AtListItem title="峰时用电" onClick={this.onListClick}
+                                            extraText={
+                                                <View className="at-row at-row__justify--center at-row__align--center">
+                                                    <Input type="number" digit={4} className="power-input" border={false} value={high} onChange={this.onChangeValue.bind(this, 'high')} />
+                                                    <div className="power-result-unit">万千瓦时</div>
+                                                </View>
+                                            }
+                                        />
+                                        <AtListItem title="平时用电" onClick={this.onListClick}
+                                            extraText={
+                                                <View className="at-row at-row__justify--center at-row__align--center">
+                                                    <Input type="number" digit={5} className="power-input" border={false} value={medium} onChange={this.onChangeValue.bind(this, 'medium')} />
+                                                    <div className="power-result-unit">万千瓦时</div>
+                                                </View>
+                                            }
+                                        />
+                                        <AtListItem title="谷时用电" onClick={this.onListClick}
+                                            extraText={
+                                                <View className="at-row at-row__justify--center at-row__align--center">
+                                                    <Input type="number" digit={5} className="power-input" border={false} value={low} onChange={this.onChangeValue.bind(this, 'low')} />
+                                                    <div className="power-result-unit">万千瓦时</div>
+                                                </View>
+                                            }
+                                        />
+                                    </AtList>
                                 </AtCard>
                             </View>
                             {/* 展示年度电量与用电均价 */}

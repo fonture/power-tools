@@ -4,8 +4,9 @@ import { AtCard, AtSwitch, AtList, AtListItem, AtActionSheet, AtActionSheetItem,
 import inject from '../../../utils/inject';
 import { deepExtract } from '../../../utils';
 import MonthButton from '../MonthPlugin/MonthButton';
-import reduxHelper from '../../../utils/reduxHelper'
+import reduxHelper from '../../../utils/reduxHelper';
 import Card from '../../../components/Card';
+import InputPanel from './InputPanel';
 import './index.less'
 import { type } from 'os';
 
@@ -54,6 +55,10 @@ export default class Step3 extends Component {
     })
   }
 
+  updateAllData = () => {
+    this.setState({})
+  }
+
   render() {
     const { isOpened, powerCalc, tradingVarieties } = this.state;
     const { type, singleRegular, singleProtocol, RegularAndSurplus, protocolAndSurplus } = powerCalc;
@@ -65,6 +70,7 @@ export default class Step3 extends Component {
             <AtListItem title='交易品种' extraText={tradingVarieties[type]} arrow='right' onClick={this.triggerActionSheet} />
           </AtList>
           <AtCard
+            className="partical"
             isFull
             extra={
               <AtSwitch
@@ -81,13 +87,12 @@ export default class Step3 extends Component {
               {/* 月份组件 */}
               {
                 powerCalc[type].isMonthlyFill
-                ? <MonthButton data={powerCalc} />
+                ? <View className="month-panel"><MonthButton data={powerCalc} updateData={this.updateAllData}/></View>
                 : null
               }
               {/* 输入面板 */}
-
+              <InputPanel data={powerCalc}  updateData={this.updateAllData}/>
           </AtCard>
-
           {/* 结果展示 */}
           <Card
             className="margin-top-10"

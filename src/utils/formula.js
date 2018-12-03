@@ -16,28 +16,28 @@ export function getAvPriceOfElePur(waterPrice, firePrice, transmissionPrice, col
 /**
    * @description 未参与市场，用电
    */
-export class noMart{
-  /**
-   * @description 未参与市场 基金计算  对象包含值
-   * @param {string} prce 平水期峰段目录电价
-   * @param {string} scale
-   * 
-   * 
-   * 
-   */
-  buyCost = (args) =>{
-    const {} = args;
-  }
+export class noMart {
+    /**
+     * @description 未参与市场 基金计算  对象包含值
+     * @param {string} prce 平水期峰段目录电价
+     * @param {string} scale
+     * 
+     * 
+     * 
+     */
+    buyCost = (args) => {
+        const { } = args;
+    }
 }
 // 参与市场
 export class haveMart {
-  /**
-   * @description 未参与市场 基金计算  对象包含值
-   * @param {string} prce 平水期峰段目录电价
-   */
-  buyCost = () =>{
+    /**
+     * @description 未参与市场 基金计算  对象包含值
+     * @param {string} prce 平水期峰段目录电价
+     */
+    buyCost = () => {
 
-  }
+    }
 }
 // 全水电均价
 export function getAllWaterAvPriceOfElePur(waterPrice, transmissionPrice, collectionFund) {
@@ -58,13 +58,13 @@ export function getAllWaterAvPriceOfElePur(waterPrice, transmissionPrice, collec
  * @param {Float} isJoin 是否参与全水电交易品种
  */
 export function powerAveragePriceOfJoin(firePrice, transmissionPrice, collectionFund, yearPower, deviationCost, signedPrice, isJoin) {
-    if(!yearPower) return ''
+    if (!yearPower) return ''
     yearPower *= 10000
     let price = 0
-    if(isJoin) {
-        price = signedPrice + transmissionPrice +  deviationCost/yearPower + collectionFund
+    if (isJoin) {
+        price = signedPrice + transmissionPrice + deviationCost / yearPower + collectionFund
     } else {
-        price = signedPrice * 0.7 + firePrice * 0.3 + deviationCost/yearPower + transmissionPrice + collectionFund
+        price = signedPrice * 0.7 + firePrice * 0.3 + deviationCost / yearPower + transmissionPrice + collectionFund
     }
     return keepDecimal(price, 5)
 }
@@ -83,7 +83,7 @@ export function powerAveragePriceOfJoin(firePrice, transmissionPrice, collection
  */
 export function powerAveragePriceOfNotJoin(high = 0, medium = 0, low = 0, highPrice, mediumPrice, lowPrice, collectionFund) {
     let yearPower = high + medium + low
-    if(!yearPower) return { yearPower, averagePrice: 0 }
+    if (!yearPower) return { yearPower, averagePrice: 0 }
     let averagePrice = ((high * highPrice + medium * mediumPrice + low * lowPrice) / (yearPower * 10000) + collectionFund)
     averagePrice = keepDecimal(averagePrice, 5)
     yearPower = keepDecimal(yearPower, 4)
@@ -102,7 +102,7 @@ export function computePowerOfHigh(data, yearCataloguePriceMap) {
     data.forEach((item, index) => {
         const { collectionFund, cataloguePriceVoMap: { peak, plain, valley } } = yearCataloguePriceMap[index + 1]
         let { high, medium, low, finished } = item
-        if(finished) {
+        if (finished) {
             high = high === '' ? 0 : high
             medium = medium === '' ? 0 : medium
             low = low === '' ? 0 : low
@@ -115,4 +115,130 @@ export function computePowerOfHigh(data, yearCataloguePriceMap) {
     yearPower = keepDecimal(highYearPower + mediumYearPower + lowYearPower, 4)
     averagePrice = yearPower === 0 || yearPower === '' ? '' : keepDecimal(price / (yearPower * 10000), 5)
     return { averagePrice, yearPower, highYearPower, mediumYearPower, lowYearPower }
+}
+
+
+/**
+ *
+ * @description 高级版 年度一口价 购电均价计算
+ * @export
+ * @param {*} waterPrice 水电
+ * @param {*} firePrice 火电
+ * @param {*} transmissionPrice 输配电价
+ * @param {*} collectionFund 基金
+ * @param {*} yearPower 年度购电量
+ * @param {*} [surplusaPowerList=[]] 月度富余电量数组
+ * @param {*} surplusaPrice 富余电量电价
+ * @returns
+ */
+export function computeAvPrcieByYearOfHigh(waterPrice, firePrice, transmissionPrice, collectionFund, yearPower, surplusaPowerList = [], surplusaPrice) {
+    yearPower = yearPower * 10000;
+    let a = (waterPrice * 0.7 + firePrice * 0.3 + transmissionPrice + collectionFund) * yearPower;
+    let b = surplusaPowerList.reduce((prev, item, index) => {
+        return prev + item * (surplusaPrice + transmissionPrice + collectionFund) * 10000
+    }, 0)
+    let c = surplusaPowerList.reduce((prev, item) => {
+        return prev + item * 10000
+    }, yearPower)
+    let res = (a + b) / c;
+    return keepDecimal(res, 5);
+}
+
+/**
+ *
+ * @description 高级版 年度一口价 全水电购电均价计算
+ * @export
+ * @param {*} waterPrice 水电
+ * @param {*} transmissionPrice 输配电价
+ * @param {*} collectionFund 基金
+ * @param {*} yearPower 年度购电量
+ * @param {*} [surplusaPowerList=[]] 月度富余电量数组
+ * @param {*} surplusaPrice 富余电量电价
+ * @returns
+ */
+export function computeAvPrcieByYearAllWaterOfHigh(waterPrice, transmissionPrice, collectionFund, yearPower, surplusaPowerList = [], surplusaPrice) {
+    yearPower = yearPower * 10000;
+    let a = (waterPrice + transmissionPrice + collectionFund) * yearPower;
+    let b = surplusaPowerList.reduce((prev, item, index) => {
+        return prev + item * (surplusaPrice + transmissionPrice + collectionFund) * 10000
+    }, 0)
+    let c = surplusaPowerList.reduce((prev, item) => {
+        return prev + item * 10000
+    }, yearPower)
+    let res = (a + b) / c;
+    return keepDecimal(res, 5);
+}
+
+/**
+ *
+ * @description 高级版 分月 购电均价计算
+ * @export
+ * @param {*} firePrice 火电
+ * @param {*} transmissionPrice 输配电价
+ * @param {*} collectionFund 基金
+ * @param {*} [monthlyPower=[]] 月度购电量数组
+ * @returns
+ */
+export function computeAvPrcieByMonthOfHigh(firePrice, transmissionPrice, collectionFund, monthlyPower = []) {
+    let a = monthlyPower.reduce((prev, item, index) => {
+        const { powerVolume, hydropowerPrice, surplusPowerVolume = 0, surplusPowerPrice = 0 } = item;
+        let b = (hydropowerPrice * 0.7 + firePrice * 0.3 + transmissionPrice + collectionFund) * powerVolume * 10000;
+        let c = surplusPowerVolume * 10000 * (surplusPowerPrice + transmissionPrice + collectionFund)
+        return prev + (b + c)
+    }, 0)
+    let d = monthlyPower.reduce((prev, item, index) => {
+        const { powerVolume, surplusPowerVolume = 0 } = item;
+        return prev + powerVolume * 10000 + surplusPowerVolume * 10000
+    }, 0)
+    let res = a / d;
+    return keepDecimal(res, 5);
+}
+
+
+/**
+ *
+ * @description 高级版 分月 全水电购电均价计算
+ * @export
+ * @param {*} transmissionPrice 输配电价
+ * @param {*} collectionFund 基金
+ * @param {*} [monthlyPower=[]] 月度购电量数组
+ * @returns
+ */
+export function computeAvPrcieByMonthAllWaterOfHigh(transmissionPrice, collectionFund, monthlyPower = []) {
+    let a = monthlyPower.reduce((prev, item, index) => {
+        const { powerVolume, hydropowerPrice, surplusPowerVolume = 0, surplusPowerPrice = 0 } = item;
+        let b = (hydropowerPrice + transmissionPrice + collectionFund) * powerVolume * 10000;
+        let c = surplusPowerVolume * 10000 * (surplusPowerPrice + transmissionPrice + collectionFund)
+        return prev + (b + c)
+    }, 0)
+    let d = monthlyPower.reduce((prev, item, index) => {
+        const { powerVolume, surplusPowerVolume = 0 } = item;
+        return prev + powerVolume * 10000 + surplusPowerVolume * 10000
+    }, 0)
+    let res = a / d;
+    return keepDecimal(res, 5);
+}
+
+/**
+ *
+ * @description 高级版 step3 丰枯比
+ * @export
+ * @param {*} [monthlyPower=[]] 月度购电量数组
+ * @returns
+ */
+export function gethighDryProportion(monthlyPower = []) {
+    let high = monthlyPower.filter((_, index) => {
+        return index >= 5 && index <= 9
+    })
+    let dry = monthlyPower.filter((_, index) => {
+        return (index >= 0 && index <= 3) || index == 11
+    })
+    let highPower = high.reduce((prev, item, index) => {
+        return prev + item.powerVolume
+    }, 0)
+    let dryPower = dry.reduce((prev, item, index) => {
+        return prev + item.powerVolume
+    }, 0)
+    let res = highPower / dryPower;
+    return keepDecimal(res, 2);
 }

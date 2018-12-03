@@ -16,6 +16,7 @@ export default class MonthButton extends Component {
         data[type].monthlyPower.current = month
         break
     }
+    this.props.updateData()
   }
 
   render() {
@@ -39,14 +40,14 @@ export default class MonthButton extends Component {
         <View className="at-row at-row--wrap">
           {
               dataSet.map((item, index) => (
-                  <View key={index} className={`at-col at-col-2 month-item ${index > 5 ? 'secondLineMarginTop' : ''}`}>
-                      <div className={`month-circle  ${item.finished ? 'finished': ''} ${index + 1 === current ? 'current' : ''}`} onClick={this.onClick.bind(this, index + 1)}>
+                  <View key={index} className={`at-col at-col-2 month-item secondLineMarginBottom`}>
+                      <div className={`month-circle  ${item.finished ? 'finished': ''} ${index === current ? 'current' : ''}`} onClick={this.onClick.bind(this, index)}>
                           {
                               item.finished
                               ? <div><img src={require('../../../assets/images/gou.png')} /></div>
                               : null
                           }
-                          <div>{item.month}月</div>
+                          <div>{item.month + 1}月</div>
                       </div>
                   </View>
               ))
