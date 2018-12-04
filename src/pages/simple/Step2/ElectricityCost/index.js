@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:11:35 
  * @Description:未参与市场时的用电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-12-03 16:12:20
+ * @Last Modified time: 2018-12-04 09:36:54
  */
 
 import Taro, { Component } from '@tarojs/taro'
@@ -32,6 +32,8 @@ export default class ElectricityCost extends Component {
         low: this.props.electricityCostData.low,
         yearPower: this.props.electricityCostData.yearPower,
         averagePrice: this.props.electricityCostData.averagePrice,
+        inputYearPower: this.props.electricityCostData.inputYearPower,
+        inputAveragePrice: this.props.electricityCostData.inputAveragePrice,
     }
     componentWillMount() {
         const { yearPower, averagePrice, high, medium, low, method } = this.state
@@ -73,11 +75,6 @@ export default class ElectricityCost extends Component {
         this.setState({
             method: e.target.innerHTML,
             isOpened: false,
-            high: '',
-            medium: '',
-            low: '',
-            yearPower: '', 
-            averagePrice: ''
         }, () => {
             reduxHelper('electricityCostData', this.state)
             const { yearPower, averagePrice, high, medium, low, method } = this.state
@@ -127,37 +124,13 @@ export default class ElectricityCost extends Component {
         e.currentTarget.getElementsByTagName('input')[0].focus()
     }
 
-    // /**
-    //  * @description 电度电价输入事件
-    //  * @param {String} name 变量名
-    //  * @param {Number} value 变量值
-    //  */
-    // onInput = (name, value) => {
-    //     const val = +value
-    //     const values = Object.assign({}, this.state, {[name]: val})
-    //     if(!isNaN(val)){
-    //         this.setState({
-    //             ...values
-    //         }, () => {
-    //             reduxHelper('electricityCostData', this.state)
-    //             const { yearPower, averagePrice, high, medium, low, method } = this.state
-    //             if((yearPower && averagePrice && method === '电度电价') || (high && medium && low)){
-    //                 reduxHelper('next', true)
-    //             }else{
-    //                 reduxHelper('next', false)
-    //             }
-    //         })    
-    //     }
-    // }
     handleClose = ()=> {
         this.setState({
             isOpened: false
-        },()=>{
-            console.log('hello', this.state.isOpened);
         })
     }
     render() {
-        const { high, medium, low, method, yearPower, averagePrice, isOpened} = this.state
+        const { high, medium, low, method, yearPower, averagePrice, isOpened, inputYearPower, inputAveragePrice } = this.state
         const items = [
             {
                 percent: yearPower && (high * 100 / yearPower).toFixed(2) + '%', 
@@ -246,7 +219,7 @@ export default class ElectricityCost extends Component {
                         <AtListItem title="年度用电量"  onClick={this.onListClick}
                             extraText={
                                 <View className="at-row at-row__justify--center at-row__align--center">
-                                    <Input type="number" digit={4} className="power-input" border={false} value={yearPower} onChange={this.onChangeValue.bind(this, 'yearPower')}/>
+                                    <Input type="number" digit={4} className="power-input" border={false} value={inputYearPower} onChange={this.onChangeValue.bind(this, 'inputYearPower')}/>
                                     <div className="power-result-unit">万千瓦时</div>
                                 </View>
                             } 
@@ -254,7 +227,7 @@ export default class ElectricityCost extends Component {
                         <AtListItem title="用电均价"  onClick={this.onListClick}
                             extraText={
                                 <View className="at-row at-row__justify--center at-row__align--center">
-                                    <Input type="number" digit={5} className="power-input" border={false} value={averagePrice} onChange={this.onChangeValue.bind(this, 'averagePrice')}/>
+                                    <Input type="number" digit={5} className="power-input" border={false} value={inputAveragePrice} onChange={this.onChangeValue.bind(this, 'inputAveragePrice')}/>
                                     <div className="power-result-unit">元/千瓦时</div>
                                 </View>
                             } 

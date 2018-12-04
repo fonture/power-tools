@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:13:09 
  * @Description: 参与市场时的购电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-12-03 15:12:56
+ * @Last Modified time: 2018-12-04 09:31:59
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -30,6 +30,8 @@ export default class BuyPowerCost extends Component {
         deviationCost: this.props.buyPowerCostData.deviationCost, 
         signedPrice: this.props.buyPowerCostData.signedPrice, 
         averagePrice: this.props.buyPowerCostData.averagePrice,
+        inputYearPower: this.props.buyPowerCostData.inputYearPower,
+        inputAveragePrice: this.props.buyPowerCostData.inputAveragePrice,
     }
     componentWillMount(){
         const { yearPower, deviationCost, signedPrice, averagePrice, method } = this.state
@@ -83,11 +85,6 @@ export default class BuyPowerCost extends Component {
         this.setState({
             method: e.target.innerHTML,
             isOpened: false,
-            checkedList: [],
-            yearPower: '', 
-            deviationCost: '', 
-            signedPrice: '', 
-            averagePrice: ''
         }, () => {
             reduxHelper('buyPowerCostData', this.state)
             const { yearPower, deviationCost, signedPrice, averagePrice, method } = this.state
@@ -160,7 +157,7 @@ export default class BuyPowerCost extends Component {
         })
     }    
     render() {
-        const { method, yearPower, deviationCost, signedPrice, averagePrice} = this.state
+        const { method, yearPower, deviationCost, signedPrice, averagePrice, inputYearPower, inputAveragePrice } = this.state
         return (
             <View className="power-cost">
 
@@ -228,7 +225,7 @@ export default class BuyPowerCost extends Component {
                         <AtListItem title="年度用电量" onClick={this.onListClick}
                             extraText={
                                 <View className="at-row at-row__justify--center at-row__align--center">
-                                    <Input type="number" digit={4} className="power-input" border={false} value={yearPower}  onChange={this.onChangeValue.bind(this, 'yearPower')}/>
+                                    <Input type="number" digit={4} className="power-input" border={false} value={inputYearPower}  onChange={this.onChangeValue.bind(this, 'inputYearPower')}/>
                                     <div className="power-result-unit">万千瓦时</div>
                                 </View>
                             } 
@@ -236,7 +233,7 @@ export default class BuyPowerCost extends Component {
                         <AtListItem title="购电均价" onClick={this.onListClick}
                             extraText={
                                 <View className="at-row at-row__justify--center at-row__align--center">
-                                    <Input type="number" digit={5} className="power-input" border={false} value={averagePrice} onChange={this.onChangeValue.bind(this, 'averagePrice')}/>
+                                    <Input type="number" digit={5} className="power-input" border={false} value={inputAveragePrice} onChange={this.onChangeValue.bind(this, 'inputAveragePrice')}/>
                                     <div className="power-result-unit">元/千瓦时</div>
                                 </View>
                             } 

@@ -3,7 +3,7 @@
  * @Date: 2018-12-02 16:21:02 
  * @Description: 输入面板
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-12-03 16:10:01
+ * @Last Modified time: 2018-12-04 09:48:08
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -88,7 +88,7 @@ export default class InputPanel extends Component {
         for(let key in dataSet) {
             const data = dataSet[key]
             data.key = key
-            if((type === 'regularAndSurplus' || type === 'protocolAndSurplus') && (current < 5 || current > 9) && (key == 'surplusPowerVolume')) continue
+            if((type === 'regularAndSurplus' || type === 'protocolAndSurplus') && (current < 5 || current > 9) && (key == 'surplusPowerVolume' || key == 'surplusPowerPrice')) continue
             dataSets.push(data)
         }
         return (
