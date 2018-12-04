@@ -4,7 +4,7 @@ import Button from '../../components/Button';
 import Proportion from '../../components/Proportion';
 import reduxHelper from '../../utils/reduxHelper'
 import inject from '../../utils/inject'
-import { AtList, AtListItem, AtModal, AtModalContent } from 'taro-ui';
+import { AtList, AtListItem, AtModal, AtModalContent, AtModalHeader, AtInput, AtButton } from 'taro-ui';
 import { keepDecimal, deepExtract } from '../../utils'
 import './index.less'
 
@@ -16,14 +16,14 @@ export default class Result extends Component {
         navigationBarTitleText: '结果页'
     }
     state = {
-        modelVis: true
+        modelVis: false,
+        selling: '',
+        electricity: '',
+        canSubmit: false
     }
     data = {}
     tryAgain = () => {
         Taro.redirectTo({ url: 'pages/index' })
-    }
-    generateReport = () => {
-        Taro.redirectTo({ url: 'pages/resultCanvas/index' })
     }
     compAP = () => {
         if (this.props.version === 'higher') {
@@ -54,14 +54,14 @@ export default class Result extends Component {
             } else {
                 yearPower = Number(data.yearlyData.powerVolume.value)
             }
-            let tp = yearPower * ap
+            let tp = yearPower * ap * 10000
             return {
                 tp: keepDecimal(tp, 0),
                 step3yp: yearPower
             }
         } else {
             let yearPower = Number(this.props.powerExpect.yearPower);
-            let tp = yearPower * ap;
+            let tp = yearPower * ap * 10000;
             return {
                 tp: keepDecimal(tp, 0),
                 step3yp: yearPower
@@ -72,8 +72,8 @@ export default class Result extends Component {
         if (this.props.version !== 'higher') {
             let step2powerChange = this.props.powerCosts.yearPower;
             let step3powerChange = this.props.powerExpect.yearPower;
-            let powerChange = step2powerChange - step3powerChange;
-            let ch = powerChange > 0 ? '增加' : '减少';
+            let powerChange = keepDecimal((step2powerChange - step3powerChange), 4);
+            let ch = powerChange < 0 ? '增加' : '减少';
 
             return {
                 ch,
@@ -82,8 +82,8 @@ export default class Result extends Component {
         } else {
             let step2powerChange = Number(this.props.powerCostsOfHigh.yearPower);
             let step3powerChange = step3yp;
-            let powerChange = step2powerChange - step3powerChange;
-            let ch = powerChange > 0 ? '增加' : '减少';
+            let powerChange = keepDecimal((step2powerChange - step3powerChange), 4);
+            let ch = powerChange < 0 ? '增加' : '减少';
 
             return {
                 ch,
@@ -92,13 +92,31 @@ export default class Result extends Component {
         }
     }
     componentWillUnmount() {
+        const { electricity, selling } = this.state;
+        this.data = Object.assign(this.data, { electricity, selling })
         reduxHelper('result', this.data)
     }
+    showModel = () => {
+        this.setState({
+            modelVis: true
+        })
+    }
     handleClose = () => {
-
+        this.setState({
+            modelVis: false
+        })
     }
     handleSubmit = () => {
-
+        Taro.redirectTo({ url: 'pages/resultCanvas/index' })
+    }
+    handleChangeValue = (type, value) => {
+        this.setState({
+            [type]: value
+        }, () => {
+            this.setState({
+                canSubmit: this.state.electricity && this.state.selling
+            })
+        })
     }
     render() {
         let ap = this.compAP();
@@ -106,7 +124,7 @@ export default class Result extends Component {
         let { ch, powerChange } = this.getPowerChange(step3yp);
         this.data = { ap, tp, ch, powerChange, step3yp }
 
-        const {modelVis} = this.state;
+        const { modelVis } = this.state;
         return (
             <View className='result page'>
                 <View className='result-wrp'>
@@ -136,26 +154,37 @@ export default class Result extends Component {
                     </View>
                 </View>
 
-                {/* <AtModal
+                <AtModal
                     isOpened={modelVis}
                     onClose={this.handleClose}
                     onCancel={this.handleClose}
                     onConfirm={this.handleClose}
                     className='formContent'
                 >
+                    <AtModalHeader>
+                        生成报告
+                    </AtModalHeader>
                     <AtModalContent>
-                        <Form
-                            onSubmit={this.handleSubmit}
-                            className='formBoder'
-                        >
- 
-                            <Button formType='submit' className='sumitButton' >确定</Button>
-                        </Form>
+                        <AtInput
+                            name='electricity'
+                            title='用电公司'
+                            type='text'
+                            value={this.state.electricity}
+                            onChange={this.handleChangeValue.bind(null, 'electricity')}
+                        />
+                        <AtInput
+                            name='selling'
+                            title='售电公司'
+                            type='text'
+                            value={this.state.selling}
+                            onChange={this.handleChangeValue.bind(null, 'selling')}
+                        />
+                        <AtButton className='sumitButton' disabled={!this.state.canSubmit} onClick={this.handleSubmit}>确定</AtButton>
                     </AtModalContent>
-                </AtModal> */}
+                </AtModal>
 
                 <Button onClick={this.tryAgain} type="secondary">再试一次</Button>
-                <Button onClick={this.generateReport} type="primary">生成报告</Button>
+                <Button onClick={this.showModel} type="primary">生成报告</Button>
             </View>
         )
     }

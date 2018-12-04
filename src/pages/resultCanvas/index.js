@@ -87,19 +87,19 @@ class ResultCanvas extends Component {
     }
     getResultData = (version) => {
         const { mart, sortValue } = this.props.baseMessage; // 参与未参与
-        const { ap, ch, powerChange, tp, step3yp } = this.props.result; // 结果页数据
+        const { ap, ch, powerChange, tp, step3yp, electricity, selling } = this.props.result; // 结果页数据
         if (version === 'simple') {
             const { averagePrice: step2av, yearPower: step2yp } = this.props.powerCosts; // 第二步均价
             const { averagePrice: step3av, yearPower: step3yp } = this.props.powerExpect; // 第三步均价
-            const buyType = '常规直够电';
+            const buyType = '常规直购电';
             let { high, medium, low } = (mart === '参与' ? this.props.powerExpect : this.props.powerCosts);
             const totalData = Number(high) + Number(medium) + Number(low);
             let highPro = keepDecimal(Number(high) / totalData * 100, 0);
             let mediumPro = keepDecimal(Number(medium) / totalData * 100, 0);
-            let lowPro = 100 - highPro - medium;
+            let lowPro = 100 - highPro - mediumPro;
             const proportionData = [highPro, mediumPro, lowPro];
             return {
-                ap, ch, powerChange, tp, mart, sortValue, step2av, step2yp, step3av, step3yp, buyType, proportionData
+                ap, ch, powerChange, tp, mart, sortValue, step2av, step2yp, step3av, step3yp, buyType, proportionData, electricity, selling
             }
         } else {
             let { highYearPower, lowYearPower, mediumYearPower } = this.props.powerCostsOfHigh;
@@ -117,7 +117,8 @@ class ResultCanvas extends Component {
                 ap, ch, powerChange, tp,
                 step2av, step2yp,
                 step3av, step3yp,
-                buyType
+                buyType,
+                electricity, selling
             }
         }
     }
@@ -147,19 +148,14 @@ class ResultCanvas extends Component {
     }
     render() {
         const versionValue = this.props.version; // 版本信息
-        const { ap, ch, powerChange, tp, mart, sortValue, step2av, step2yp, step3av, step3yp, buyType, proportionData } = this.getResultData(versionValue)
+        const { ap, ch, powerChange, tp, mart, sortValue, step2av, step2yp, step3av, step3yp, buyType, proportionData, electricity, selling } = this.getResultData(versionValue)
         const { actualValue, expectValue, monthList } = this.state;
         const { step2Ratio, step3Ratio, Kvalue } = this.getRatio();
         return (
             <ScrollView className='result page'>
-                <AtIcon className="close"
-                    onClick={this.onClose}
-                    value='close-circle'
-                    size='30'
-                    color='#1bdce3'>×</AtIcon>
                 <View className='result-wrp'>
                     <View className="result-header dash-border">
-                        <Text className="title">针对<Text className="company">QWERTY物业管理公司</Text>分析结果为</Text>
+                        <Text className="title">针对<Text className="company">{electricity}</Text>分析结果为</Text>
                         <img src={ap > 0 ? smlieImage : cryImage} className="result-img" />
                         <h3 style={{ color: ap > 0 ? '#27F47A' : '#F85A24' }}>{ap > 0 ? '参加市场化交易很划算！' : '不建议参加市场化交易'}</h3>
                     </View>
@@ -190,19 +186,22 @@ class ResultCanvas extends Component {
                             {
                                 mart === '参与' ?
                                     <Text className="wenan">
-                                        <p>用户属于电压等级为<Text className="blue">{sortValue[0]}</Text>的<Text className="blue">{sortValue[1]}</Text>用户，当前<Text className="blue">已参加</Text>市场化交易，购买<Text className="blue">{buyType}</Text>，年度用电均价为<Text className="blue">{step2av}元/千瓦时</Text>。</p>
-                                        <p>如果不参与市场化交易，根据其峰平谷比例，预估购电均价为<Text className="blue">{step3av}元/千瓦时</Text>，平均每度电预计将<span style={{ color: ap > 0 ? '#24FCFF' : '#F85A24' }}>{ap > 0 ? '节约' : '亏损'}{ap}元</span>。根据预估的购电量情况，年度电费预计<span style={{ color: tp > 0 ? '#27F47A' : '#F85A24' }}>{tp > 0 ? '节约' : '亏损'}{tp}元</span>。</p>
+                                        <p>用户属于电压等级为<Text className="blue">{sortValue[1]}</Text>的<Text className="blue">{sortValue[0]}</Text>用户，当前<Text className="blue">已参加</Text>市场化交易，购买<Text className="blue">{buyType}</Text>，年度用电均价为<Text className="blue">{step2av}元/千瓦时</Text>。</p>
+                                        <p>如果不参与市场化交易，根据其峰平谷比例，预估购电均价为<Text className="blue">{step3av}元/千瓦时</Text>，平均每度电预计将<span style={{ color: ap > 0 ? '#27F47A' : '#F85A24' }}>{ap > 0 ? '节约' : '亏损'}{Math.abs(ap)}元</span>。根据预估的购电量情况，年度电费预计<span style={{ color: tp > 0 ? '#27F47A' : '#F85A24' }}>{tp > 0 ? '节约' : '亏损'}{Math.abs(tp)}元</span>。</p>
                                     </Text> :
                                     <Text className="wenan">
-                                        <p>用户属于电压等级为<Text className="blue">{sortValue[0]}</Text>的<Text className="blue">{sortValue[1]}</Text>用户，当前<Text className="blue">没有参加</Text>市场化交易，年度用电均价为<Text className="blue">{step2av}元/千瓦时</Text>。</p>
-                                        <p>如果参与市场化交易，购买<Text className="blue">{buyType}</Text>，预估购电均价为<Text className="blue">{step3av}元/千瓦时</Text>，平均每度电预计将<span style={{ color: ap > 0 ? '#24FCFF' : '#F85A24' }}>{ap > 0 ? '节约' : '亏损'}{ap}元</span>。根据预估的购电量情况，年度电费预计<span style={{ color: tp > 0 ? '#27F47A' : '#F85A24' }}>{tp > 0 ? '节约' : '亏损'}{tp}元</span>。</p>
+                                        <p>用户属于电压等级为<Text className="blue">{sortValue[1]}</Text>的<Text className="blue">{sortValue[0]}</Text>用户，当前<Text className="blue">没有参加</Text>市场化交易，年度用电均价为<Text className="blue">{step2av}元/千瓦时</Text>。</p>
+                                        <p>如果参与市场化交易，购买<Text className="blue">{buyType}</Text>，预估购电均价为<Text className="blue">{step3av}元/千瓦时</Text>，平均每度电预计将<span style={{ color: ap > 0 ? '#27F47A' : '#F85A24' }}>{ap > 0 ? '节约' : '亏损'}{Math.abs(ap)}元</span>。根据预估的购电量情况，年度电费预计<span style={{ color: tp > 0 ? '#27F47A' : '#F85A24' }}>{tp > 0 ? '节约' : '亏损'}{Math.abs(tp)}元</span>。</p>
                                     </Text>
                             }
                         </View>
-                        <View className="dash-border proportion-cantainer container">
-                            <Text>用电峰平谷比例：</Text>
-                            <Proportion data={proportionData} />
-                        </View>
+                        {
+                            mart !== '参与' && <View className="dash-border proportion-cantainer container">
+                                <Text>用电峰平谷比例：</Text>
+                                <Proportion data={proportionData} />
+                            </View>
+                        }
+
                         {
                             versionValue === 'higher' && <View className="reCharts-container">
                                 <ReCharts actualValue={actualValue} expectValue={expectValue} monthList={monthList} />
@@ -210,7 +209,7 @@ class ResultCanvas extends Component {
                             </View>
                         }
                         <View className="container">
-                            <Text>总用电量（千瓦时）：</Text>
+                            <Text>总用电量（万千瓦时）：</Text>
                             <View className='at-row'>
                                 <View className='at-col at-col-1 at-col--auto'>
                                     <div className="rangefull" >
@@ -252,7 +251,7 @@ class ResultCanvas extends Component {
                                 <View className='at-col at-col-7'>
                                     <p>长按识别二维码</p>
                                     <p>生成我的购电报告</p>
-                                    <p>由<Text className="blue">BABC售电公司</Text>提供本方案</p>
+                                    <p>由<Text className="blue">{selling}</Text>提供本方案</p>
                                 </View>
                                 <View className='at-col at-col-5'>
                                     <img src={require('../../assets/erweima.png')} className="erweima" />

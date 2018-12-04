@@ -132,7 +132,7 @@ export default class Index extends Component {
                   onChange={this.handleChange}
                   placeholder={`默认${firePrice}元/千瓦时`}
                 />
-                <Button formType='submit' width='100px' className='sumitButton' >确定</Button>
+                <Button formType='submit' className='sumitButton' >确定</Button>
               </Form>
             </AtModalContent>
           </AtModal>
