@@ -1,19 +1,22 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text, ScrollView } from '@tarojs/components'
+import { View, Text, Form } from '@tarojs/components'
 import Button from '../../components/Button';
 import Proportion from '../../components/Proportion';
 import reduxHelper from '../../utils/reduxHelper'
 import inject from '../../utils/inject'
-import { AtList, AtListItem, AtDivider, AtCurtain } from 'taro-ui';
-import { keepDecimal } from '../../utils'
+import { AtList, AtListItem, AtModal, AtModalContent } from 'taro-ui';
+import { keepDecimal, deepExtract } from '../../utils'
 import './index.less'
 
 const cryImage = require('../../assets/images/cry.png');
 const smlieImage = require('../../assets/images/smile.png');
-@inject('baseMessage', 'powerExpect', 'powerCosts')
+@inject('baseMessage', 'powerExpect', 'powerCosts', 'powerCalc', 'powerCostsOfHigh', 'version')
 export default class Result extends Component {
     config = {
         navigationBarTitleText: '结果页'
+    }
+    state = {
+        modelVis: true
     }
     data = {}
     tryAgain = () => {
@@ -23,35 +26,87 @@ export default class Result extends Component {
         Taro.redirectTo({ url: 'pages/resultCanvas/index' })
     }
     compAP = () => {
-        let { mart } = this.props.baseMessage;
-        let step2AP = this.props.powerCosts.averagePrice,
-            step3AP = this.props.powerExpect.averagePrice;
-        return keepDecimal(step2AP - step3AP, 5)
+        if (this.props.version === 'higher') {
+            let step2AP = Number(this.props.powerCostsOfHigh.averagePrice),
+                step3AP = Number(this.props.powerCalc[this.props.powerCalc.type].average) || 0;
+            return keepDecimal(step2AP - step3AP, 5)
+        } else {
+            let step2AP = Number(this.props.powerCosts.averagePrice),
+                step3AP = Number(this.props.powerExpect.averagePrice);
+            return keepDecimal(step2AP - step3AP, 5)
+        }
     }
     compTP = (ap) => {
-        let tp = this.props.powerExpect.yearPower * ap
-        return keepDecimal(tp, 0)
+        if (this.props.version === 'higher') {
+            let data = this.props.powerCalc[this.props.powerCalc.type];
+            let yearPower;
+            if (data.isMonthlyFill) {
+                yearPower = data.monthlyPower.data.reduce((pre, item) => {
+                    if (item.finished) {
+                        let num = 0;
+                        !!deepExtract(item, 'data.powerVolume.value') && (num += Number(deepExtract(item, 'data.powerVolume.value')));
+                        !!deepExtract(item, 'data.surplusPowerVolume.value') && (num += Number(deepExtract(item, 'data.surplusPowerVolume.value')));
+                        return pre + num
+                    } else {
+                        return pre
+                    }
+                }, 0)
+            } else {
+                yearPower = Number(data.yearlyData.powerVolume.value)
+            }
+            let tp = yearPower * ap
+            return {
+                tp: keepDecimal(tp, 0),
+                step3yp: yearPower
+            }
+        } else {
+            let yearPower = Number(this.props.powerExpect.yearPower);
+            let tp = yearPower * ap;
+            return {
+                tp: keepDecimal(tp, 0),
+                step3yp: yearPower
+            }
+        }
     }
-    getPowerChange = () => {
-        let { mart } = this.props.baseMessage;
-        let step2powerChange = this.props.powerCosts.yearPower;
-        let step3powerChange = this.props.powerExpect.yearPower;
-        let powerChange = step2powerChange - step3powerChange;
-        let ch = powerChange > 0 ? '增加' : '减少';
+    getPowerChange = (step3yp) => {
+        if (this.props.version !== 'higher') {
+            let step2powerChange = this.props.powerCosts.yearPower;
+            let step3powerChange = this.props.powerExpect.yearPower;
+            let powerChange = step2powerChange - step3powerChange;
+            let ch = powerChange > 0 ? '增加' : '减少';
 
-        return {
-            ch,
-            powerChange: Math.abs(powerChange)
+            return {
+                ch,
+                powerChange: Math.abs(powerChange)
+            }
+        } else {
+            let step2powerChange = Number(this.props.powerCostsOfHigh.yearPower);
+            let step3powerChange = step3yp;
+            let powerChange = step2powerChange - step3powerChange;
+            let ch = powerChange > 0 ? '增加' : '减少';
+
+            return {
+                ch,
+                powerChange: Math.abs(powerChange)
+            }
         }
     }
     componentWillUnmount() {
         reduxHelper('result', this.data)
     }
+    handleClose = () => {
+
+    }
+    handleSubmit = () => {
+
+    }
     render() {
         let ap = this.compAP();
-        let tp = this.compTP(ap);
-        let { ch, powerChange } = this.getPowerChange();
-        this.data = { ap, tp, ch, powerChange }
+        let { tp, step3yp } = this.compTP(ap);
+        let { ch, powerChange } = this.getPowerChange(step3yp);
+        this.data = { ap, tp, ch, powerChange, step3yp }
+
+        const {modelVis} = this.state;
         return (
             <View className='result page'>
                 <View className='result-wrp'>
@@ -72,7 +127,7 @@ export default class Result extends Component {
                             />
                             {
                                 powerChange !== 0 && <AtListItem
-                                    extraText={<span><span style={{ color:'#262828'}}>{powerChange}</span> 万千瓦时</span>}
+                                    extraText={<span><span style={{ color: '#262828' }}>{powerChange}</span> 万千瓦时</span>}
                                     title={`购电量${ch}`}
                                     hasBorder={false}
                                 />
@@ -80,6 +135,25 @@ export default class Result extends Component {
                         </AtList>
                     </View>
                 </View>
+
+                {/* <AtModal
+                    isOpened={modelVis}
+                    onClose={this.handleClose}
+                    onCancel={this.handleClose}
+                    onConfirm={this.handleClose}
+                    className='formContent'
+                >
+                    <AtModalContent>
+                        <Form
+                            onSubmit={this.handleSubmit}
+                            className='formBoder'
+                        >
+ 
+                            <Button formType='submit' className='sumitButton' >确定</Button>
+                        </Form>
+                    </AtModalContent>
+                </AtModal> */}
+
                 <Button onClick={this.tryAgain} type="secondary">再试一次</Button>
                 <Button onClick={this.generateReport} type="primary">生成报告</Button>
             </View>

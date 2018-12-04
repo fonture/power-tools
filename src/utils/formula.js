@@ -90,7 +90,7 @@ export function powerAveragePriceOfNotJoin(high = 0, medium = 0, low = 0, highPr
     low = +low
     let yearPower = high + medium + low
     if (!yearPower) return { yearPower, averagePrice: 0 }
-    let averagePrice = ((high * highPrice + medium * mediumPrice + low * lowPrice) / (yearPower * 10000) + collectionFund)
+    let averagePrice = ((high * highPrice + medium * mediumPrice + low * lowPrice) / yearPower + collectionFund)
     averagePrice = keepDecimal(averagePrice, 5)
     yearPower = keepDecimal(yearPower, 4)
     return { yearPower, averagePrice }
@@ -137,11 +137,11 @@ export function computePowerOfHigh(data, yearCataloguePriceMap) {
  * @param {*} surplusaPrice 富余电量电价
  * @returns
  */
-export function computeAvPrcieByYearOfHigh(waterPrice, firePrice, transmissionPrice, collectionFund, yearPower, surplusaPowerList = [], surplusaPrice) {
+export function computeAvPrcieByYearOfHigh(waterPrice, firePrice, transmissionPrice=[], collectionFund, yearPower, surplusaPowerList = [], surplusaPrice) {
     yearPower = yearPower * 10000;
-    let a = (waterPrice * 0.7 + firePrice * 0.3 + transmissionPrice + collectionFund) * yearPower;
+    let a = (waterPrice * 0.7 + firePrice * 0.3 + transmissionPrice[0] + collectionFund) * yearPower;
     let b = surplusaPowerList.reduce((prev, item, index) => {
-        return prev + item * (surplusaPrice + transmissionPrice + collectionFund) * 10000
+        return prev + item * ((+surplusaPrice) + transmissionPrice[1] + collectionFund) * 10000
     }, 0)
     let c = surplusaPowerList.reduce((prev, item) => {
         return prev + item * 10000
@@ -162,15 +162,17 @@ export function computeAvPrcieByYearOfHigh(waterPrice, firePrice, transmissionPr
  * @param {*} surplusaPrice 富余电量电价
  * @returns
  */
-export function computeAvPrcieByYearAllWaterOfHigh(waterPrice, transmissionPrice, collectionFund, yearPower, surplusaPowerList = [], surplusaPrice) {
+export function computeAvPrcieByYearAllWaterOfHigh(waterPrice, transmissionPrice=[], collectionFund, yearPower, surplusaPowerList = [], surplusaPrice) {
     yearPower = yearPower * 10000;
-    let a = (waterPrice + transmissionPrice + collectionFund) * yearPower;
+    console.log(typeof waterPrice , typeof transmissionPrice[0] , typeof collectionFund, typeof yearPower);
+    let a = ( +waterPrice + transmissionPrice[0] + collectionFund) * yearPower;
     let b = surplusaPowerList.reduce((prev, item, index) => {
-        return prev + item * (surplusaPrice + transmissionPrice + collectionFund) * 10000
+        return prev + item * (+(surplusaPrice) + transmissionPrice[1] + collectionFund) * 10000
     }, 0)
     let c = surplusaPowerList.reduce((prev, item) => {
         return prev + item * 10000
     }, yearPower)
+    console.log(a, b, c);
     let res = (a + b) / c;
     return keepDecimal(res, 5);
 }
@@ -185,17 +187,20 @@ export function computeAvPrcieByYearAllWaterOfHigh(waterPrice, transmissionPrice
  * @param {*} [monthlyPower=[]] 月度购电量数组
  * @returns
  */
-export function computeAvPrcieByMonthOfHigh(firePrice, transmissionPrice, collectionFund, monthlyPower = []) {
+export function computeAvPrcieByMonthOfHigh(firePrice = 1, transmissionPrice=[], collectionFund =[], monthlyPower = []) {
     let a = monthlyPower.reduce((prev, item, index) => {
-        const { powerVolume, hydropowerPrice, surplusPowerVolume = 0, surplusPowerPrice = 0 } = item;
-        let b = (hydropowerPrice * 0.7 + firePrice * 0.3 + transmissionPrice + collectionFund) * powerVolume * 10000;
-        let c = surplusPowerVolume * 10000 * (surplusPowerPrice + transmissionPrice + collectionFund)
+        const { powerVolume:_powerVolume = {}, hydropowerPrice:_hydropowerPrice= {}, surplusPowerVolume:_surplusPowerVolume={}, surplusPowerPrice:_surplusPowerPrice= {} } = item
+        const [ {value: powerVolume = 0}, {value: hydropowerPrice = 0}, {value: surplusPowerVolume = 0} , {value: surplusPowerPrice = 0} ]= [_powerVolume , _hydropowerPrice, _surplusPowerVolume, _surplusPowerPrice];
+        let b = (hydropowerPrice * 0.7 + firePrice * 0.3 + transmissionPrice[0][index] + collectionFund[index]) * powerVolume * 10000;
+        let c = surplusPowerVolume * 10000 * ((+surplusPowerPrice) + transmissionPrice[1][index] + collectionFund[index])
         return prev + (b + c)
     }, 0)
     let d = monthlyPower.reduce((prev, item, index) => {
-        const { powerVolume, surplusPowerVolume = 0 } = item;
+      const { powerVolume:_powerVolume = {}, surplusPowerVolume:_surplusPowerVolume={} } = item
+      const [{value: powerVolume = 0}, {value: surplusPowerVolume = 0} ] = [_powerVolume, _surplusPowerVolume];
         return prev + powerVolume * 10000 + surplusPowerVolume * 10000
     }, 0)
+    console.log(a,d);
     let res = a / d;
     return keepDecimal(res, 5);
 }
@@ -210,33 +215,36 @@ export function computeAvPrcieByMonthOfHigh(firePrice, transmissionPrice, collec
  * @param {*} [monthlyPower=[]] 月度购电量数组
  * @returns
  */
-export function computeAvPrcieByMonthAllWaterOfHigh(transmissionPrice, collectionFund, monthlyPower = []) {
+export function computeAvPrcieByMonthAllWaterOfHigh(transmissionPrice = [], collectionFund=[], monthlyPower = []) {
     let a = monthlyPower.reduce((prev, item, index) => {
-        const { powerVolume, hydropowerPrice, surplusPowerVolume = 0, surplusPowerPrice = 0 } = item;
-        let b = (hydropowerPrice + transmissionPrice + collectionFund) * powerVolume * 10000;
-        let c = surplusPowerVolume * 10000 * (surplusPowerPrice + transmissionPrice + collectionFund)
+        const { powerVolume:_powerVolume = {}, hydropowerPrice:_hydropowerPrice= {}, surplusPowerVolume:_surplusPowerVolume={}, surplusPowerPrice:_surplusPowerPrice= {} } = item
+        const [ {value: powerVolume = 0}, {value: hydropowerPrice = 0}, {value: surplusPowerVolume = 0} , {value: surplusPowerPrice = 0} ]= [_powerVolume , _hydropowerPrice, _surplusPowerVolume, _surplusPowerPrice];
+        let b = ((+hydropowerPrice) + transmissionPrice[0][index] + collectionFund[index]) * (+powerVolume) * 10000;
+        let c = surplusPowerVolume * 10000 * ((+surplusPowerPrice) + transmissionPrice[1][index] + collectionFund[index])
         return prev + (b + c)
     }, 0)
     let d = monthlyPower.reduce((prev, item, index) => {
-        const { powerVolume, surplusPowerVolume = 0 } = item;
-        return prev + powerVolume * 10000 + surplusPowerVolume * 10000
+      const { powerVolume:_powerVolume = {}, surplusPowerVolume:_surplusPowerVolume={} } = item
+      const [{value: powerVolume = 0}, {value: surplusPowerVolume = 0} ] = [_powerVolume, _surplusPowerVolume];
+      return prev + powerVolume * 10000 + surplusPowerVolume * 10000
     }, 0)
+    console.log(a, d);
     let res = a / d;
     return keepDecimal(res, 5);
 }
 
-export function extractDryAndHighData({data}) {
-  const extra = (prop) => ({data}) => deepExtract(data, `${prop}.value`);
+export function extractDryAndHighData({ data }) {
+    const extra = (prop) => ({ data }) => deepExtract(data, `${prop}.value`);
 
-  const dry = data.filter((_, index) => {
-    return (index >= 0 && index <= 3) || index == 11
-  }).map(extra('powerVolume'))
+    const dry = data.filter((_, index) => {
+        return (index >= 0 && index <= 3) || index == 11
+    }).map(extra('powerVolume'))
 
-  const high = data.filter((_, index) => {
-    return index >= 5 && index <= 9
-  }).map(extra('powerVolume'))
+    const high = data.filter((_, index) => {
+        return index >= 5 && index <= 9
+    }).map(extra('powerVolume'))
 
-	return [dry,high]
+    return [dry, high]
 }
 
 /**
@@ -249,16 +257,22 @@ export function extractDryAndHighData({data}) {
 export function gethighDryProportion(data) {
     const [dry, high] = data;
     let dryPower = dry.reduce((prev, item = 0) => {
-        return prev + item
+        return prev + (+item)
     }, 0)
     let highPower = high.reduce((prev, item = 0) => {
-        return prev + item
+        return prev + (+item)
     }, 0)
     return (
-      dryPower === 0
-        ? '--'
-        : highPower === 0
-          ? 0
-          : keepDecimal(highPower / dryPower, 2)
+        dryPower === 0
+            ? '--'
+            : highPower === 0
+                ? 0
+                : keepDecimal(highPower / dryPower, 2)
     )
+}
+
+export function getKvalue(plain, drain) {
+    let a = 288 * (2 / 12 - plain);
+    let b = 288 * (1 + 0.245) * (5 / 12 - drain);
+    return keepDecimal((a + b), 2);
 }
