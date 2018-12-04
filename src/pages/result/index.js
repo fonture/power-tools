@@ -1,10 +1,10 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text, ScrollView } from '@tarojs/components'
+import { View, Text, Form } from '@tarojs/components'
 import Button from '../../components/Button';
 import Proportion from '../../components/Proportion';
 import reduxHelper from '../../utils/reduxHelper'
 import inject from '../../utils/inject'
-import { AtList, AtListItem, AtDivider, AtCurtain } from 'taro-ui';
+import { AtList, AtListItem, AtModal, AtModalContent } from 'taro-ui';
 import { keepDecimal, deepExtract } from '../../utils'
 import './index.less'
 
@@ -14,6 +14,9 @@ const smlieImage = require('../../assets/images/smile.png');
 export default class Result extends Component {
     config = {
         navigationBarTitleText: '结果页'
+    }
+    state = {
+        modelVis: true
     }
     data = {}
     tryAgain = () => {
@@ -34,7 +37,7 @@ export default class Result extends Component {
         }
     }
     compTP = (ap) => {
-        if(this.props.version === 'higher'){
+        if (this.props.version === 'higher') {
             let data = this.props.powerCalc[this.props.powerCalc.type];
             let yearPower;
             if (data.isMonthlyFill) {
@@ -56,7 +59,7 @@ export default class Result extends Component {
                 tp: keepDecimal(tp, 0),
                 step3yp: yearPower
             }
-        }else{
+        } else {
             let yearPower = Number(this.props.powerExpect.yearPower);
             let tp = yearPower * ap;
             return {
@@ -91,11 +94,19 @@ export default class Result extends Component {
     componentWillUnmount() {
         reduxHelper('result', this.data)
     }
+    handleClose = () => {
+
+    }
+    handleSubmit = () => {
+
+    }
     render() {
         let ap = this.compAP();
         let { tp, step3yp } = this.compTP(ap);
         let { ch, powerChange } = this.getPowerChange(step3yp);
         this.data = { ap, tp, ch, powerChange, step3yp }
+
+        const {modelVis} = this.state;
         return (
             <View className='result page'>
                 <View className='result-wrp'>
@@ -124,6 +135,25 @@ export default class Result extends Component {
                         </AtList>
                     </View>
                 </View>
+
+                {/* <AtModal
+                    isOpened={modelVis}
+                    onClose={this.handleClose}
+                    onCancel={this.handleClose}
+                    onConfirm={this.handleClose}
+                    className='formContent'
+                >
+                    <AtModalContent>
+                        <Form
+                            onSubmit={this.handleSubmit}
+                            className='formBoder'
+                        >
+ 
+                            <Button formType='submit' className='sumitButton' >确定</Button>
+                        </Form>
+                    </AtModalContent>
+                </AtModal> */}
+
                 <Button onClick={this.tryAgain} type="secondary">再试一次</Button>
                 <Button onClick={this.generateReport} type="primary">生成报告</Button>
             </View>
