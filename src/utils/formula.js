@@ -138,12 +138,10 @@ export function computePowerOfHigh(data, yearCataloguePriceMap) {
  * @returns
  */
 export function computeAvPrcieByYearOfHigh(waterPrice, firePrice, transmissionPrice=[], collectionFund, yearPower, surplusaPowerList = [], surplusaPrice) {
-    console.log('computeAvPrcieByYearOfHigh',
-    waterPrice, firePrice, transmissionPrice, collectionFund, yearPower, surplusaPowerList, surplusaPrice);
     yearPower = yearPower * 10000;
     let a = (waterPrice * 0.7 + firePrice * 0.3 + transmissionPrice[0] + collectionFund) * yearPower;
     let b = surplusaPowerList.reduce((prev, item, index) => {
-        return prev + item * (surplusaPrice + transmissionPrice[1] + collectionFund) * 10000
+        return prev + item * ((+surplusaPrice) + transmissionPrice[1] + collectionFund) * 10000
     }, 0)
     let c = surplusaPowerList.reduce((prev, item) => {
         return prev + item * 10000
@@ -165,13 +163,11 @@ export function computeAvPrcieByYearOfHigh(waterPrice, firePrice, transmissionPr
  * @returns
  */
 export function computeAvPrcieByYearAllWaterOfHigh(waterPrice, transmissionPrice=[], collectionFund, yearPower, surplusaPowerList = [], surplusaPrice) {
-    console.log('computeAvPrcieByYearAllWaterOfHigh',
-    waterPrice, transmissionPrice, collectionFund, yearPower, surplusaPowerList, surplusaPrice);
     yearPower = yearPower * 10000;
     console.log(typeof waterPrice , typeof transmissionPrice[0] , typeof collectionFund, typeof yearPower);
     let a = ( +waterPrice + transmissionPrice[0] + collectionFund) * yearPower;
     let b = surplusaPowerList.reduce((prev, item, index) => {
-        return prev + item * (surplusaPrice + transmissionPrice[1] + collectionFund) * 10000
+        return prev + item * (+(surplusaPrice) + transmissionPrice[1] + collectionFund) * 10000
     }, 0)
     let c = surplusaPowerList.reduce((prev, item) => {
         return prev + item * 10000
@@ -192,8 +188,6 @@ export function computeAvPrcieByYearAllWaterOfHigh(waterPrice, transmissionPrice
  * @returns
  */
 export function computeAvPrcieByMonthOfHigh(firePrice = 1, transmissionPrice=[], collectionFund =[], monthlyPower = []) {
-    console.log('computeAvPrcieByMonthOfHigh',
-    firePrice, transmissionPrice, collectionFund, monthlyPower);
     let a = monthlyPower.reduce((prev, item, index) => {
         const { powerVolume:_powerVolume = {}, hydropowerPrice:_hydropowerPrice= {}, surplusPowerVolume:_surplusPowerVolume={}, surplusPowerPrice:_surplusPowerPrice= {} } = item
         const [ {value: powerVolume = 0}, {value: hydropowerPrice = 0}, {value: surplusPowerVolume = 0} , {value: surplusPowerPrice = 0} ]= [_powerVolume , _hydropowerPrice, _surplusPowerVolume, _surplusPowerPrice];
@@ -222,8 +216,6 @@ export function computeAvPrcieByMonthOfHigh(firePrice = 1, transmissionPrice=[],
  * @returns
  */
 export function computeAvPrcieByMonthAllWaterOfHigh(transmissionPrice = [], collectionFund=[], monthlyPower = []) {
-    console.log('computeAvPrcieByMonthAllWaterOfHigh',
-    transmissionPrice , collectionFund, monthlyPower);
     let a = monthlyPower.reduce((prev, item, index) => {
         const { powerVolume:_powerVolume = {}, hydropowerPrice:_hydropowerPrice= {}, surplusPowerVolume:_surplusPowerVolume={}, surplusPowerPrice:_surplusPowerPrice= {} } = item
         const [ {value: powerVolume = 0}, {value: hydropowerPrice = 0}, {value: surplusPowerVolume = 0} , {value: surplusPowerPrice = 0} ]= [_powerVolume , _hydropowerPrice, _surplusPowerVolume, _surplusPowerPrice];

@@ -118,7 +118,7 @@ export default class Step3 extends Component {
 
     const className = classNames(
       'at-col',
-      'at-col-4',
+      'at-col-3',
       {
         'hidden': !powerCalc[type].isMonthlyFill,
       }
@@ -164,8 +164,12 @@ export default class Step3 extends Component {
               <View className={className}>
                 <span>丰枯比：{deepExtract(powerCalc, `${type}.ratio`)}</span>
               </View>
-              <View className='at-col at-col-6'>
-                <span>购电均价：{deepExtract(powerCalc , `${type}.average`)}<span style={{float: 'right'}}>元/千瓦时</span></span>
+              <View className='at-col at-col-8'>
+                <View className='at-row at-row--wrap at-row__justify--between'>
+                  <View className='at-col-3 at-col--auto'>购电均价：</View>
+                  <View className='at-col-4 at-col--auto'>{deepExtract(powerCalc , `${type}.average`)}</View>
+                  <View className='at-col-3 at-col--auto'>元/千瓦时</View>
+                </View>
               </View>
             </View>
           </Card>
