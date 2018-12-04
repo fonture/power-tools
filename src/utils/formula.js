@@ -119,7 +119,7 @@ export function computePowerOfHigh(data, yearCataloguePriceMap) {
         }
     })
     yearPower = keepDecimal(highYearPower + mediumYearPower + lowYearPower, 4)
-    averagePrice = yearPower === 0 || yearPower === '' ? '' : keepDecimal(price / (yearPower * 10000), 5)
+    averagePrice = yearPower === 0 || yearPower === '' ? '' : keepDecimal(price / yearPower, 5)
     return { averagePrice, yearPower, highYearPower, mediumYearPower, lowYearPower }
 }
 
