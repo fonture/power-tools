@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:13:09 
  * @Description: 参与市场时的购电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-12-04 09:31:59
+ * @Last Modified time: 2018-12-04 12:34:50
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -34,8 +34,8 @@ export default class BuyPowerCost extends Component {
         inputAveragePrice: this.props.buyPowerCostData.inputAveragePrice,
     }
     componentWillMount(){
-        const { yearPower, deviationCost, signedPrice, averagePrice, method } = this.state
-        if((yearPower && deviationCost && signedPrice) || (yearPower && averagePrice && method === '购电均价')){
+        const { yearPower, deviationCost, signedPrice, method, inputYearPower, inputAveragePrice } = this.state
+        if((yearPower && deviationCost && signedPrice) || (inputYearPower && inputAveragePrice && method === '购电均价')){
             reduxHelper('next', true)
         }else{
             reduxHelper('next', false)
@@ -45,8 +45,16 @@ export default class BuyPowerCost extends Component {
         reduxHelper('buyPowerCostData', this.state)
     }
     componentWillUnmount() {
-        const { yearPower, averagePrice } = this.state
-        reduxHelper('powerCosts', { yearPower, averagePrice })
+        const { yearPower, averagePrice, method, inputAveragePrice, inputYearPower } = this.state
+        let tempYearPower = 0, tempAveragePrice = 0
+        if(method === '购电均价') {
+            tempYearPower = inputYearPower
+            tempAveragePrice = inputAveragePrice
+        }else {
+            tempYearPower = yearPower
+            tempAveragePrice = averagePrice
+        }
+        reduxHelper('powerCosts', { yearPower: tempYearPower, averagePrice: tempAveragePrice })
     }
     /**
      * @description 点击输入方式时显示底部活动页
@@ -72,16 +80,6 @@ export default class BuyPowerCost extends Component {
             })
             return
         }
-        // this.state.method = e.target.innerHTML
-        // if(e.target.innerHTML === '年度用电量') {
-        //     this.onChangeValue()
-        // }else {
-        //     this.setState({
-        //         averagePrice: '',
-        //         yearPower: '',
-        //         isOpened: false
-        //     })
-        // }
         this.setState({
             method: e.target.innerHTML,
             isOpened: false,
@@ -121,6 +119,7 @@ export default class BuyPowerCost extends Component {
         }
         
         this.setState({
+            ...this.state,
             ...values,
             isOpened: false
         }, () => {

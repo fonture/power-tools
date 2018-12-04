@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:11:35 
  * @Description:未参与市场时的用电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-12-04 09:36:54
+ * @Last Modified time: 2018-12-04 12:35:09
  */
 
 import Taro, { Component } from '@tarojs/taro'
@@ -36,8 +36,8 @@ export default class ElectricityCost extends Component {
         inputAveragePrice: this.props.electricityCostData.inputAveragePrice,
     }
     componentWillMount() {
-        const { yearPower, averagePrice, high, medium, low, method } = this.state
-        if((yearPower && averagePrice && method === '电度电价') || (high && medium && low)){
+        const { high, medium, low, method, inputAveragePrice, inputYearPower } = this.state
+        if((inputAveragePrice && inputYearPower && method === '电度电价') || (high && medium && low)){
             reduxHelper('next', true)
         }else{
             reduxHelper('next', false)
@@ -47,8 +47,16 @@ export default class ElectricityCost extends Component {
         reduxHelper('electricityCostData', this.state)
     }
     componentWillUnmount() {
-        const { yearPower, averagePrice, high, medium, low } = this.state
-        reduxHelper('powerCosts', { yearPower, averagePrice, high, medium, low })
+        const { yearPower, averagePrice, high, medium, low, inputAveragePrice, inputYearPower } = this.state
+        let tempYearPower = 0, tempAveragePrice = 0
+        if(method === '电度电价') {
+            tempYearPower = inputYearPower
+            tempAveragePrice = inputAveragePrice
+        }else {
+            tempYearPower = yearPower
+            tempAveragePrice = averagePrice
+        }
+        reduxHelper('powerCosts', { yearPower: tempYearPower, averagePrice: tempAveragePrice, high, medium, low })
     }
 
     /**
