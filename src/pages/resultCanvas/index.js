@@ -77,7 +77,8 @@ class ResultCanvas extends Component {
                 return item.data.powerVolume.value
             }
         }).filter(Boolean);
-        const monthList = [...new Set([...actualMonth, ...expectMonth])].sort();
+        const monthList = [...new Set([...actualMonth, ...expectMonth])];
+        monthList.sort();
         this.setState({
             actualValue,
             expectValue,
@@ -92,13 +93,21 @@ class ResultCanvas extends Component {
             const { averagePrice: step3av, yearPower: step3yp } = this.props.powerExpect; // 第三步均价
             const buyType = '常规直够电';
             let { high, medium, low } = (mart === '参与' ? this.props.powerExpect : this.props.powerCosts);
-            const proportionData = [Number(high), Number(medium), Number(low)];
+            const totalData = Number(high) + Number(medium) + Number(low);
+            let highPro = keepDecimal(Number(high) / totalData * 100, 0);
+            let mediumPro = keepDecimal(Number(medium) / totalData * 100, 0);
+            let lowPro = 100 - highPro - medium;
+            const proportionData = [highPro, mediumPro, lowPro];
             return {
                 ap, ch, powerChange, tp, mart, sortValue, step2av, step2yp, step3av, step3yp, buyType, proportionData
             }
         } else {
             let { highYearPower, lowYearPower, mediumYearPower } = this.props.powerCostsOfHigh;
-            const proportionData = [Number(highYearPower), Number(lowYearPower), Number(mediumYearPower)];
+            const totalData = Number(highYearPower) + Number(mediumYearPower) + Number(lowYearPower);
+            let highPro = keepDecimal(Number(highYearPower) / totalData * 100, 0);
+            let mediumPro = keepDecimal(Number(mediumYearPower) / totalData * 100, 0);
+            let lowPro = 100 - highPro - mediumPro;
+            const proportionData = [highPro, mediumPro, lowPro];
             const { averagePrice: step2av, yearPower: step2yp } = this.props.powerCostsOfHigh;
             const { average: step3av } = this.props.powerCalc[this.props.powerCalc.type];
             const buyType = this.props.tradingVarieties[this.props.powerCalc.type];

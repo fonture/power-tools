@@ -5,7 +5,7 @@ import Proportion from '../../components/Proportion';
 import reduxHelper from '../../utils/reduxHelper'
 import inject from '../../utils/inject'
 import { AtList, AtListItem, AtDivider, AtCurtain } from 'taro-ui';
-import { keepDecimal } from '../../utils'
+import { keepDecimal, deepExtract } from '../../utils'
 import './index.less'
 
 const cryImage = require('../../assets/images/cry.png');
@@ -34,22 +34,38 @@ export default class Result extends Component {
         }
     }
     compTP = (ap) => {
-        let data = this.props.powerCalc[this.props.powerCalc.type];
-        let yearPower;
-        if (data.isMonthlyFill) {
-            yearPower = data.monthlyPower.data.reduce((pre, item) => {
-                return pre + (item.finished ? Number(item.data.powerVolume.value) : 0)
-            }, 0)
-        } else {
-            yearPower = Number(data.yearlyData.powerVolume.value)
-        }
-        let tp = yearPower * ap
-        return {
-            tp: keepDecimal(tp, 0),
-            step3yp: yearPower
+        if(this.props.version === 'higher'){
+            let data = this.props.powerCalc[this.props.powerCalc.type];
+            let yearPower;
+            if (data.isMonthlyFill) {
+                yearPower = data.monthlyPower.data.reduce((pre, item) => {
+                    if (item.finished) {
+                        let num = 0;
+                        !!deepExtract(item, 'data.powerVolume.value') && (num += Number(deepExtract(item, 'data.powerVolume.value')));
+                        !!deepExtract(item, 'data.surplusPowerVolume.value') && (num += Number(deepExtract(item, 'data.surplusPowerVolume.value')));
+                        return pre + num
+                    } else {
+                        return pre
+                    }
+                }, 0)
+            } else {
+                yearPower = Number(data.yearlyData.powerVolume.value)
+            }
+            let tp = yearPower * ap
+            return {
+                tp: keepDecimal(tp, 0),
+                step3yp: yearPower
+            }
+        }else{
+            let yearPower = Number(this.props.powerExpect.yearPower);
+            let tp = yearPower * ap;
+            return {
+                tp: keepDecimal(tp, 0),
+                step3yp: yearPower
+            }
         }
     }
-    getPowerChange = () => {
+    getPowerChange = (step3yp) => {
         if (this.props.version !== 'higher') {
             let step2powerChange = this.props.powerCosts.yearPower;
             let step3powerChange = this.props.powerExpect.yearPower;
@@ -62,7 +78,7 @@ export default class Result extends Component {
             }
         } else {
             let step2powerChange = Number(this.props.powerCostsOfHigh.yearPower);
-            let step3powerChange = Number(this.props.powerCalc[this.props.powerCalc.type].yearlyData.powerVolume.value);
+            let step3powerChange = step3yp;
             let powerChange = step2powerChange - step3powerChange;
             let ch = powerChange > 0 ? '增加' : '减少';
 
@@ -77,8 +93,8 @@ export default class Result extends Component {
     }
     render() {
         let ap = this.compAP();
-        let {tp, step3yp} = this.compTP(ap);
-        let { ch, powerChange } = this.getPowerChange();
+        let { tp, step3yp } = this.compTP(ap);
+        let { ch, powerChange } = this.getPowerChange(step3yp);
         this.data = { ap, tp, ch, powerChange, step3yp }
         return (
             <View className='result page'>
