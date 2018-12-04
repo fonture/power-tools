@@ -25,11 +25,12 @@ class Partake extends Component {
         high: this.props.powerExpect.high || undefined,
         medium: this.props.powerExpect.medium || undefined,
         low: this.props.powerExpect.low || undefined,
-        highPrice: 0.8234,
-        mediumPrice: 0.5234,
-        lowPrice: 0.3324,
         averagePrice: this.props.powerExpect.averagePrice || undefined,
-        yearPower: this.props.powerExpect.yearPower || undefined
+        yearPower: this.props.powerExpect.yearPower || undefined,
+        rememberData: {
+            averagePrice: 0,
+            yearPower: 0
+        }
     }
     componentDidMount() {
         const { firePrice } = this.props;
@@ -52,16 +53,24 @@ class Partake extends Component {
      * @param {Object} e 事件对象
      */
     onClickSheet = (e) => {
-        // if (this.state.method === e.target.innerHTML) return
-        this.setState({
-            method: e.target.innerHTML,
-            isOpened: false,
-            high: undefined,
-            medium: undefined,
-            low: undefined,
-            yearPower: undefined,
-            averagePrice: undefined
-        })
+        if (e.target.innerHTML !== '电度电价') {
+            this.setState({
+                method: e.target.innerHTML,
+                isOpened: false,
+                rememberData: {
+                    averagePrice: this.state.averagePrice,
+                    yearPower: this.state.yearPower
+                }
+            })
+            this.getCompData();
+        }else{
+            this.setState({
+                method: e.target.innerHTML,
+                isOpened: false,
+                averagePrice: this.state.rememberData.averagePrice,
+                yearPower: this.state.rememberData.yearPower
+            })            
+        }
     }
     /**
      * @description 峰平谷输入框值改变的时候调用
@@ -78,7 +87,7 @@ class Partake extends Component {
             let highPrice = peak.price,
                 mediumPrice = plain.price,
                 lowPrice = valley.price
-            const result = powerAveragePriceOfNotJoin(high, medium, low, highPrice, mediumPrice, lowPrice, 0.5423)
+            const result = powerAveragePriceOfNotJoin(high, medium, low, highPrice, mediumPrice, lowPrice, collectionFund)
             this.setState({
                 ...values,
                 ...result,
@@ -87,11 +96,17 @@ class Partake extends Component {
         }
     }
     getCompData = () => {
-        const { high, medium, low, highPrice, mediumPrice, lowPrice } = this.state;
-        let res = powerAveragePriceOfNotJoin(high, medium, low, highPrice, mediumPrice, lowPrice, 1);
+        const { high, medium, low } = this.state;
+        const { cataloguePriceVoMap, collectionFund } = this.props.newestCataloguePrice;
+        const { peak, plain, valley } = cataloguePriceVoMap
+        let highPrice = peak.price,
+            mediumPrice = plain.price,
+            lowPrice = valley.price
+        let res = powerAveragePriceOfNotJoin(high, medium, low, highPrice, mediumPrice, lowPrice, collectionFund);
         const { yearPower, averagePrice } = res;
         this.setState({
-            averagePrice
+            averagePrice,
+            yearPower
         })
     }
     handleValueChange = (...args) => {
@@ -114,7 +129,7 @@ class Partake extends Component {
     componentDidUpdate() {
         this.validate();
     }
-    validate = ()=> {
+    validate = () => {
         const { averagePrice, yearPower, high, medium, low, method } = this.state;
         if (method === '用电量') {
             reduxHelper('next', validate(high, medium, low))
@@ -123,7 +138,7 @@ class Partake extends Component {
         }
     }
     render() {
-        const { high, medium, low, highPrice, mediumPrice, lowPrice, method, yearPower, averagePrice } = this.state
+        const { high, medium, low, method, yearPower, averagePrice } = this.state
         const items = [
             {
                 percent: yearPower && (high * 100 / yearPower).toFixed(2) + '%',

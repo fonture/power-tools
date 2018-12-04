@@ -48,12 +48,12 @@ class ResultCanvas extends Component {
         Taro.redirectTo({ url: 'pages/result/index' })
     }
     componentDidMount() {
-        // let resultWrp = document.getElementsByClassName('result-wrp')[0];
-        // html2canvas(resultWrp).then(canvas => {
-        //     resultWrp.style.padding = 0;
-        //     resultWrp.innerHTML = '';
-        //     resultWrp.appendChild(canvas);
-        // });
+        let resultWrp = document.getElementsByClassName('result-wrp')[0];
+        html2canvas(resultWrp).then(canvas => {
+            resultWrp.style.padding = 0;
+            resultWrp.innerHTML = '';
+            resultWrp.appendChild(canvas);
+        });
     }
 
     componentWillMount() {
