@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Button, Form, Image } from '@tarojs/components'
+import { View, Button, Input, Form, Image } from '@tarojs/components'
 import { AtModal, AtInput, AtModalContent } from "taro-ui"
 import reduxHelper from '../utils/reduxHelper'
 import './index.less'
@@ -24,6 +24,7 @@ export default class Index extends Component {
   state = {
     activeNode: null,
     modelVis: false,
+    showFirePrice: null,
   }
   editions= [
     {
@@ -74,6 +75,12 @@ export default class Index extends Component {
       modelVis: false,
     })
   }
+  handleChange = (e)=> {
+    const re = e.replace(/[^0-9\.]/ig,"");
+    this.setState({
+      showFirePrice: re,
+    })
+  }
   showModel = () => {
     this.setState({
       modelVis: true,
@@ -81,7 +88,7 @@ export default class Index extends Component {
   }
 
   render() {
-    const { activeNode, modelVis, firePrice = 0.4025 } = this.state;
+    const { activeNode, modelVis, firePrice = 0.4025, showFirePrice } = this.state;
     return (
       <View className='page indexPage'>
         <View className='index'>
@@ -120,8 +127,10 @@ export default class Index extends Component {
                 <AtInput
                   name='value'
                   title='火电价格'
+                  value={showFirePrice}
                   type='digit'
-                  placeholder={`默认火电价格${firePrice}`}
+                  onChange={this.handleChange}
+                  placeholder={`默认${firePrice}元/千瓦时`}
                 />
                 <Button formType='submit' width='100px' className='sumitButton' >确定</Button>
               </Form>
