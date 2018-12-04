@@ -14,11 +14,11 @@ import inject from '../../../../utils/inject'
 import reduxHelper from '../../../../utils/reduxHelper'
 import { validate } from '../../../../utils'
 
-@inject('powerExpect', 'firePrice', 'newestTransmissionPrice', 'newestCataloguePrice', 'next')
+@inject('powerExpect', 'firePrice', 'newestTransmissionPrice', 'newestCataloguePrice', 'next', 'powerCosts')
 class UnPartake extends Component {
     state = {
         checkedList: this.props.powerExpect.checkedList || [],
-        yearPower: this.props.powerExpect.yearPower || undefined,
+        yearPower: this.props.powerExpect.yearPower || this.props.powerCosts.yearPower || undefined,
         waterPrice: this.props.powerExpect.waterPrice || undefined,
         averagePrice: this.props.powerExpect.averagePrice || 0
     }
@@ -100,7 +100,7 @@ class UnPartake extends Component {
                                 <Input
                                     type="number"
                                     className="power-input"
-                                    title="万千瓦时"
+                                    title="元/千瓦时"
                                     border={false}
                                     value={this.state.waterPrice}
                                     digit={5}

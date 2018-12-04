@@ -123,7 +123,7 @@ export default class Index extends Component {
                   type='digit'
                   placeholder={`默认火电价格${firePrice}`}
                 />
-                <Button formType='submit' width='100px' className='sumitButton' >确定</Button>
+                <Button formType='submit' className='sumitButton' >确定</Button>
               </Form>
             </AtModalContent>
           </AtModal>

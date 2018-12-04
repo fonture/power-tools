@@ -7,7 +7,7 @@ import './index.less'
 import request from '../../../utils/request';
 import inject from '../../../utils/inject';
 
-@inject('baseMessage','next', 'version')
+@inject('baseMessage','next')
 export default class Step1 extends Component {
 
     state = {
