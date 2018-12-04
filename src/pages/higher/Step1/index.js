@@ -5,7 +5,7 @@ import Step1 from '../../simple/Step1';
 export default class Steph1 extends Component {
     render() {
         return (<View>
-            <Step1 version='higher' onDidMount={this.props.onDidMount}/>
+            <Step1 version='higher' onDidMount={this.props.onDidMount} />
         </View>)
     }
 }
