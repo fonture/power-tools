@@ -87,7 +87,7 @@ class ResultCanvas extends Component {
     }
     getResultData = (version) => {
         const { mart, sortValue } = this.props.baseMessage; // 参与未参与
-        const { ap, ch, powerChange, tp, step3yp } = this.props.result; // 结果页数据
+        const { ap, ch, powerChange, tp, step3yp, electricity, selling } = this.props.result; // 结果页数据
         if (version === 'simple') {
             const { averagePrice: step2av, yearPower: step2yp } = this.props.powerCosts; // 第二步均价
             const { averagePrice: step3av, yearPower: step3yp } = this.props.powerExpect; // 第三步均价
@@ -99,7 +99,7 @@ class ResultCanvas extends Component {
             let lowPro = 100 - highPro - mediumPro;
             const proportionData = [highPro, mediumPro, lowPro];
             return {
-                ap, ch, powerChange, tp, mart, sortValue, step2av, step2yp, step3av, step3yp, buyType, proportionData
+                ap, ch, powerChange, tp, mart, sortValue, step2av, step2yp, step3av, step3yp, buyType, proportionData, electricity, selling
             }
         } else {
             let { highYearPower, lowYearPower, mediumYearPower } = this.props.powerCostsOfHigh;
@@ -117,7 +117,8 @@ class ResultCanvas extends Component {
                 ap, ch, powerChange, tp,
                 step2av, step2yp,
                 step3av, step3yp,
-                buyType
+                buyType,
+                electricity, selling
             }
         }
     }
@@ -147,19 +148,14 @@ class ResultCanvas extends Component {
     }
     render() {
         const versionValue = this.props.version; // 版本信息
-        const { ap, ch, powerChange, tp, mart, sortValue, step2av, step2yp, step3av, step3yp, buyType, proportionData } = this.getResultData(versionValue)
+        const { ap, ch, powerChange, tp, mart, sortValue, step2av, step2yp, step3av, step3yp, buyType, proportionData, electricity, selling } = this.getResultData(versionValue)
         const { actualValue, expectValue, monthList } = this.state;
         const { step2Ratio, step3Ratio, Kvalue } = this.getRatio();
         return (
             <ScrollView className='result page'>
-                <AtIcon className="close"
-                    onClick={this.onClose}
-                    value='close-circle'
-                    size='30'
-                    color='#1bdce3'>×</AtIcon>
                 <View className='result-wrp'>
                     <View className="result-header dash-border">
-                        <Text className="title">针对<Text className="company">QWERTY物业管理公司</Text>分析结果为</Text>
+                        <Text className="title">针对<Text className="company">{electricity}</Text>分析结果为</Text>
                         <img src={ap > 0 ? smlieImage : cryImage} className="result-img" />
                         <h3 style={{ color: ap > 0 ? '#27F47A' : '#F85A24' }}>{ap > 0 ? '参加市场化交易很划算！' : '不建议参加市场化交易'}</h3>
                     </View>
@@ -255,7 +251,7 @@ class ResultCanvas extends Component {
                                 <View className='at-col at-col-7'>
                                     <p>长按识别二维码</p>
                                     <p>生成我的购电报告</p>
-                                    <p>由<Text className="blue">BABC售电公司</Text>提供本方案</p>
+                                    <p>由<Text className="blue">{selling}</Text>提供本方案</p>
                                 </View>
                                 <View className='at-col at-col-5'>
                                     <img src={require('../../assets/erweima.png')} className="erweima" />
