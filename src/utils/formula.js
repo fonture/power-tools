@@ -90,7 +90,7 @@ export function powerAveragePriceOfNotJoin(high = 0, medium = 0, low = 0, highPr
     low = +low
     let yearPower = high + medium + low
     if (!yearPower) return { yearPower, averagePrice: 0 }
-    let averagePrice = ((high * highPrice + medium * mediumPrice + low * lowPrice) / (yearPower * 10000) + collectionFund)
+    let averagePrice = ((high * highPrice + medium * mediumPrice + low * lowPrice) / yearPower + collectionFund)
     averagePrice = keepDecimal(averagePrice, 5)
     yearPower = keepDecimal(yearPower, 4)
     return { yearPower, averagePrice }

@@ -8,6 +8,8 @@ const initialState =  {
     deviationCost: '',
     signedPrice: '',
     averagePrice: '',
+    inputYearPower: '',
+    inputAveragePrice: ''
   },
   electricityCostData: {
     method: '用电量',
@@ -16,6 +18,8 @@ const initialState =  {
     low: '',
     yearPower: '',
     averagePrice: '',
+    inputYearPower: '',
+    inputAveragePrice: ''
   },
   powerExpect: {},
   powerCostsOfHigh: {
