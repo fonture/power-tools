@@ -4,22 +4,22 @@ const initialState =  {
   buyPowerCostData: {
     method: '年度用电量',
     checkedList: [],
-    yearPower: '',
-    deviationCost: '',
-    signedPrice: '',
-    averagePrice: '',
-    inputYearPower: '',
-    inputAveragePrice: ''
+    yearPower: undefined,
+    deviationCost: undefined,
+    signedPrice: undefined,
+    averagePrice: undefined,
+    inputYearPower: undefined,
+    inputAveragePrice: undefined
   },
   electricityCostData: {
     method: '用电量',
-    high: '',
-    medium: '',
-    low: '',
-    yearPower: '',
-    averagePrice: '',
-    inputYearPower: '',
-    inputAveragePrice: ''
+    high: undefined,
+    medium: undefined,
+    low: undefined,
+    yearPower: undefined,
+    averagePrice: undefined,
+    inputYearPower: undefined,
+    inputAveragePrice: undefined
   },
   powerExpect: {},
   powerCostsOfHigh: {

@@ -47,6 +47,7 @@ export function getAllWaterAvPriceOfElePur(waterPrice, transmissionPrice, collec
 
 
 /**
+ * @author ouyangdc
  * @description 参与市场时购电均价计算
  * @export 购电均价
  * @param {Float} firePrice 火电价格
@@ -57,11 +58,16 @@ export function getAllWaterAvPriceOfElePur(waterPrice, transmissionPrice, collec
  * @param {Float} signedPrice 签约水电价格
  * @param {Float} isJoin 是否参与全水电交易品种
  */
-export function powerAveragePriceOfJoin(firePrice, transmissionPrice, collectionFund, yearPower, deviationCost, signedPrice, isJoin) {
+export function powerAveragePriceOfJoin(firePrice, transmissionPrice, collectionFund, yearPower = 0, deviationCost = 0, signedPrice = 0, isJoin) {
+    // AtInput返回的是字符串型的，因此要将输入的内容转为数值型
     yearPower = +yearPower
     deviationCost = +deviationCost
     signedPrice = +signedPrice
-    if (!yearPower) return ''
+
+    // 如果年度用电量是0，不能做除数，直接结束计算
+    if (!yearPower) return
+
+    // 界面上输入的电量单位是“万千瓦时”，而价格的单位是“元/千瓦时”，因此计算均价时要将电量扩大10000
     yearPower *= 10000
     let price = 0
     if (isJoin) {
@@ -74,6 +80,7 @@ export function powerAveragePriceOfJoin(firePrice, transmissionPrice, collection
 
 
 /**
+ * @author ouyangdc
  * @description 未参与市场时年度用电量、用电均价的计算
  * @param {Float} high 峰电量
  * @param {Float} medium 平电量
@@ -85,23 +92,30 @@ export function powerAveragePriceOfJoin(firePrice, transmissionPrice, collection
  * @returns 年度用电量、用电均价
  */
 export function powerAveragePriceOfNotJoin(high = 0, medium = 0, low = 0, highPrice, mediumPrice, lowPrice, collectionFund) {
+    // AtInput返回的是字符串型的，因此要将输入的内容转为数值型
     high = +high
     medium = +medium
     low = +low
+
+    // 计算年度用电量
     let yearPower = high + medium + low
-    if (!yearPower) return { yearPower, averagePrice: 0 }
+
+    // 如果年度用电量为0，则不需要进行后续的计算操作
+    if (!yearPower) return { yearPower: undefined, averagePrice: undefined }
     let averagePrice = ((high * highPrice + medium * mediumPrice + low * lowPrice) / yearPower + collectionFund)
+
+    // 保留指定的小数位
     averagePrice = keepDecimal(averagePrice, 5)
     yearPower = keepDecimal(yearPower, 4)
     return { yearPower, averagePrice }
 }
 
 /**
+ * @author ouyangdc
  * @description 计算高级版的年度用电量和用电均价
- * @export
  * @param {Array} data 每个月的数据组成的数组
  * @param {Array} yearCataloguePriceMap 每个月对应的基金和峰平谷电价
- * @param {*} collectionFund
+ * @param {Number} collectionFund 基金
  */
 export function computePowerOfHigh(data, yearCataloguePriceMap) {
     let averagePrice = 0, price = 0, yearPower = 0, highYearPower = 0, mediumYearPower = 0, lowYearPower = 0
