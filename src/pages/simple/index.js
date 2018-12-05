@@ -21,13 +21,29 @@ export default class Form extends Component {
         step: 1,
         action: 'enter'
     }
-
     componentDidMount() {
         const { firePrice } = this.props
         if (!firePrice) {
             Taro.redirectTo({
                 url: 'pages/index'
-            });
+            }); 
+        }
+    }
+
+    componentDidUpdate() {
+        // 视口区高度
+        const clientHeight = document.documentElement.clientHeight
+        // 按钮组距离顶部的距离
+
+        const dom = this._rendered.dom.querySelector('.btn-group')
+        const offsetTop = dom.offsetTop
+
+        // 如果按钮组距离顶部的距离加上按钮组的高度没有超过可视区的高度，则按钮组相对于底部绝对定位
+        if(offsetTop + 32 * 2 + 80 < clientHeight) {
+            dom.style.position = 'fixed'
+            dom.style.bottom = 0
+            dom.style.margin = '0 auto'
+            
         }
     }
 
@@ -49,6 +65,7 @@ export default class Form extends Component {
         reduxHelper('stepInfo', { current: step, items: baseMessage.mart === '参与' ? ['基础信息', '购电成本', '目录电价'] : ['基础信息', '用电成本', '购电计算']})
         reduxHelper('next', false)
     }
+
     render() {
         const { stepInfo ,next = false } = this.props
         return (
@@ -57,8 +74,10 @@ export default class Form extends Component {
                 <Content
                     step={this.state.step}
                     action={this.state.action} />
-                <Button onClick={this.preStep} type="secondary">上一步</Button>
-                <Button onClick={this.nextStep} type="primary" disabled={!next}>下一步</Button>
+                <View className="btn-group">
+                    <Button onClick={this.preStep} type="secondary">上一步</Button>
+                    <Button onClick={this.nextStep} type="primary" disabled={!next}>下一步</Button>
+                </View> 
             </ScrollView>
         )
     }
