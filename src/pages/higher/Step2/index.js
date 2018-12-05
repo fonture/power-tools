@@ -3,7 +3,7 @@
  * @Date: 2018-11-28 13:47:30 
  * @Description: 高级版第二步用电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-12-03 18:58:23
+ * @Last Modified time: 2018-12-05 09:22:53
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -38,8 +38,9 @@ export default class Step2 extends Component {
         reduxHelper('next', next ? true : false)  
     }
     async componentDidMount(){
+        const { baseMessage } = this.props;
         reduxHelper('powerCostsOfHigh', this.state)
-        const { adsWord, sort } = this.props.baseMessage
+        const { adsWord, sort } = baseMessage
         
         // 请求基金、峰平谷电价
         const catalogueprice = await request({

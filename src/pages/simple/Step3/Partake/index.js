@@ -32,14 +32,14 @@ class Partake extends Component {
             yearPower: 0
         }
     }
-    componentDidMount() {
-        const { firePrice } = this.props;
-        if (!firePrice) {
-            Taro.redirectTo({
-                url: 'pages/index'
-            });
-        }
-    }
+    // componentDidMount() {
+    //     const { firePrice } = this.props;
+    //     if (!firePrice) {
+    //         Taro.redirectTo({
+    //             url: 'pages/index'
+    //         });
+    //     }
+    // }
     /**
      * @description 点击输入方式时显示底部活动页
      */
