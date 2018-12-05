@@ -49,3 +49,15 @@ export function deepExtract(o, props) {
                 : o[first]
     );
 }
+
+
+/**
+ * 数字千分位分隔符格式化
+ *
+ * @export
+ * @param {*} num
+ * @returns
+ */
+export function toThousands(num) {
+    return (num || 0).toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
+}

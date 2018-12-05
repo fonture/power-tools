@@ -7,7 +7,7 @@ import { AtList, AtListItem, AtDivider, AtIcon } from 'taro-ui';
 import ReCharts from './ReCharts';
 import html2canvas from 'html2canvas';
 import './index.less'
-import { deepExtract, keepDecimal } from '../../utils'
+import { deepExtract, keepDecimal, toThousands } from '../../utils'
 import { gethighDryProportion, getKvalue } from '../../utils/formula'
 
 const cryImage = require('../../assets/images/cry.png');
@@ -176,7 +176,7 @@ class ResultCanvas extends Component {
                                 <AtListItem
                                     title={<Text><img src={require('../../assets/no2.png')} className="stepImg" />预计节约年度电费</Text>}
                                     hasBorder={false}
-                                    extraText={<span style={{ color: ap > 0 ? '#27F47A' : '#F85A24' }}>{tp} 元</span>}
+                                    extraText={<span style={{ color: ap > 0 ? '#27F47A' : '#F85A24' }}>{toThousands(tp)} 元</span>}
                                 />
                                 {
                                     powerChange !== 0 && <AtListItem
