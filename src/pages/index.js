@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Button, Input, Form, Image } from '@tarojs/components'
+import { View, Button, Form, Image } from '@tarojs/components'
 import { AtModal, AtInput, AtModalContent } from "taro-ui"
 import reduxHelper from '../utils/reduxHelper'
 import './index.less'
@@ -76,7 +76,10 @@ export default class Index extends Component {
     })
   }
   handleChange = (e)=> {
-    const re = e.replace(/[^0-9\.]/ig,"");
+    let re = e.replace(/[^\d\.]/ig,"").replace(/\.{2,}/g,".").replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+    if(re.indexOf(".")< 0 && re !=""){  
+      re= parseFloat(re);
+     }
     this.setState({
       showFirePrice: re,
     })
@@ -124,9 +127,10 @@ export default class Index extends Component {
                 onSubmit={this.handleSubmit}
                 className='formBoder'
               >
+                <View className='inputTitle'>火电价格</View>
                 <AtInput
                   name='value'
-                  title='火电价格'
+                  // title='火电价格'
                   value={showFirePrice}
                   type='digit'
                   onChange={this.handleChange}
