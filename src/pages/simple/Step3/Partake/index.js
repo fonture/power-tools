@@ -17,7 +17,7 @@ import reduxHelper from '../../../../utils/reduxHelper';
 import '../index.less';
 import { validate } from '../../../../utils'
 
-@inject('powerExpect', 'newestCataloguePrice', 'firePrice', 'next')
+@inject('powerExpect', 'newestCataloguePrice', 'firePrice', 'next', 'powerCosts')
 class Partake extends Component {
     state = {
         isOpened: false,
@@ -28,12 +28,12 @@ class Partake extends Component {
         averagePrice: this.props.powerExpect.averagePrice || undefined,
         yearPower: this.props.powerExpect.yearPower || undefined,
         rememberData: {
-            averagePrice: undefined,
-            yearPower: undefined
+            averagePrice: this.props.powerExpect.averagePrice || undefined,
+            yearPower: this.props.powerExpect.yearPower || this.props.powerCosts.yearPower || undefined
         }
     }
     componentDidMount() {
-        this.getCompData();
+        this.props.powerExpect.method==='用电量'&&this.getCompData();
     }
 
     /**
@@ -59,13 +59,13 @@ class Partake extends Component {
                 }
             })
             this.getCompData();
-        }else{
+        } else {
             this.setState({
                 method: e.target.innerHTML,
                 isOpened: false,
                 averagePrice: this.state.rememberData.averagePrice,
                 yearPower: this.state.rememberData.yearPower
-            })            
+            })
         }
     }
     /**

@@ -19,7 +19,7 @@ export default class Step1 extends Component {
         sheetShow: false,
         sorts: [[], []],
     }
-    
+
     async componentDidMount() {
         this.props.onDidMount(this._rendered.dom);
         const { data } = await request({

@@ -3,7 +3,7 @@
  * @Date: 2018-11-19 09:09:13 
  * @Description: 封装react-redux的connect方法
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-12-01 14:35:19
+ * @Last Modified time: 2018-12-05 15:21:56
  */
 import { connect } from '@tarojs/redux'
 export default (...args) => comp => {
@@ -14,5 +14,6 @@ export default (...args) => comp => {
         })
         return props
     }
-    return connect(mapStateToProps)(comp)
+    const mapDispatchToProps = (dispatch, props) => {}
+    return connect(mapStateToProps, mapDispatchToProps)(comp)
 }
