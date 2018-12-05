@@ -21,6 +21,7 @@ const initialState =  {
     inputYearPower: undefined,
     inputAveragePrice: undefined
   },
+  stepInfo: { current: 0, items: ['基础信息', '第二步', '第三步'] },
   powerExpect: {},
   powerCostsOfHigh: {
     currMonth:  1,

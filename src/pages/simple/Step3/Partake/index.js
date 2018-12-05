@@ -33,15 +33,9 @@ class Partake extends Component {
         }
     }
     componentDidMount() {
-        const { firePrice } = this.props;
-        if (!firePrice) {
-            Taro.redirectTo({
-                url: 'pages/index'
-            });
-        }else{
-            this.getCompData();           
-        }
+        this.getCompData();
     }
+
     /**
      * @description 点击输入方式时显示底部活动页
      */

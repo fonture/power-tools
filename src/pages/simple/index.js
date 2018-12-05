@@ -11,7 +11,7 @@ import Step1 from './Step1';
 import Step2 from './Step2';
 import Step3 from './Step3';
 
-@inject('stepInfo', 'baseMessage', 'next')
+@inject('stepInfo', 'baseMessage', 'next', 'firePrice')
 export default class Form extends Component {
 
     config = {
@@ -23,7 +23,12 @@ export default class Form extends Component {
     }
 
     componentDidMount() {
-        reduxHelper('stepInfo', { current: 0, items: ['基础信息', '第二步', '第三步'] })
+        const { firePrice } = this.props
+        if (!firePrice) {
+            Taro.redirectTo({
+                url: 'pages/index'
+            });
+        }
     }
 
     preStep = () => {
@@ -45,7 +50,7 @@ export default class Form extends Component {
         reduxHelper('next', false)
     }
     render() {
-        const { stepInfo = {} ,next = false } = this.props
+        const { stepInfo ,next = false } = this.props
         return (
             <ScrollView className='form page'>
                 <Steps current={stepInfo.current} items={stepInfo.items} />

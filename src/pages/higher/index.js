@@ -19,6 +19,7 @@ export default class Form extends Component {
         step: 1,
         action: 'enter'
     }
+
     componentDidMount() {
         reduxHelper('stepInfo', { current: 0, items: ['基础信息', '用电成本', '购电计算'] })
     }

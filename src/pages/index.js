@@ -10,6 +10,7 @@ export default class Index extends Component {
   config = {
     navigationBarTitleText: '首页'
   }
+
   async componentDidMount(){
     // 请求火电价格
     const {data} = await request({
