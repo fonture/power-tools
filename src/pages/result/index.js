@@ -108,7 +108,11 @@ export default class Result extends Component {
         const { electricity, selling } = this.state;
         this.data = Object.assign(this.data, { electricity, selling })
         reduxHelper('result', this.data)
-        Taro.navigateTo({ url: '../../pages/resultCanvas/index' })
+        Taro.navigateTo({ url: '../../pages/resultCanvas/index' }).then(()=>{
+            this.setState({
+                modelVis: false
+            })
+        })
     }
     handleChangeValue = (type, value) => {
         this.setState({

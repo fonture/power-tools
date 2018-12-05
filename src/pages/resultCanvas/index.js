@@ -193,7 +193,7 @@ class ResultCanvas extends Component {
                                 mart === '参与' ?
                                     <Text className="wenan">
                                         <p>用户属于电压等级为<span style={{color:'#24FCFF'}}>{sortValue[1]}</span>的<span style={{color:'#24FCFF'}}>{sortValue[0]}</span>用户，当前<span style={{color:'#24FCFF'}}>已参加</span>市场化交易，购买<span style={{color:'#24FCFF'}}>{buyType}</span>，年度用电均价为<span style={{color:'#24FCFF'}}>{step2av}元/千瓦时</span>。</p>
-                                        <p>如果不参与市场化交易，根据其峰平谷比例，预估购电均价为<span style={{color:'#24FCFF'}}>{step3av}元/千瓦时</span>，平均每度电预计将<span style={{ color: ap > 0 ? '#27F47A' : '#F85A24' }}>{ap > 0 ? '节约' : '亏损'}{Math.abs(ap)}元</span>。根据预估的购电量情况，年度电费预计<span style={{ color: tp > 0 ? '#27F47A' : '#F85A24' }}>{tp > 0 ? '节约' : '亏损'}{Math.abs(tp)}元</span>。</p>
+                                        <p>如果不参与市场化交易，根据其峰平谷比例，预估购电均价为<span style={{color:'#24FCFF'}}>{step3av}元/千瓦时</span>，平均每度电预计将<span style={{ color: ap > 0 ? '#27F47A' : '#F85A24' }}>{ap > 0 ? '节约' : '亏损'}{Math.abs(ap)}元</span>。根据预估的购电量情况，年度电费预计<span style={{ color: tp > 0 ? '#27F47A' : '#F85A24' }}>{tp > 0 ? '节约' : '亏损'}{toThousands(Math.abs(tp))}元</span>。</p>
                                     </Text> :
                                     <Text className="wenan">
                                         <p>用户属于电压等级为<span style={{color:'#24FCFF'}}>{sortValue[1]}</span>的<span style={{color:'#24FCFF'}}>{sortValue[0]}</span>用户，当前<span style={{color:'#24FCFF'}}>没有参加</span>市场化交易，年度用电均价为<span style={{color:'#24FCFF'}}>{step2av}元/千瓦时</span>。</p>
