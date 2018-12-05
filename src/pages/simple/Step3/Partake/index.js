@@ -28,18 +28,14 @@ class Partake extends Component {
         averagePrice: this.props.powerExpect.averagePrice || undefined,
         yearPower: this.props.powerExpect.yearPower || undefined,
         rememberData: {
-            averagePrice: 0,
-            yearPower: 0
+            averagePrice: undefined,
+            yearPower: undefined
         }
     }
-    // componentDidMount() {
-    //     const { firePrice } = this.props;
-    //     if (!firePrice) {
-    //         Taro.redirectTo({
-    //             url: 'pages/index'
-    //         });
-    //     }
-    // }
+    componentDidMount() {
+        this.getCompData();
+    }
+
     /**
      * @description 点击输入方式时显示底部活动页
      */

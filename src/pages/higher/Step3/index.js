@@ -12,7 +12,7 @@ import InputPanel from './InputPanel';
 import './index.less'
 import { extractDryAndHighData, computeAvPrcieByMonthOfHigh, gethighDryProportion, computeAvPrcieByMonthAllWaterOfHigh, computeAvPrcieByYearOfHigh, computeAvPrcieByYearAllWaterOfHigh } from '../../../utils/formula';
 
-@inject('tradingVarieties', 'powerCalc' , 'catalogueprice', 'transmissionprice', 'firePrice' )
+@inject('tradingVarieties', 'powerCalc' , 'catalogueprice', 'transmissionprice', 'firePrice', 'powerCostsOfHigh' )
 export default class Step3 extends Component {
 
   state = {
@@ -36,8 +36,15 @@ export default class Step3 extends Component {
     ]
   }
   componentDidMount() {
+    const { yearPower } = this.props.powerCostsOfHigh;
     reduxHelper('next', true)
     this.props.onDidMount(this._rendered.dom);
+    if(yearPower) {
+      const keys = Object.keys(this.props.tradingVarieties)
+      keys.forEach( key => this.props.powerCalc[key].yearlyData.powerVolume.value = yearPower)
+      reduxHelper('powerCalc', this.props.powerCalc)
+    }
+
   }
 
   triggerActionSheet = (bool = true) => {
