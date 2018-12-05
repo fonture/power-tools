@@ -35,8 +35,8 @@ export default class Form extends Component {
         
         dom.style.position = 'relative'
         dom.style.marginTop = '20px'
-        dom.style.background = '#fff'
-        dom.querySelector('.at-button--secondary').style.background='#efefef'
+        // dom.style.background = '#fff'
+        // dom.querySelector('.at-button--secondary').style.background='#efefef'
         // 视口区高度
         const clientHeight = document.documentElement.clientHeight
         // 按钮组距离顶部的距离
@@ -47,8 +47,6 @@ export default class Form extends Component {
         if(offsetTop + 32 * 2 + 80 < clientHeight - 20) {
             dom.style.position = 'absolute'
             dom.style.bottom = '20px'
-            dom.style.background = '#efefef'
-            dom.querySelector('.at-button--secondary').style.background='#fff'
         }
     }
 
