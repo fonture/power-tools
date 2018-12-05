@@ -14,7 +14,7 @@ const cryImage = require('../../assets/images/cry.png');
 const smlieImage = require('../../assets/images/smile.png');
 
 
-const monthToNum = (str) => str.split('月')[0] - 0
+const monthToNum = (str) => str.split('月')[0] - 1
 const _extractDryAndHighData = (data) => {
     const extra = (item, index) => {
         let { high, medium, low } = item;
@@ -67,7 +67,7 @@ class ResultCanvas extends Component {
         }).filter(Boolean);
         const expectValue = this.props.powerCalc[this.props.powerCalc.type].monthlyPower.data.map(item => {
             if (item.finished) {
-                return [item.month, item.data.powerVolume.value]
+                return [item.month, Number(item.data.powerVolume.value)]
             }
         }).filter(Boolean);
         this.setState({
