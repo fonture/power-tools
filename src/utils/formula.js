@@ -151,9 +151,9 @@ export function computePowerOfHigh(data, yearCataloguePriceMap) {
  * @param {*} surplusaPrice 富余电量电价
  * @returns
  */
-export function computeAvPrcieByYearOfHigh(waterPrice, firePrice, transmissionPrice=[], collectionFund, yearPower, surplusaPowerList = [], surplusaPrice) {
+export function computeAvPrcieByYearOfHigh(waterPrice = 0, firePrice, transmissionPrice=[], collectionFund, yearPower, surplusaPowerList = [], surplusaPrice) {
     yearPower = yearPower * 10000;
-    let a = (waterPrice * 0.7 + firePrice * 0.3 + transmissionPrice[0] + collectionFund) * yearPower;
+    let a = (Number(waterPrice) * 0.7 + firePrice * 0.3 + transmissionPrice[0] + collectionFund) * yearPower;
     let b = surplusaPowerList.reduce((prev, item, index) => {
         return prev + item * ((+surplusaPrice) + transmissionPrice[1] + collectionFund) * 10000
     }, 0)
@@ -161,7 +161,7 @@ export function computeAvPrcieByYearOfHigh(waterPrice, firePrice, transmissionPr
         return prev + item * 10000
     }, yearPower)
     let res = (a + b) / c;
-    return keepDecimal(res, 5);
+    return keepDecimal(res, 5) || '--';
 }
 
 /**
@@ -176,10 +176,9 @@ export function computeAvPrcieByYearOfHigh(waterPrice, firePrice, transmissionPr
  * @param {*} surplusaPrice 富余电量电价
  * @returns
  */
-export function computeAvPrcieByYearAllWaterOfHigh(waterPrice, transmissionPrice=[], collectionFund, yearPower, surplusaPowerList = [], surplusaPrice) {
+export function computeAvPrcieByYearAllWaterOfHigh(waterPrice = 0, transmissionPrice=[], collectionFund, yearPower, surplusaPowerList = [], surplusaPrice) {
     yearPower = yearPower * 10000;
-    console.log(typeof waterPrice , typeof transmissionPrice[0] , typeof collectionFund, typeof yearPower);
-    let a = ( +waterPrice + transmissionPrice[0] + collectionFund) * yearPower;
+    let a = ( Number(waterPrice) + transmissionPrice[0] + collectionFund) * yearPower;
     let b = surplusaPowerList.reduce((prev, item, index) => {
         return prev + item * (+(surplusaPrice) + transmissionPrice[1] + collectionFund) * 10000
     }, 0)
@@ -188,7 +187,7 @@ export function computeAvPrcieByYearAllWaterOfHigh(waterPrice, transmissionPrice
     }, yearPower)
     console.log(a, b, c);
     let res = (a + b) / c;
-    return keepDecimal(res, 5);
+    return keepDecimal(res, 5) || '--';
 }
 
 /**
@@ -216,7 +215,7 @@ export function computeAvPrcieByMonthOfHigh(firePrice = 1, transmissionPrice=[],
     }, 0)
     console.log(a,d);
     let res = a / d;
-    return keepDecimal(res, 5);
+    return keepDecimal(res, 5) || '--';
 }
 
 
@@ -244,7 +243,7 @@ export function computeAvPrcieByMonthAllWaterOfHigh(transmissionPrice = [], coll
     }, 0)
     console.log(a, d);
     let res = a / d;
-    return keepDecimal(res, 5);
+    return keepDecimal(res, 5) || '--';
 }
 
 export function extractDryAndHighData({ data }) {
