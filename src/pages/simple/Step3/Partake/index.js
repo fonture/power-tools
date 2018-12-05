@@ -17,7 +17,7 @@ import reduxHelper from '../../../../utils/reduxHelper';
 import '../index.less';
 import { validate } from '../../../../utils'
 
-@inject('powerExpect', 'newestCataloguePrice', 'firePrice', 'next')
+@inject('powerExpect', 'newestCataloguePrice', 'firePrice', 'next', 'powerCosts')
 class Partake extends Component {
     state = {
         isOpened: false,
@@ -28,18 +28,14 @@ class Partake extends Component {
         averagePrice: this.props.powerExpect.averagePrice || undefined,
         yearPower: this.props.powerExpect.yearPower || undefined,
         rememberData: {
-            averagePrice: 0,
-            yearPower: 0
+            averagePrice: this.props.powerExpect.averagePrice || undefined,
+            yearPower: this.props.powerExpect.yearPower || this.props.powerCosts.yearPower || undefined
         }
     }
     componentDidMount() {
-        const { firePrice } = this.props;
-        if (!firePrice) {
-            Taro.redirectTo({
-                url: 'pages/index'
-            });
-        }
+        this.props.powerExpect.method==='用电量'&&this.getCompData();
     }
+
     /**
      * @description 点击输入方式时显示底部活动页
      */
@@ -63,13 +59,13 @@ class Partake extends Component {
                 }
             })
             this.getCompData();
-        }else{
+        } else {
             this.setState({
                 method: e.target.innerHTML,
                 isOpened: false,
                 averagePrice: this.state.rememberData.averagePrice,
                 yearPower: this.state.rememberData.yearPower
-            })            
+            })
         }
     }
     /**

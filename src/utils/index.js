@@ -26,7 +26,7 @@ export function validate(...args) {
     let length = args.length;
     for (let i = 0; i < length; i++) {
         let value = args[i];
-        if (value === undefined || value === null || value === '') {
+        if (value === undefined || value === null || value === '' || isNaN(value)) {
             return false
         }
     }
@@ -48,4 +48,16 @@ export function deepExtract(o, props) {
                 ? deepExtract(o[first], remaining.join('.'))
                 : o[first]
     );
+}
+
+
+/**
+ * 数字千分位分隔符格式化
+ *
+ * @export
+ * @param {*} num
+ * @returns
+ */
+export function toThousands(num) {
+    return (num || 0).toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
 }

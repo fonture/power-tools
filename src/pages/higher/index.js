@@ -9,7 +9,7 @@ import TaroAmin from '../../components/taro-amin'
 import Step1 from './Step1';
 import Step2 from './Step2';
 import Step3 from './Step3';
-@inject('stepInfo','next')
+@inject('stepInfo','next', 'firePrice')
 export default class Form extends Component {
 
     config = {
@@ -19,8 +19,34 @@ export default class Form extends Component {
         step: 1,
         action: 'enter'
     }
+
     componentDidMount() {
+        const { firePrice } = this.props
+        if (!firePrice) {
+            Taro.redirectTo({
+                url: 'pages/index'
+            }); 
+        }
         reduxHelper('stepInfo', { current: 0, items: ['基础信息', '用电成本', '购电计算'] })
+    }
+
+    componentDidUpdate() {
+        const dom = this._rendered.dom.querySelector('.btn-group')
+        dom.style.position = 'relative'
+        dom.style.marginTop = '20px'
+        // dom.style.background = '#fff'
+        // dom.querySelector('.at-button--secondary').style.background='#efefef'
+        // 视口区高度
+        const clientHeight = document.documentElement.clientHeight
+        // 按钮组距离顶部的距离
+
+        const offsetTop = dom.offsetTop
+
+        // 如果按钮组距离顶部的距离加上按钮组的高度没有超过可视区的高度，则按钮组相对于底部绝对定位
+        if(offsetTop + 32 * 2 + 80 < clientHeight - 20) {
+            dom.style.position = 'absolute'
+            dom.style.bottom = '20px'
+        }
     }
     preStep = () => {
         this.state.step === 1 ?
@@ -41,8 +67,10 @@ export default class Form extends Component {
             <ScrollView className='form page'>
                 <Steps current={stepInfo.current} items={stepInfo.items} />
                 <Content step={this.state.step} action={this.state.action} />
-                <Button onClick={this.preStep} type="secondary">上一步</Button>
-                <Button onClick={this.nextStep} type="primary" disabled={!next}>下一步</Button>
+                <View className="btn-group">
+                    <Button onClick={this.preStep} type="secondary">上一步</Button>
+                    <Button onClick={this.nextStep} type="primary" disabled={!next}>下一步</Button>
+                </View> 
             </ScrollView>
         )
     }

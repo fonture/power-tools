@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:13:09 
  * @Description: 简单版 -- 第二步 -- 购电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-12-04 16:03:52
+ * @Last Modified time: 2018-12-05 20:06:17
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -35,8 +35,15 @@ export default class BuyPowerCost extends Component {
         inputAveragePrice: this.props.buyPowerCostData.inputAveragePrice,
     }
     componentWillMount(){
-        const { yearPower, deviationCost, signedPrice, method, inputYearPower, inputAveragePrice } = this.state
-         
+        const { yearPower, deviationCost, signedPrice, method, inputYearPower, inputAveragePrice, checkedList } = this.state
+        if(this.props.newestCataloguePrice && this.props.newestTransmissionPrice) {
+            const { newestCataloguePrice: { collectionFund }, newestTransmissionPrice: { price }, firePrice } = this.props
+            const averagePrice = powerAveragePriceOfJoin(firePrice, price, collectionFund, yearPower, deviationCost, signedPrice, checkedList.length)
+            this.setState({
+                averagePrice
+            })
+        }
+        
         /**
          * 判断初始化时组件中的数据是否为有效数据。如果有效，则“下一步”按钮默认可点击，否则不可点击
          * 如果当前的输入方式是年度用电量，则需要判断年度用电量、年度偏差考核费用、签约水电价格的值是否有效

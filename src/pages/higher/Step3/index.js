@@ -12,7 +12,7 @@ import InputPanel from './InputPanel';
 import './index.less'
 import { extractDryAndHighData, computeAvPrcieByMonthOfHigh, gethighDryProportion, computeAvPrcieByMonthAllWaterOfHigh, computeAvPrcieByYearOfHigh, computeAvPrcieByYearAllWaterOfHigh } from '../../../utils/formula';
 
-@inject('tradingVarieties', 'powerCalc' , 'catalogueprice', 'transmissionprice', 'firePrice' )
+@inject('tradingVarieties', 'powerCalc' , 'catalogueprice', 'transmissionprice', 'firePrice', 'powerCostsOfHigh' )
 export default class Step3 extends Component {
 
   state = {
@@ -20,6 +20,7 @@ export default class Step3 extends Component {
     tradingVarieties: this.props.tradingVarieties,
     powerCalc: this.props.powerCalc,
     firePrice: this.props.firePrice,
+    powerCostsOfHigh: this.props.powerCostsOfHigh,
     collectionFund: [
       this.props.catalogueprice.newestCataloguePrice.collectionFund,
       Object.keys(this.props.catalogueprice.yearCataloguePriceMap).map(item => this.props.catalogueprice.yearCataloguePriceMap[item].collectionFund)
@@ -35,9 +36,19 @@ export default class Step3 extends Component {
       Object.keys(this.props.transmissionprice.yearSurplusTransmissionPriceMap).map(item => this.props.transmissionprice.yearSurplusTransmissionPriceMap[item].price)
     ]
   }
-  componentDidMount() {
-    reduxHelper('next', true)
+  componentDidMount=() => {
+    const { yearPower } = this.state.powerCostsOfHigh;
     this.props.onDidMount(this._rendered.dom);
+    if(yearPower) {
+      const keys = Object.keys(this.state.tradingVarieties)
+      keys.forEach( key =>  {
+        const powerVolume = this.state.powerCalc[key].yearlyData.powerVolume
+        if (!powerVolume.value || powerVolume.value == '0') powerVolume.value = +yearPower;
+      })
+      reduxHelper('powerCalc', this.state.powerCalc)
+      this.updateAllData();
+    }
+
   }
 
   triggerActionSheet = (bool = true) => {
@@ -109,6 +120,7 @@ export default class Step3 extends Component {
     }
     powerCalc[type].average = average
 
+    reduxHelper('next', !!average && average!== '--')
     this.setState({})
   }
 
@@ -167,7 +179,7 @@ export default class Step3 extends Component {
               <View className='at-col at-col-8'>
                 <View className='at-row at-row--wrap at-row__justify--between'>
                   <View className='at-col-3 at-col--auto'>购电均价：</View>
-                  <View className='at-col-4 at-col--auto'>{deepExtract(powerCalc , `${type}.average`)}</View>
+                  <View className='at-col-4 at-col--auto' style={{textAlign: 'center'}}>{deepExtract(powerCalc , `${type}.average`)}</View>
                   <View className='at-col-3 at-col--auto'>元/千瓦时</View>
                 </View>
               </View>

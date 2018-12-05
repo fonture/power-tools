@@ -5,7 +5,7 @@ import Proportion from '../../components/Proportion';
 import reduxHelper from '../../utils/reduxHelper'
 import inject from '../../utils/inject'
 import { AtList, AtListItem, AtModal, AtModalContent, AtModalHeader, AtInput, AtButton } from 'taro-ui';
-import { keepDecimal, deepExtract } from '../../utils'
+import { keepDecimal, deepExtract, toThousands } from '../../utils'
 import './index.less'
 
 const cryImage = require('../../assets/images/cry.png');
@@ -91,10 +91,12 @@ export default class Result extends Component {
             }
         }
     }
-    componentWillUnmount() {
-        const { electricity, selling } = this.state;
-        this.data = Object.assign(this.data, { electricity, selling })
-        reduxHelper('result', this.data)
+    componentDidMount() {
+        if(!this.props.version){
+            Taro.redirectTo({
+                url: 'pages/index'
+            });
+        }
     }
     showModel = () => {
         this.setState({
@@ -107,7 +109,14 @@ export default class Result extends Component {
         })
     }
     handleSubmit = () => {
-        Taro.redirectTo({ url: 'pages/resultCanvas/index' })
+        const { electricity, selling } = this.state;
+        this.data = Object.assign(this.data, { electricity, selling })
+        reduxHelper('result', this.data)
+        Taro.navigateTo({ url: '../../pages/resultCanvas/index' }).then(()=>{
+            this.setState({
+                modelVis: false
+            })
+        })
     }
     handleChangeValue = (type, value) => {
         this.setState({
@@ -140,7 +149,7 @@ export default class Result extends Component {
                                 title='平均每度电节约'
                             />
                             <AtListItem
-                                extraText={<span><span style={{ color: ap > 0 ? '#27F47A' : '#F85A24' }}>{tp}</span> 元</span>}
+                                extraText={<span><span style={{ color: ap > 0 ? '#27F47A' : '#F85A24' }}>{toThousands(tp)}</span> 元</span>}
                                 title='预计节约年度电费'
                             />
                             {
@@ -182,7 +191,6 @@ export default class Result extends Component {
                         <AtButton className='sumitButton' disabled={!this.state.canSubmit} onClick={this.handleSubmit}>确定</AtButton>
                     </AtModalContent>
                 </AtModal>
-
                 <Button onClick={this.tryAgain} type="secondary">再试一次</Button>
                 <Button onClick={this.showModel} type="primary">生成报告</Button>
             </View>

@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:12:20 
  * @Description: 第二步入口文件
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-12-01 16:09:57
+ * @Last Modified time: 2018-12-05 09:22:25
  */
 import Taro, { Component } from '@tarojs/taro'
 import PropTypes from 'prop-types'
@@ -27,6 +27,7 @@ export default class Step2 extends Component {
             sort: []
         }
     }
+
     async componentDidMount() {
         this.props.onDidMount(this._rendered.dom);
         const { adsWord, sort } = this.props.baseMessage
