@@ -91,8 +91,12 @@ export default class Result extends Component {
             }
         }
     }
-    componentWillUnmount() {
-
+    componentDidMount() {
+        if(!this.props.version){
+            Taro.redirectTo({
+                url: 'pages/index'
+            });
+        }
     }
     showModel = () => {
         this.setState({

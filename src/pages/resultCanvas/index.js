@@ -14,7 +14,7 @@ const cryImage = require('../../assets/images/cry.png');
 const smlieImage = require('../../assets/images/smile.png');
 
 
-const monthToNum = (str) => str.split('月')[0] - 0
+const monthToNum = (str) => str.split('月')[0] - 1
 const _extractDryAndHighData = (data) => {
     const extra = (item, index) => {
         let { high, medium, low } = item;
@@ -67,7 +67,7 @@ class ResultCanvas extends Component {
         }).filter(Boolean);
         const expectValue = this.props.powerCalc[this.props.powerCalc.type].monthlyPower.data.map(item => {
             if (item.finished) {
-                return [item.month, item.data.powerVolume.value]
+                return [item.month, Number(item.data.powerVolume.value)]
             }
         }).filter(Boolean);
         this.setState({
@@ -197,7 +197,7 @@ class ResultCanvas extends Component {
                                     </Text> :
                                     <Text className="wenan">
                                         <p>用户属于电压等级为<span style={{color:'#24FCFF'}}>{sortValue[1]}</span>的<span style={{color:'#24FCFF'}}>{sortValue[0]}</span>用户，当前<span style={{color:'#24FCFF'}}>没有参加</span>市场化交易，年度用电均价为<span style={{color:'#24FCFF'}}>{step2av}元/千瓦时</span>。</p>
-                                        <p>如果参与市场化交易，购买<span style={{color:'#24FCFF'}}>{buyType}</span>，预估购电均价为<span style={{color:'#24FCFF'}}>{step3av}元/千瓦时</span>，平均每度电预计将<span style={{ color: ap > 0 ? '#27F47A' : '#F85A24' }}>{ap > 0 ? '节约' : '亏损'}{Math.abs(ap)}元</span>。根据预估的购电量情况，年度电费预计<span style={{ color: tp > 0 ? '#27F47A' : '#F85A24' }}>{tp > 0 ? '节约' : '亏损'}{Math.abs(tp)}元</span>。</p>
+                                        <p>如果参与市场化交易，购买<span style={{color:'#24FCFF'}}>{buyType}</span>，预估购电均价为<span style={{color:'#24FCFF'}}>{step3av}元/千瓦时</span>，平均每度电预计将<span style={{ color: ap > 0 ? '#27F47A' : '#F85A24' }}>{ap > 0 ? '节约' : '亏损'}{Math.abs(ap)}元</span>。根据预估的购电量情况，年度电费预计<span style={{ color: tp > 0 ? '#27F47A' : '#F85A24' }}>{tp > 0 ? '节约' : '亏损'}{toThousands(Math.abs(tp))}元</span>。</p>
                                     </Text>
                             }
                         </View>

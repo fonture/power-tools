@@ -126,7 +126,6 @@ export default class ReCharts extends Component {
                 {
                     name: '实际电量',
                     type: 'line',
-                    stack: '总量',
                     data: this.props.actualValue,
                     lineStyle: {
                         color: '#3dcca6',
@@ -141,7 +140,6 @@ export default class ReCharts extends Component {
                 {
                     name: '预计电量',
                     type: 'line',
-                    stack: '总量',
                     data: this.props.expectValue,
                     lineStyle: {
                         color: '#4a9df2',
@@ -157,6 +155,8 @@ export default class ReCharts extends Component {
         }
     }
     render() {
+        console.log(this.props.expectValue);
+        console.log(this.props.actualValue);
         const option = this.getOption();
         return (
             <Charts option={option} />
