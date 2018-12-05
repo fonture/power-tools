@@ -4,7 +4,9 @@ import { AtModal, AtInput, AtModalContent } from "taro-ui"
 import reduxHelper from '../utils/reduxHelper'
 import './index.less'
 import request from '../utils/request';
-
+import inject from '../utils/inject';
+// @inject("baseMessage", "next")
+@inject('firePrice')
 export default class Index extends Component {
 
   config = {
@@ -16,9 +18,10 @@ export default class Index extends Component {
       method: 'get',
       url: '/wechat/kit/thermal/price',
     });
-    reduxHelper('firePrice', data.thermalPrice || 0.4025);
+    // if(this.props.firePrice)
+    reduxHelper('firePrice', this.props.firePrice || data.thermalPrice || 0.4025);
     this.setState({
-      firePrice: data.thermalPrice,
+      firePrice: this.props.firePrice || data.thermalPrice,
     })
   }
   state = {
