@@ -9,7 +9,7 @@ import TaroAmin from '../../components/taro-amin'
 import Step1 from './Step1';
 import Step2 from './Step2';
 import Step3 from './Step3';
-@inject('stepInfo','next')
+@inject('stepInfo','next', 'firePrice')
 export default class Form extends Component {
 
     config = {
@@ -21,22 +21,28 @@ export default class Form extends Component {
     }
 
     componentDidMount() {
+        const { firePrice } = this.props
+        if (!firePrice) {
+            Taro.redirectTo({
+                url: 'pages/index'
+            }); 
+        }
         reduxHelper('stepInfo', { current: 0, items: ['基础信息', '用电成本', '购电计算'] })
     }
+
     componentDidUpdate() {
+        const dom = this._rendered.dom.querySelector('.btn-group')
+        dom.style.position = 'relative'
         // 视口区高度
         const clientHeight = document.documentElement.clientHeight
         // 按钮组距离顶部的距离
 
-        const dom = this._rendered.dom.querySelector('.btn-group')
         const offsetTop = dom.offsetTop
 
         // 如果按钮组距离顶部的距离加上按钮组的高度没有超过可视区的高度，则按钮组相对于底部绝对定位
         if(offsetTop + 32 * 2 + 80 < clientHeight) {
             dom.style.position = 'fixed'
             dom.style.bottom = 0
-            dom.style.margin = '0 auto'
-            
         }
     }
     preStep = () => {

@@ -187,7 +187,6 @@ export default class Result extends Component {
                         <AtButton className='sumitButton' disabled={!this.state.canSubmit} onClick={this.handleSubmit}>确定</AtButton>
                     </AtModalContent>
                 </AtModal>
-
                 <Button onClick={this.tryAgain} type="secondary">再试一次</Button>
                 <Button onClick={this.showModel} type="primary">生成报告</Button>
             </View>
