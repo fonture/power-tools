@@ -44,7 +44,7 @@ export default class Form extends Component {
 
         // 如果按钮组距离顶部的距离加上按钮组的高度没有超过可视区的高度，则按钮组相对于底部绝对定位
         if(offsetTop + 32 * 2 + 80 < clientHeight - 20) {
-            dom.style.position = 'fixed'
+            dom.style.position = 'absolute'
             dom.style.bottom = '20px'
             dom.style.background = '#efefef'
             dom.querySelector('.at-button--secondary').style.background='#fff'
