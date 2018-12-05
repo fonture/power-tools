@@ -71,7 +71,7 @@ export default class ReCharts extends Component {
                 textStyle: {
                     color: '#fff',
                     fontSize: '13',
-                    fontWeight: 400                    
+                    fontWeight: 400
                 },
                 left: '15px'
             },
@@ -91,7 +91,7 @@ export default class ReCharts extends Component {
             xAxis: {
                 type: 'category',
                 boundaryGap: false,
-                data: this.props.monthList,
+                data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
                 axisTick: {
                     show: false
                 },
@@ -99,14 +99,14 @@ export default class ReCharts extends Component {
                     show: false
                 },
                 axisLabel: {
-                    color:'#80899C'
+                    color: '#80899C'
                 },
-                boundaryGap: ['8%',0]
+                boundaryGap: ['8%', 0]
             },
             yAxis: {
                 type: 'value',
-                axisLine:{
-                    lineStyle:{
+                axisLine: {
+                    lineStyle: {
                         color: '#80899C'
                     }
                 },
@@ -115,7 +115,7 @@ export default class ReCharts extends Component {
                     length: 3
                 },
                 axisLabel: {
-                    color:'#80899C'
+                    color: '#80899C'
                 },
                 splitLine: {
                     show: false

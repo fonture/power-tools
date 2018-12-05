@@ -14,7 +14,7 @@ const cryImage = require('../../assets/images/cry.png');
 const smlieImage = require('../../assets/images/smile.png');
 
 
-const numberToMonth = (index) => `${index + 1}月`
+const monthToNum = (str) => str.split('月')[0] - 0
 const _extractDryAndHighData = (data) => {
     const extra = (item, index) => {
         let { high, medium, low } = item;
@@ -48,85 +48,91 @@ class ResultCanvas extends Component {
         Taro.redirectTo({ url: 'pages/result/index' })
     }
     componentDidMount() {
-        let resultWrp = document.getElementsByClassName('result-wrp')[0];
-        html2canvas(resultWrp).then(canvas => {
-            resultWrp.style.padding = 0;
-            resultWrp.innerHTML = '';
-            resultWrp.appendChild(canvas);
-        });
+        // setImmediate(() => {
+        //     let resultWrp = document.getElementsByClassName('result-wrp')[0];
+        //     html2canvas(resultWrp).then(canvas => {
+        //         resultWrp.style.padding = 0;
+        //         resultWrp.innerHTML = '';
+        //         resultWrp.appendChild(canvas);
+        //     });
+        // })
+
     }
 
     componentWillMount() {
-        const actualMonth = this.props.powerCostsOfHigh.monthPowerList.map(item => {
-            if (item.finished) {
-                return item.name
-            }
-        }).filter(Boolean);
-        const expectMonth = this.props.powerCalc[this.props.powerCalc.type].monthlyPower.data.map(item => {
-            if (item.finished) {
-                return numberToMonth(item.month)
-            }
-        }).filter(Boolean);
         const actualValue = this.props.powerCostsOfHigh.monthPowerList.map(item => {
             if (item.finished) {
-                return Number(item.high) + Number(item.medium) + Number(item.low)
+                return [monthToNum(item.name), Number(item.high) + Number(item.medium) + Number(item.low)]
             }
         }).filter(Boolean);
         const expectValue = this.props.powerCalc[this.props.powerCalc.type].monthlyPower.data.map(item => {
             if (item.finished) {
-                return item.data.powerVolume.value
+                return [item.month, item.data.powerVolume.value]
             }
         }).filter(Boolean);
-        const monthList = [...new Set([...actualMonth, ...expectMonth])];
-        monthList.sort();
         this.setState({
             actualValue,
             expectValue,
-            monthList
         })
     }
     getResultData = (version) => {
-        const { mart, sortValue } = this.props.baseMessage; // 参与未参与
-        const { ap, ch, powerChange, tp, step3yp, electricity, selling } = this.props.result; // 结果页数据
-        if (version === 'simple') {
-            const { averagePrice: step2av, yearPower: step2yp } = this.props.powerCosts; // 第二步均价
-            const { averagePrice: step3av, yearPower: step3yp } = this.props.powerExpect; // 第三步均价
-            const buyType = '常规直购电';
-            let { high, medium, low } = (mart === '参与' ? this.props.powerExpect : this.props.powerCosts);
-            const totalData = Number(high) + Number(medium) + Number(low);
-            let highPro = keepDecimal(Number(high) / totalData * 100, 0);
-            let mediumPro = keepDecimal(Number(medium) / totalData * 100, 0);
-            let lowPro = 100 - highPro - mediumPro;
-            const proportionData = [highPro, mediumPro, lowPro];
-            return {
-                ap, ch, powerChange, tp, mart, sortValue, step2av, step2yp, step3av, step3yp, buyType, proportionData, electricity, selling
-            }
-        } else {
-            let { highYearPower, lowYearPower, mediumYearPower } = this.props.powerCostsOfHigh;
-            const totalData = Number(highYearPower) + Number(mediumYearPower) + Number(lowYearPower);
-            let highPro = keepDecimal(Number(highYearPower) / totalData * 100, 0);
-            let mediumPro = keepDecimal(Number(mediumYearPower) / totalData * 100, 0);
-            let lowPro = 100 - highPro - mediumPro;
-            const proportionData = [highPro, mediumPro, lowPro];
-            const { averagePrice: step2av, yearPower: step2yp } = this.props.powerCostsOfHigh;
-            const { average: step3av } = this.props.powerCalc[this.props.powerCalc.type];
-            const buyType = this.props.tradingVarieties[this.props.powerCalc.type];
-            return {
-                proportionData,
-                mart, sortValue,
-                ap, ch, powerChange, tp,
-                step2av, step2yp,
-                step3av, step3yp,
-                buyType,
-                electricity, selling
-            }
+        try {
+            const { mart, sortValue } = this.props.baseMessage; // 参与未参与
+            const { ap, ch, powerChange, tp, step3yp, electricity, selling } = this.props.result; // 结果页数据
+            if (version === 'simple') {
+                const { averagePrice: step2av, yearPower: step2yp } = this.props.powerCosts; // 第二步均价
+                const { averagePrice: step3av, yearPower: step3yp } = this.props.powerExpect; // 第三步均价
+                const buyType = '常规直购电';
+                let { high, medium, low } = (mart === '参与' ? this.props.powerExpect : this.props.powerCosts);
+                const totalData = Number(high) + Number(medium) + Number(low);
+                let highPro = keepDecimal(Number(high) / totalData * 100, 2);
+                let mediumPro = keepDecimal(Number(medium) / totalData * 100, 2);
+                let lowPro = keepDecimal((100 - highPro - mediumPro), 2);
+                const proportionData = [highPro, mediumPro, lowPro];
+                return {
+                    ap, ch, powerChange, tp, mart, sortValue, step2av, step2yp, step3av, step3yp, buyType, proportionData, electricity, selling
+                }
+            } else {
+                let { highYearPower, lowYearPower, mediumYearPower } = this.props.powerCostsOfHigh;
+                const totalData = Number(highYearPower) + Number(mediumYearPower) + Number(lowYearPower);
+                let highPro = keepDecimal(Number(highYearPower) / totalData * 100, 2);
+                let mediumPro = keepDecimal(Number(mediumYearPower) / totalData * 100, 2);
+                let lowPro = keepDecimal((100 - highPro - mediumPro), 2);
+                const proportionData = [highPro, mediumPro, lowPro];
+                const { averagePrice: step2av, yearPower: step2yp } = this.props.powerCostsOfHigh;
+                const { average: step3av, isMonthlyFill } = this.props.powerCalc[this.props.powerCalc.type];
+                const buyType = this.props.tradingVarieties[this.props.powerCalc.type];
+                return {
+                    proportionData,
+                    mart, sortValue,
+                    ap, ch, powerChange, tp,
+                    step2av, step2yp,
+                    step3av, step3yp,
+                    buyType,
+                    electricity, selling,
+                    isMonthlyFill
+                }
+            }            
+        } catch (error) {
+            Taro.redirectTo({
+                url: 'pages/index'
+            });            
         }
+
     }
     getRatio = () => {
-        const { step3yp } = this.props.result;
         let data = this.props.powerCalc[this.props.powerCalc.type]
         let step3Ratio = data.ratio;
         let step2Ratio = gethighDryProportion(_extractDryAndHighData(this.props.powerCostsOfHigh.monthPowerList));
+        let yearPower = data.monthlyPower.data.reduce((pre, item) => {
+            if (item.finished) {
+                let num = 0;
+                !!deepExtract(item, 'data.powerVolume.value') && (num += Number(deepExtract(item, 'data.powerVolume.value')));
+                return pre + num
+            } else {
+                return pre
+            }
+        }, 0)
         let plain = data.monthlyPower.data.reduce((pre, item, index) => {
             if (index == 4 || index == 10) {
                 let value = item.data.powerVolume.value
@@ -134,7 +140,7 @@ class ResultCanvas extends Component {
             } else {
                 return pre
             }
-        }, 0) / step3yp;
+        }, 0) / yearPower;
         let drain = data.monthlyPower.data.reduce((pre, item, index) => {
             if ((index >= 0 && index <= 3) || index == 11) {
                 let value = item.data.powerVolume.value
@@ -142,13 +148,13 @@ class ResultCanvas extends Component {
             } else {
                 return pre
             }
-        }, 0) / step3yp;
+        }, 0) / yearPower;
         let Kvalue = getKvalue(plain, drain);
         return { step2Ratio, step3Ratio, Kvalue }
     }
     render() {
         const versionValue = this.props.version; // 版本信息
-        const { ap, ch, powerChange, tp, mart, sortValue, step2av, step2yp, step3av, step3yp, buyType, proportionData, electricity, selling } = this.getResultData(versionValue)
+        const { ap, ch, powerChange, tp, mart, sortValue, step2av, step2yp, step3av, step3yp, buyType, proportionData, electricity, selling, isMonthlyFill } = this.getResultData(versionValue)
         const { actualValue, expectValue, monthList } = this.state;
         const { step2Ratio, step3Ratio, Kvalue } = this.getRatio();
         return (
@@ -186,12 +192,12 @@ class ResultCanvas extends Component {
                             {
                                 mart === '参与' ?
                                     <Text className="wenan">
-                                        <p>用户属于电压等级为<Text className="blue">{sortValue[1]}</Text>的<Text className="blue">{sortValue[0]}</Text>用户，当前<Text className="blue">已参加</Text>市场化交易，购买<Text className="blue">{buyType}</Text>，年度用电均价为<Text className="blue">{step2av}元/千瓦时</Text>。</p>
-                                        <p>如果不参与市场化交易，根据其峰平谷比例，预估购电均价为<Text className="blue">{step3av}元/千瓦时</Text>，平均每度电预计将<span style={{ color: ap > 0 ? '#27F47A' : '#F85A24' }}>{ap > 0 ? '节约' : '亏损'}{Math.abs(ap)}元</span>。根据预估的购电量情况，年度电费预计<span style={{ color: tp > 0 ? '#27F47A' : '#F85A24' }}>{tp > 0 ? '节约' : '亏损'}{Math.abs(tp)}元</span>。</p>
+                                        <p>用户属于电压等级为<span style={{color:'#24FCFF'}}>{sortValue[1]}</span>的<span style={{color:'#24FCFF'}}>{sortValue[0]}</span>用户，当前<span style={{color:'#24FCFF'}}>已参加</span>市场化交易，购买<span style={{color:'#24FCFF'}}>{buyType}</span>，年度用电均价为<span style={{color:'#24FCFF'}}>{step2av}元/千瓦时</span>。</p>
+                                        <p>如果不参与市场化交易，根据其峰平谷比例，预估购电均价为<span style={{color:'#24FCFF'}}>{step3av}元/千瓦时</span>，平均每度电预计将<span style={{ color: ap > 0 ? '#27F47A' : '#F85A24' }}>{ap > 0 ? '节约' : '亏损'}{Math.abs(ap)}元</span>。根据预估的购电量情况，年度电费预计<span style={{ color: tp > 0 ? '#27F47A' : '#F85A24' }}>{tp > 0 ? '节约' : '亏损'}{Math.abs(tp)}元</span>。</p>
                                     </Text> :
                                     <Text className="wenan">
-                                        <p>用户属于电压等级为<Text className="blue">{sortValue[1]}</Text>的<Text className="blue">{sortValue[0]}</Text>用户，当前<Text className="blue">没有参加</Text>市场化交易，年度用电均价为<Text className="blue">{step2av}元/千瓦时</Text>。</p>
-                                        <p>如果参与市场化交易，购买<Text className="blue">{buyType}</Text>，预估购电均价为<Text className="blue">{step3av}元/千瓦时</Text>，平均每度电预计将<span style={{ color: ap > 0 ? '#27F47A' : '#F85A24' }}>{ap > 0 ? '节约' : '亏损'}{Math.abs(ap)}元</span>。根据预估的购电量情况，年度电费预计<span style={{ color: tp > 0 ? '#27F47A' : '#F85A24' }}>{tp > 0 ? '节约' : '亏损'}{Math.abs(tp)}元</span>。</p>
+                                        <p>用户属于电压等级为<span style={{color:'#24FCFF'}}>{sortValue[1]}</span>的<span style={{color:'#24FCFF'}}>{sortValue[0]}</span>用户，当前<span style={{color:'#24FCFF'}}>没有参加</span>市场化交易，年度用电均价为<span style={{color:'#24FCFF'}}>{step2av}元/千瓦时</span>。</p>
+                                        <p>如果参与市场化交易，购买<span style={{color:'#24FCFF'}}>{buyType}</span>，预估购电均价为<span style={{color:'#24FCFF'}}>{step3av}元/千瓦时</span>，平均每度电预计将<span style={{ color: ap > 0 ? '#27F47A' : '#F85A24' }}>{ap > 0 ? '节约' : '亏损'}{Math.abs(ap)}元</span>。根据预估的购电量情况，年度电费预计<span style={{ color: tp > 0 ? '#27F47A' : '#F85A24' }}>{tp > 0 ? '节约' : '亏损'}{Math.abs(tp)}元</span>。</p>
                                     </Text>
                             }
                         </View>
@@ -228,7 +234,7 @@ class ResultCanvas extends Component {
                             </View>
                         </View>
                         {
-                            (versionValue === 'higher' && step3Ratio) && <View className="container dash-border">
+                            isMonthlyFill && <View className="container dash-border">
                                 <Text>用电丰枯比（富余电量不纳入计算）：</Text>
                                 <View className='at-row proportion-row'>
                                     <View className='at-col'>
