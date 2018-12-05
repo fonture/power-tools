@@ -33,6 +33,9 @@ export default class Form extends Component {
     componentDidUpdate() {
         const dom = this._rendered.dom.querySelector('.btn-group')
         dom.style.position = 'relative'
+        dom.style.marginTop = '20px'
+        dom.style.background = '#fff'
+        dom.querySelector('.at-button--secondary').style.background='#efefef'
         // 视口区高度
         const clientHeight = document.documentElement.clientHeight
         // 按钮组距离顶部的距离
@@ -40,9 +43,11 @@ export default class Form extends Component {
         const offsetTop = dom.offsetTop
 
         // 如果按钮组距离顶部的距离加上按钮组的高度没有超过可视区的高度，则按钮组相对于底部绝对定位
-        if(offsetTop + 32 * 2 + 80 < clientHeight) {
+        if(offsetTop + 32 * 2 + 80 < clientHeight - 20) {
             dom.style.position = 'fixed'
-            dom.style.bottom = 0
+            dom.style.bottom = '20px'
+            dom.style.background = '#efefef'
+            dom.querySelector('.at-button--secondary').style.background='#fff'
         }
     }
     preStep = () => {
