@@ -26,7 +26,7 @@ export function validate(...args) {
     let length = args.length;
     for (let i = 0; i < length; i++) {
         let value = args[i];
-        if (value === undefined || value === null || value === '') {
+        if (value === undefined || value === null || value === '' || isNaN(value)) {
             return false
         }
     }

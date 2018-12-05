@@ -92,9 +92,7 @@ export default class Result extends Component {
         }
     }
     componentWillUnmount() {
-        const { electricity, selling } = this.state;
-        this.data = Object.assign(this.data, { electricity, selling })
-        reduxHelper('result', this.data)
+
     }
     showModel = () => {
         this.setState({
@@ -107,7 +105,10 @@ export default class Result extends Component {
         })
     }
     handleSubmit = () => {
-        Taro.redirectTo({ url: 'pages/resultCanvas/index' })
+        const { electricity, selling } = this.state;
+        this.data = Object.assign(this.data, { electricity, selling })
+        reduxHelper('result', this.data)
+        Taro.navigateTo({ url: '../../pages/resultCanvas/index' })
     }
     handleChangeValue = (type, value) => {
         this.setState({

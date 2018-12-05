@@ -28,8 +28,8 @@ class Partake extends Component {
         averagePrice: this.props.powerExpect.averagePrice || undefined,
         yearPower: this.props.powerExpect.yearPower || undefined,
         rememberData: {
-            averagePrice: 0,
-            yearPower: 0
+            averagePrice: undefined,
+            yearPower: undefined
         }
     }
     componentDidMount() {
@@ -38,6 +38,8 @@ class Partake extends Component {
             Taro.redirectTo({
                 url: 'pages/index'
             });
+        }else{
+            this.getCompData();           
         }
     }
     /**
