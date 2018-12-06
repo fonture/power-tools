@@ -9,6 +9,9 @@ import { keepDecimal, deepExtract } from './index';
 
 // 购电均价
 export function getAvPriceOfElePur(waterPrice, firePrice, transmissionPrice, collectionFund) {
+    waterPrice = +waterPrice;
+    transmissionPrice = +transmissionPrice;
+    collectionFund = +collectionFund;
     let res = waterPrice * 0.7 + firePrice * 0.3 + transmissionPrice + collectionFund
     return keepDecimal(res, 5)
 }
@@ -41,6 +44,9 @@ export class haveMart {
 }
 // 全水电均价
 export function getAllWaterAvPriceOfElePur(waterPrice, transmissionPrice, collectionFund) {
+    waterPrice = +waterPrice;
+    transmissionPrice = +transmissionPrice;
+    collectionFund = +collectionFund;
     let res = waterPrice + transmissionPrice + collectionFund
     return keepDecimal(res, 5)
 }
@@ -151,7 +157,7 @@ export function computePowerOfHigh(data, yearCataloguePriceMap) {
  * @param {*} surplusaPrice 富余电量电价
  * @returns
  */
-export function computeAvPrcieByYearOfHigh(waterPrice = 0, firePrice, transmissionPrice=[], collectionFund, yearPower, surplusaPowerList = [], surplusaPrice) {
+export function computeAvPrcieByYearOfHigh(waterPrice = 0, firePrice, transmissionPrice = [], collectionFund, yearPower, surplusaPowerList = [], surplusaPrice) {
     yearPower = yearPower * 10000;
     let a = (Number(waterPrice) * 0.7 + firePrice * 0.3 + transmissionPrice[0] + collectionFund) * yearPower;
     let b = surplusaPowerList.reduce((prev, item, index) => {
@@ -176,9 +182,9 @@ export function computeAvPrcieByYearOfHigh(waterPrice = 0, firePrice, transmissi
  * @param {*} surplusaPrice 富余电量电价
  * @returns
  */
-export function computeAvPrcieByYearAllWaterOfHigh(waterPrice = 0, transmissionPrice=[], collectionFund, yearPower, surplusaPowerList = [], surplusaPrice) {
+export function computeAvPrcieByYearAllWaterOfHigh(waterPrice = 0, transmissionPrice = [], collectionFund, yearPower, surplusaPowerList = [], surplusaPrice) {
     yearPower = yearPower * 10000;
-    let a = ( Number(waterPrice) + transmissionPrice[0] + collectionFund) * yearPower;
+    let a = (Number(waterPrice) + transmissionPrice[0] + collectionFund) * yearPower;
     let b = surplusaPowerList.reduce((prev, item, index) => {
         return prev + item * (+(surplusaPrice) + transmissionPrice[1] + collectionFund) * 10000
     }, 0)
@@ -200,20 +206,20 @@ export function computeAvPrcieByYearAllWaterOfHigh(waterPrice = 0, transmissionP
  * @param {*} [monthlyPower=[]] 月度购电量数组
  * @returns
  */
-export function computeAvPrcieByMonthOfHigh(firePrice = 1, transmissionPrice=[], collectionFund =[], monthlyPower = []) {
+export function computeAvPrcieByMonthOfHigh(firePrice = 1, transmissionPrice = [], collectionFund = [], monthlyPower = []) {
     let a = monthlyPower.reduce((prev, item, index) => {
-        const { powerVolume:_powerVolume = {}, hydropowerPrice:_hydropowerPrice= {}, surplusPowerVolume:_surplusPowerVolume={}, surplusPowerPrice:_surplusPowerPrice= {} } = item
-        const [ {value: powerVolume = 0}, {value: hydropowerPrice = 0}, {value: surplusPowerVolume = 0} , {value: surplusPowerPrice = 0} ]= [_powerVolume , _hydropowerPrice, _surplusPowerVolume, _surplusPowerPrice];
+        const { powerVolume: _powerVolume = {}, hydropowerPrice: _hydropowerPrice = {}, surplusPowerVolume: _surplusPowerVolume = {}, surplusPowerPrice: _surplusPowerPrice = {} } = item
+        const [{ value: powerVolume = 0 }, { value: hydropowerPrice = 0 }, { value: surplusPowerVolume = 0 }, { value: surplusPowerPrice = 0 }] = [_powerVolume, _hydropowerPrice, _surplusPowerVolume, _surplusPowerPrice];
         let b = (hydropowerPrice * 0.7 + firePrice * 0.3 + transmissionPrice[0][index] + collectionFund[index]) * powerVolume * 10000;
         let c = surplusPowerVolume * 10000 * ((+surplusPowerPrice) + transmissionPrice[1][index] + collectionFund[index])
         return prev + (b + c)
     }, 0)
     let d = monthlyPower.reduce((prev, item, index) => {
-      const { powerVolume:_powerVolume = {}, surplusPowerVolume:_surplusPowerVolume={} } = item
-      const [{value: powerVolume = 0}, {value: surplusPowerVolume = 0} ] = [_powerVolume, _surplusPowerVolume];
+        const { powerVolume: _powerVolume = {}, surplusPowerVolume: _surplusPowerVolume = {} } = item
+        const [{ value: powerVolume = 0 }, { value: surplusPowerVolume = 0 }] = [_powerVolume, _surplusPowerVolume];
         return prev + powerVolume * 10000 + surplusPowerVolume * 10000
     }, 0)
-    console.log(a,d);
+    console.log(a, d);
     let res = a / d;
     return keepDecimal(res, 5) || '--';
 }
@@ -228,18 +234,18 @@ export function computeAvPrcieByMonthOfHigh(firePrice = 1, transmissionPrice=[],
  * @param {*} [monthlyPower=[]] 月度购电量数组
  * @returns
  */
-export function computeAvPrcieByMonthAllWaterOfHigh(transmissionPrice = [], collectionFund=[], monthlyPower = []) {
+export function computeAvPrcieByMonthAllWaterOfHigh(transmissionPrice = [], collectionFund = [], monthlyPower = []) {
     let a = monthlyPower.reduce((prev, item, index) => {
-        const { powerVolume:_powerVolume = {}, hydropowerPrice:_hydropowerPrice= {}, surplusPowerVolume:_surplusPowerVolume={}, surplusPowerPrice:_surplusPowerPrice= {} } = item
-        const [ {value: powerVolume = 0}, {value: hydropowerPrice = 0}, {value: surplusPowerVolume = 0} , {value: surplusPowerPrice = 0} ]= [_powerVolume , _hydropowerPrice, _surplusPowerVolume, _surplusPowerPrice];
+        const { powerVolume: _powerVolume = {}, hydropowerPrice: _hydropowerPrice = {}, surplusPowerVolume: _surplusPowerVolume = {}, surplusPowerPrice: _surplusPowerPrice = {} } = item
+        const [{ value: powerVolume = 0 }, { value: hydropowerPrice = 0 }, { value: surplusPowerVolume = 0 }, { value: surplusPowerPrice = 0 }] = [_powerVolume, _hydropowerPrice, _surplusPowerVolume, _surplusPowerPrice];
         let b = ((+hydropowerPrice) + transmissionPrice[0][index] + collectionFund[index]) * (+powerVolume) * 10000;
         let c = surplusPowerVolume * 10000 * ((+surplusPowerPrice) + transmissionPrice[1][index] + collectionFund[index])
         return prev + (b + c)
     }, 0)
     let d = monthlyPower.reduce((prev, item, index) => {
-      const { powerVolume:_powerVolume = {}, surplusPowerVolume:_surplusPowerVolume={} } = item
-      const [{value: powerVolume = 0}, {value: surplusPowerVolume = 0} ] = [_powerVolume, _surplusPowerVolume];
-      return prev + powerVolume * 10000 + surplusPowerVolume * 10000
+        const { powerVolume: _powerVolume = {}, surplusPowerVolume: _surplusPowerVolume = {} } = item
+        const [{ value: powerVolume = 0 }, { value: surplusPowerVolume = 0 }] = [_powerVolume, _surplusPowerVolume];
+        return prev + powerVolume * 10000 + surplusPowerVolume * 10000
     }, 0)
     console.log(a, d);
     let res = a / d;
