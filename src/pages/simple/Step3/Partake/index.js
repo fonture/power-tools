@@ -17,7 +17,7 @@ import reduxHelper from '../../../../utils/reduxHelper';
 import '../index.less';
 import { validate } from '../../../../utils'
 
-@inject('powerExpect', 'newestCataloguePrice', 'firePrice', 'next', 'powerCosts')
+@inject('powerExpect', 'newestCataloguePrice', 'firePrice', 'next', 'powerCosts', 'reLocateButton')
 class Partake extends Component {
     state = {
         isOpened: false,
@@ -34,6 +34,9 @@ class Partake extends Component {
     }
     componentDidMount() {
         this.props.powerExpect.method==='用电量'&&this.getCompData();
+    }
+    componentDidUpdate(){
+        this.props.reLocateButton()
     }
 
     /**

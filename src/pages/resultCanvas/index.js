@@ -160,7 +160,7 @@ class ResultCanvas extends Component {
         return (
             <ScrollView className='result page'>
                 <View className='result-wrp'>
-                    <View className="result-header dash-border">
+                    <View className="result-header">
                         <Text className="title">针对<Text className="company">{electricity}</Text>分析结果为</Text>
                         <img src={ap > 0 ? smlieImage : cryImage} className="result-img" />
                         <h3 style={{ color: ap > 0 ? '#27F47A' : '#F85A24' }}>{ap > 0 ? '参加市场化交易很划算！' : '不建议参加市场化交易'}</h3>

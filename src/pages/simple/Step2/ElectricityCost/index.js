@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:11:35 
  * @Description: 简单版 -- 第二步 -- 用电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-12-04 16:41:09
+ * @Last Modified time: 2018-12-06 16:18:02
  */
 
 import Taro, { Component } from '@tarojs/taro'
@@ -21,7 +21,7 @@ import inject from '../../../../utils/inject'
 import Input from '../../../../components/Input'
 import './index.less'
 
-@inject('newestCataloguePrice', 'electricityCostData', 'firePrice')
+@inject('newestCataloguePrice', 'electricityCostData', 'firePrice', 'reLocateButton')
 export default class ElectricityCost extends Component {
     // 初始化的state要从redux中获取，以便点了“上一步”或者“下一步”再回来时数据还在
     state = {
@@ -55,6 +55,9 @@ export default class ElectricityCost extends Component {
                 reduxHelper('next', false)
             }
         }
+    }
+    componentDidUpdate(){
+        this.props.reLocateButton()
     }
     /**
      * @description 组件卸载时，需要将报告中需要的数据存在powerCosts中
@@ -193,7 +196,7 @@ export default class ElectricityCost extends Component {
                     ? <View>
                         {/* 峰平谷比例 */}
                         <AtCard
-                            className="card-group"
+                            className="card-group power-input-list"
                             title="峰平谷比例"
                             isFull
                         >

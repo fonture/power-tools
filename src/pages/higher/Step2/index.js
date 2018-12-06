@@ -3,7 +3,7 @@
  * @Date: 2018-11-28 13:47:30 
  * @Description: 高级版第二步用电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-12-05 09:22:53
+ * @Last Modified time: 2018-12-06 16:14:35
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -22,7 +22,7 @@ import MonthPlugin from '../MonthPlugin'
 import Input from '../../../components/Input'
 import './index.less'
 
-@inject('baseMessage', 'catalogueprice', 'powerCostsOfHigh')
+@inject('baseMessage', 'catalogueprice', 'powerCostsOfHigh', 'reLocateButton')
 export default class Step2 extends Component {
     state = {
         currMonth: this.props.powerCostsOfHigh.currMonth,
@@ -38,10 +38,12 @@ export default class Step2 extends Component {
         reduxHelper('next', next ? true : false)  
     }
     async componentDidMount(){
-        const { baseMessage } = this.props;
-        reduxHelper('powerCostsOfHigh', this.state)
+        const { baseMessage } = this.props
         const { adsWord, sort } = baseMessage
-        
+
+        // 将焦点聚焦到第一个输入框
+        this._rendered.dom.querySelector('.power-input').querySelector('input').focus()
+
         // 请求基金、峰平谷电价
         const catalogueprice = await request({
             method: 'GET',
@@ -67,7 +69,9 @@ export default class Step2 extends Component {
         // 输配电价
         transmissionprice && transmissionprice.data && reduxHelper('transmissionprice', transmissionprice.data)
     }
-    
+    componentDidUpdate() {
+        this.props.reLocateButton()
+    }
     componentWillUnmount() {
         reduxHelper('powerCostsOfHigh', this.state)
     }
@@ -103,19 +107,25 @@ export default class Step2 extends Component {
         this.setState({
             currMonth
         })
+        this._rendered.dom.querySelector('.power-input').querySelector('input').focus()
     }
     render() {
         const { currMonth, monthPowerList, yearPower, averagePrice, lowYearPower, mediumYearPower, highYearPower } = this.state
         const data = monthPowerList[currMonth - 1]
         const items = []
-        yearPower && items.push(keepDecimal((highYearPower || 0) * 100 / yearPower, 2))
-        yearPower && items.push(keepDecimal((mediumYearPower || 0) * 100 / yearPower, 2))
-        yearPower && items.push(keepDecimal((lowYearPower || 0) * 100 / yearPower, 2))
+        if(yearPower) {
+            const highPercent = keepDecimal((highYearPower || 0) * 100 / yearPower, 2)
+            const mediumPercent = keepDecimal((mediumYearPower || 0) * 100 / yearPower, 2)
+            const lowPercent = keepDecimal(100 - highPercent - mediumPercent, 2)
+            items.push(highPercent)
+            items.push(mediumPercent)
+            items.push(lowPercent)
+        }
         return (
             <View className="elec-cost-high">
             
                 {/* 月份操作区 */}
-                <MonthPlugin title="用电成本" data={this.state.monthPowerList} onClick={this.onClickMonth} current={this.state.currMonth}/>
+                <MonthPlugin title="用电成本" data={this.state.monthPowerList} onClick={this.onClickMonth.bind(this)} current={this.state.currMonth}/>
 
                 {/* 峰平谷电量输入区 */}
                 <AtCard
@@ -146,7 +156,7 @@ export default class Step2 extends Component {
                 </AtCard>
 
                 {/* 结果展示区 */}
-                <AtList className="at-card">
+                <AtList className="at-card result-panel">
                     <AtListItem title="年度用电量" className={`year-power ${lowYearPower || mediumYearPower || highYearPower ? 'show-proportion' : ''}`} extraText={
                         <div>{yearPower}<span className="unit">万千瓦时</span></div>
                     }/>

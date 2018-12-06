@@ -9,6 +9,11 @@ export default class MonthButton extends Component {
     const type = data.type
     data[type].monthlyPower.current = month
     this.props.updateData()
+    this._rendered.dom.parentNode.nextSibling.querySelector('input').focus()
+  }
+
+  componentDidMount() {
+    this._rendered.dom.parentNode.nextSibling.querySelector('input').focus()
   }
 
   render() {
