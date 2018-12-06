@@ -22,7 +22,8 @@ class App extends Component {
       'pages/simple/index',
       'pages/higher/index',
       'pages/result/index',
-      'pages/resultCanvas/index'
+      'pages/resultCanvas/index',
+      'pages/error/errorPage'
     ],
     window: {
       backgroundTextStyle: 'light',
