@@ -85,7 +85,7 @@ export function reLocateButton() {
      * 32是按钮组的padding值，80是按钮组的高度
      * 第一个20表示按钮组的marginTop，第二个20表示按钮的marginBottom
      */
-    if(offsetTop + 32 * 2 + 80 < clientHeight) {
+    if(offsetTop + 80 < clientHeight) {
         dom.style.position = 'absolute'
         dom.style.bottom = '20px'
         dom.style.marginTop = '0'
