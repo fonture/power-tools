@@ -68,7 +68,7 @@ export function toThousands(num) {
  * @export
  */
 export function reLocateButton() {
-    const dom = this._rendered.dom.querySelector('.btn-group')
+    const dom = document.querySelector('.btn-group')
     dom.style.position = 'relative'
     dom.style.marginTop = '20px'
     dom.style.marginBottom = '20px'

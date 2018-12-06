@@ -14,10 +14,11 @@ import {
 } from '../../../../utils/formula'
 import inject from '../../../../utils/inject';
 import reduxHelper from '../../../../utils/reduxHelper';
+import {reLocateButton} from '../../../../utils'
 import '../index.less';
 import { validate } from '../../../../utils'
 
-@inject('powerExpect', 'newestCataloguePrice', 'firePrice', 'next', 'powerCosts', 'reLocateButton')
+@inject('powerExpect', 'newestCataloguePrice', 'firePrice', 'next', 'powerCosts')
 class Partake extends Component {
     state = {
         isOpened: false,
@@ -36,7 +37,7 @@ class Partake extends Component {
         this.props.powerExpect.method==='用电量'&&this.getCompData();
     }
     componentDidUpdate(){
-        this.props.reLocateButton()
+        reLocateButton()
     }
 
     /**

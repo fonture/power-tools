@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import { compact } from 'lodash/array';
 import inject from '../../../utils/inject';
 import { deepExtract } from '../../../utils';
+import { reLocateButton } from '../../../utils'
 import MonthButton from '../MonthPlugin/monthButton';
 import reduxHelper from '../../../utils/reduxHelper';
 import Card from '../../../components/Card';
@@ -13,7 +14,7 @@ import Checkbox from './Checkbox'
 import './index.less'
 import { extractDryAndHighData, computeAvPrcieByMonthOfHigh, gethighDryProportion, computeAvPrcieByMonthAllWaterOfHigh, computeAvPrcieByYearOfHigh, computeAvPrcieByYearAllWaterOfHigh } from '../../../utils/formula';
 
-@inject('tradingVarieties', 'powerCalc' , 'catalogueprice', 'transmissionprice', 'firePrice', 'powerCostsOfHigh', 'reLocateButton' )
+@inject('tradingVarieties', 'powerCalc' , 'catalogueprice', 'transmissionprice', 'firePrice', 'powerCostsOfHigh' )
 export default class Step3 extends Component {
 
   state = {
@@ -53,7 +54,7 @@ export default class Step3 extends Component {
   }
 
   componentDidUpdate() {
-    this.props.reLocateButton()
+    reLocateButton()
   }
   triggerActionSheet = (bool = true) => {
     this.setState({

@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:13:09 
  * @Description: 简单版 -- 第二步 -- 购电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-12-06 16:17:28
+ * @Last Modified time: 2018-12-06 19:06:38
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -17,10 +17,11 @@ import {
 import { powerAveragePriceOfJoin } from '../../../../utils/formula'
 import reduxHelper from '../../../../utils/reduxHelper'
 import inject from '../../../../utils/inject'
+import { reLocateButton } from '../../../../utils'
 import Input from '../../../../components/Input'
 import './index.less'
 
-@inject('newestCataloguePrice', 'newestTransmissionPrice', 'firePrice', 'buyPowerCostData', 'reLocateButton')
+@inject('newestCataloguePrice', 'newestTransmissionPrice', 'firePrice', 'buyPowerCostData')
 export default class BuyPowerCost extends Component {
     // 初始化的state要从redux中获取，以便点了“上一步”或者“下一步”再回来时数据还在
     state = {
@@ -64,7 +65,7 @@ export default class BuyPowerCost extends Component {
         }
     }
     componentDidUpdate(){
-        this.props.reLocateButton()
+        reLocateButton()
     }
 
     /**
