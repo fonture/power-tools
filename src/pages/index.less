@@ -84,8 +84,17 @@
         position: absolute;
         bottom: 79px;
         left: 270px;
-        width: 173px;
-        height: 30px;
+        width: 183px;
+        height: 47px;
+        img{
+            position: absolute;
+            display: inline-block;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            width: 173px;
+            height: 30px;
+        }
     }
     .formBoder{
         padding-top: 0.8em;
@@ -157,14 +166,21 @@
 .formContent .at-modal__container, .formContent .at-form{
     background-color: rgba(0,0,0,.6);
 }
+.indexPage .formContent .at-modal__container, .formContent .at-form{
+    background-color: rgba(0,0,0,.8);
+}
 .formContent .at-input {
     background-color: transparent;
 }
 .formContent .at-input .at-input__input{
+    font-size: 24px;
+    padding-right: 0;
     text-align: center;
 }
-.formContent .at-modal__container{
+.indexPage .formContent .at-modal__container{
     border: none;
+    border-radius: 0;
+    box-shadow: 0px 0px 20px 0px rgba(36,252,255,0.25);
 }
 /*右箭头的颜色*/
 .at-icon-chevron-right::before{

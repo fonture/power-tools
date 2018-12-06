@@ -21,7 +21,7 @@ export default class Index extends Component {
     });
     reduxHelper('firePrice', this.props.firePrice || data.thermalPrice || 0.4025);
     this.setState({
-      firePrice: this.props.firePrice || data.thermalPrice,
+      firePrice: data.thermalPrice,
     })
   }
   state = {
@@ -76,6 +76,7 @@ export default class Index extends Component {
   handleClose = ()=>{
     this.setState({
       modelVis: false,
+      showFirePrice: null,
     })
   }
   handleChange = (e)=> {
@@ -95,6 +96,7 @@ export default class Index extends Component {
 
   render() {
     const { activeNode, modelVis, firePrice = 0.4025, showFirePrice } = this.state;
+    const {firePrice: setFirePrice} = this.props;
     return (
       <View className='page indexPage'>
         <View className='index'>
@@ -122,7 +124,7 @@ export default class Index extends Component {
             isOpened={modelVis}
             onClose={this.handleClose}
             onCancel={this.handleClose}
-            onConfirm={this.handleClose}
+            // onConfirm={this.handleClose}
             className='formContent'
           >
             <AtModalContent>
@@ -137,7 +139,7 @@ export default class Index extends Component {
                   value={showFirePrice}
                   type='digit'
                   onChange={this.handleChange}
-                  placeholder={`默认${firePrice}元/千瓦时`}
+                  placeholder={setFirePrice !== firePrice ? `${setFirePrice}元/千瓦时`:`默认${firePrice}元/千瓦时`}
                 />
                 <Button formType='submit' className='sumitButton' >确定</Button>
               </Form>
