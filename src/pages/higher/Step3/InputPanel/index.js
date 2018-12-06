@@ -2,13 +2,12 @@
  * @Author: ouyangdc 
  * @Date: 2018-12-02 16:21:02 
  * @Description: 输入面板
- * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-12-06 11:08:24
+ * @Last Modified by: ouyangdc
+ * @Last Modified time: 2018-12-06 14:44:32
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtList, AtListItem, AtCheckbox } from "taro-ui"
-import { keepDecimal } from '../../../../utils'
 import FiveMonth from '../../MonthPlugin/FiveMonth'
 import Input from '../../../../components/Input'
 import './index.less'
@@ -121,7 +120,7 @@ export default class InputPanel extends Component {
                     )
                     : null
                 }
-                {
+                {/* {
                     (type === 'singleProtocol' || type === 'protocolAndSurplus') && !isMonthlyFill
                     ? <AtCheckbox
                         options={[{
@@ -148,7 +147,7 @@ export default class InputPanel extends Component {
                         onChange={this.handleJoinChange.bind(this, 'isMonthlyParticipate')}
                     />
                     : null
-                }
+                } */}
             </AtList>
         )
     }

@@ -14,7 +14,7 @@ import inject from '../../../../utils/inject'
 import reduxHelper from '../../../../utils/reduxHelper'
 import { validate } from '../../../../utils'
 
-@inject('powerExpect', 'firePrice', 'newestTransmissionPrice', 'newestCataloguePrice', 'next', 'powerCosts')
+@inject('powerExpect', 'firePrice', 'newestTransmissionPrice', 'newestCataloguePrice', 'next', 'powerCosts', 'reLocateButton')
 class UnPartake extends Component {
     state = {
         checkedList: this.props.powerExpect.checkedList || [],
@@ -39,6 +39,9 @@ class UnPartake extends Component {
             });
         }
     }
+    componentDidUpdate(){
+        this.props.reLocateButton()
+    }
     handleCheckBoxChange = () => {
         this.setState({
             checkedList: this.state.checkedList.length === 0 ? ['joinWater'] : []
@@ -46,10 +49,9 @@ class UnPartake extends Component {
     }
     handleInputChange = (...args) => {
         let [key, value, event] = args
-        this.getAvPrice()
         this.setState({
             [key]: value
-        })
+        },this.getAvPrice)
     }
     getAvPrice = () => {
         const { price } = this.props.newestTransmissionPrice;
