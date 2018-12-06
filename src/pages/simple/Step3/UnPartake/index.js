@@ -46,9 +46,10 @@ class UnPartake extends Component {
     }
     handleInputChange = (...args) => {
         let [key, value, event] = args
+        this.getAvPrice()
         this.setState({
-            [key]: Number(value)
-        }, this.getAvPrice)
+            [key]: value
+        })
     }
     getAvPrice = () => {
         const { price } = this.props.newestTransmissionPrice;
