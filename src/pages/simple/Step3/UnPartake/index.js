@@ -122,9 +122,9 @@ class UnPartake extends Component {
                             extraText={
                                 <Input
                                     disabled
-                                    type="number"
                                     className="power-input"
                                     title="元/千瓦时"
+                                    type="number"
                                     border={false}
                                     digit={5}
                                     value={this.state.averagePrice} />
