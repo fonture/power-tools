@@ -3,8 +3,16 @@ const config = require('../../config');
 const { noConsole, env } = config(Object.assign);
 const request_data = {};
 
+const events = new Taro.Events();
+
+events.on('error', (arg) => {
+  Taro.redirectTo({
+    url: 'pages/error/errorPage'
+  })
+})
+
 export default (options = { method: 'GET', data: {} }) => {
-  
+
   if (!noConsole) {
     console.log(`${new Date().toLocaleString()}【 M=${options.url} 】P=${JSON.stringify(options.data)}`);
   }
@@ -19,7 +27,8 @@ export default (options = { method: 'GET', data: {} }) => {
     },
     method: options.method.toUpperCase(),
     dataType: 'json',
-  }).then((res) => {
+  })
+  .then((res) => {
     const { statusCode, data } = res;
     if (statusCode >= 200 && statusCode < 300) {
       if (!noConsole) {
@@ -36,5 +45,8 @@ export default (options = { method: 'GET', data: {} }) => {
     } else {
       throw new Error(`网络请求错误，状态码${statusCode}`);
     }
+  })
+  .catch((err) => {
+    events.trigger('error', err)
   })
 }
