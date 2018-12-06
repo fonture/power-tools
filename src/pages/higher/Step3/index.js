@@ -9,10 +9,11 @@ import MonthButton from '../MonthPlugin/monthButton';
 import reduxHelper from '../../../utils/reduxHelper';
 import Card from '../../../components/Card';
 import InputPanel from './InputPanel';
+import Checkbox from './Checkbox'
 import './index.less'
 import { extractDryAndHighData, computeAvPrcieByMonthOfHigh, gethighDryProportion, computeAvPrcieByMonthAllWaterOfHigh, computeAvPrcieByYearOfHigh, computeAvPrcieByYearAllWaterOfHigh } from '../../../utils/formula';
 
-@inject('tradingVarieties', 'powerCalc' , 'catalogueprice', 'transmissionprice', 'firePrice', 'powerCostsOfHigh' )
+@inject('tradingVarieties', 'powerCalc' , 'catalogueprice', 'transmissionprice', 'firePrice', 'powerCostsOfHigh', 'reLocateButton' )
 export default class Step3 extends Component {
 
   state = {
@@ -51,6 +52,9 @@ export default class Step3 extends Component {
 
   }
 
+  componentDidUpdate() {
+    this.props.reLocateButton()
+  }
   triggerActionSheet = (bool = true) => {
     this.setState({
       isOpened: !!bool,
@@ -82,6 +86,7 @@ export default class Step3 extends Component {
       isOpened: false
     })
     reduxHelper('powerCalc', this.state.powerCalc)
+    this.updateAllData()
   }
 
 
@@ -144,7 +149,7 @@ export default class Step3 extends Component {
             <AtListItem title='交易品种' extraText={tradingVarieties[type]} arrow='right' onClick={this.triggerActionSheet} />
           </AtList>
           <AtCard
-            className="partical"
+            className="partical margin-top-20"
             isFull
             extra={
               <AtSwitch
@@ -166,10 +171,22 @@ export default class Step3 extends Component {
               }
               {/* 输入面板 */}
               <InputPanel data={powerCalc}  updateData={this.updateAllData}/>
+              
           </AtCard>
+          {/* 是否参与全水电 */}
+          {
+            (type === 'singleProtocol' || type === 'protocolAndSurplus') && !powerCalc[type].isMonthlyFill
+            ? <Checkbox key="isYearlyParticipate" data={powerCalc}  updateData={this.updateAllData}/>
+            : null
+          }
+          {
+            (type === 'singleProtocol' || type === 'protocolAndSurplus') && powerCalc[type].isMonthlyFill
+            ? <Checkbox key="isMonthlyParticipate" data={powerCalc}  updateData={this.updateAllData}/>
+            : null
+          }
           {/* 结果展示 */}
           <Card
-            className="margin-top-10"
+            className="margin-top-20"
             isFull
             showBody
           >
