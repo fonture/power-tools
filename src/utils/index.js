@@ -72,21 +72,20 @@ export function reLocateButton() {
     dom.style.position = 'relative'
     dom.style.marginTop = '20px'
     dom.style.marginBottom = '20px'
-    dom.style.bottom = '0'
+    dom.style.bottom = 'auto'
     // dom.style.background = '#fff'
     // dom.querySelector('.at-button--secondary').style.background='#efefef'
     // 视口区高度
     const clientHeight = document.documentElement.clientHeight
+
     // 按钮组距离顶部的距离
-
     const offsetTop = dom.offsetTop
-
     /* 
      * 如果按钮组距离顶部的距离加上按钮组的高度没有超过可视区的高度，则按钮组相对于底部绝对定位
      * 32是按钮组的padding值，80是按钮组的高度
      * 第一个20表示按钮组的marginTop，第二个20表示按钮的marginBottom
      */
-    if(offsetTop + 32 * 2 + 80 < clientHeight - 20 - 20) {
+    if(offsetTop + 32 * 2 + 80 < clientHeight) {
         dom.style.position = 'absolute'
         dom.style.bottom = '20px'
         dom.style.marginTop = '0'

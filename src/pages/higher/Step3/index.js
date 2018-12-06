@@ -46,8 +46,8 @@ export default class Step3 extends Component {
         if (!powerVolume.value || powerVolume.value == '0') powerVolume.value = +yearPower;
       })
       reduxHelper('powerCalc', this.state.powerCalc)
-      this.updateAllData();
     }
+    this.updateAllData();
 
   }
 
