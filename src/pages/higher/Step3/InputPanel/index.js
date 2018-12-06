@@ -2,8 +2,8 @@
  * @Author: ouyangdc 
  * @Date: 2018-12-02 16:21:02 
  * @Description: 输入面板
- * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-12-04 09:54:00
+ * @Last Modified by: mikey.zhaopeng
+ * @Last Modified time: 2018-12-06 11:08:24
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -126,7 +126,7 @@ export default class InputPanel extends Component {
                     ? <AtCheckbox
                         options={[{
                             value: 'isYearlyParticipate',
-                            label: '使用全水电',
+                            label: '参与全水电交易品种',
                             desc: '',
                             disabled: false
                         }]}
