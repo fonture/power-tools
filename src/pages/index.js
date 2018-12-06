@@ -139,7 +139,7 @@ export default class Index extends Component {
                   value={showFirePrice}
                   type='digit'
                   onChange={this.handleChange}
-                  placeholder={setFirePrice||`默认${firePrice}元/千瓦时`}
+                  placeholder={setFirePrice !== firePrice ? `${setFirePrice}元/千瓦时`:`默认${firePrice}元/千瓦时`}
                 />
                 <Button formType='submit' className='sumitButton' >确定</Button>
               </Form>
