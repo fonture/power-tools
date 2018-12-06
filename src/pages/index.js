@@ -21,7 +21,7 @@ export default class Index extends Component {
     });
     reduxHelper('firePrice', this.props.firePrice || data.thermalPrice || 0.4025);
     this.setState({
-      firePrice: this.props.firePrice || data.thermalPrice,
+      firePrice: data.thermalPrice,
     })
   }
   state = {
