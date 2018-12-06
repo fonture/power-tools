@@ -81,6 +81,7 @@ export default class Step3 extends Component {
       powerCalc,
       isOpened: false
     })
+    reduxHelper('powerCalc', this.state.powerCalc)
   }
 
 

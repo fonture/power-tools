@@ -2,7 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, ScrollView, AtToast } from '@tarojs/components'
 import reduxHelper from '../../utils/reduxHelper'
 import inject from '../../utils/inject'
-import { report } from '../../utils'
+import { reLocateButton } from '../../utils'
 import Steps from '../../components/Steps'
 import Button from '../../components/Button'
 import './index.less'
@@ -28,26 +28,17 @@ export default class Form extends Component {
                 url: 'pages/index'
             }); 
         }
+        // 绑定window的resize事件，如果窗口发生了变化，要重新计算“上一步”“下一步”按钮的位置
+        window.onresize = reLocateButton.bind(this)
     }
 
     componentDidUpdate() {
-        const dom = this._rendered.dom.querySelector('.btn-group')
-        
-        dom.style.position = 'relative'
-        dom.style.marginTop = '20px'
-        // dom.style.background = '#fff'
-        // dom.querySelector('.at-button--secondary').style.background='#efefef'
-        // 视口区高度
-        const clientHeight = document.documentElement.clientHeight
-        // 按钮组距离顶部的距离
+        reLocateButton.call(this)
+    }
 
-        const offsetTop = dom.offsetTop
-
-        // 如果按钮组距离顶部的距离加上按钮组的高度没有超过可视区的高度，则按钮组相对于底部绝对定位
-        if(offsetTop + 32 * 2 + 80 < clientHeight - 20) {
-            dom.style.position = 'absolute'
-            dom.style.bottom = '20px'
-        }
+    componentWillUnmount() {
+        // 组件卸载时要销毁注册的事件
+        window.onresize = null
     }
 
     preStep = () => {
