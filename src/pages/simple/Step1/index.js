@@ -263,48 +263,32 @@ export default class Step1 extends Component {
       );
     };
     const renderSort = () => {
+      let exTextNode = "请选择用电分类";
       if (sort) {
-        // return sort;
-        // 模拟list
-        return (
-          <View className='at-list__item'>
-            <View className='at-list__item-container'>
-              <View className='at-list__item-content item-content'>
-                <View className='item-content__info'>
-                  <View className='item-content__info-title'>用电分类</View>
-                </View>
-              </View>
-              <View className='at-list__item-extra item-extra'>
-                <View className='item-extra__info'>
-                  <Text
-                    style={{
-                      display: "block",
-                      fontSize: "16px",
-                      lineHeight: "1"
-                    }}
-                  >
-                    {sort[0]}
-                  </Text>
-                  <Text
-                    style={{
-                      display: "block",
-                      fontSize: "14px",
-                      lineHeight: "1"
-                    }}
-                  >
-                    {sort[1]}
-                  </Text>
-                </View>
-                <View className='item-extra__icon'>
-                  <AtIcon size='24' value='chevron-right' color='rgb(199, 199, 204)' />
-                </View>
-              </View>
-            </View>
+        exTextNode = (
+          <View>
+            <Text
+              style={{
+                display: "block",
+                fontSize: "16px",
+                lineHeight: "1"
+              }}
+            >
+              {sort[0]}
+            </Text>
+            <Text
+              style={{
+                display: "block",
+                fontSize: "14px",
+                lineHeight: "1"
+              }}
+            >
+              {sort[1]}
+            </Text>
           </View>
         );
-      } else {
-        return <AtListItem title='用电分类' arrow='right' extraText='请选择用电分类' />;
       }
+      return <AtListItem title='用电分类' arrow='right' extraText={exTextNode} />;
     };
     const renderMartList = () => {
       if (this.props.version === "higher") {

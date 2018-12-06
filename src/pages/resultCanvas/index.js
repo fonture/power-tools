@@ -48,14 +48,16 @@ class ResultCanvas extends Component {
         Taro.redirectTo({ url: 'pages/result/index' })
     }
     componentDidMount() {
-        // setImmediate(() => {
-        //     let resultWrp = document.getElementsByClassName('result-wrp')[0];
-        //     html2canvas(resultWrp).then(canvas => {
-        //         resultWrp.style.padding = 0;
-        //         resultWrp.innerHTML = '';
-        //         resultWrp.appendChild(canvas);
-        //     });
-        // })
+        setTimeout(() => {
+            let dom = this._rendered.dom.getElementsByClassName('result-wrp')[0];
+            html2canvas(dom).then(canvas => {
+                // resultWrp.style.padding = 0;
+                // resultWrp.innerHTML = '';
+                // resultWrp.appendChild(canvas);
+                this.canvasImg.style.height = `${document.body.scrollHeight}px`;
+                this.canvasImg.src = canvas.toDataURL();
+            });
+        },0)
 
     }
 
@@ -159,6 +161,7 @@ class ResultCanvas extends Component {
         const { step2Ratio, step3Ratio, Kvalue } = this.getRatio();
         return (
             <ScrollView className='result page'>
+                <img className="canvasImg" src="" ref={dom=>this.canvasImg=dom}/>
                 <View className='result-wrp'>
                     <View className="result-header">
                         <Text className="title">针对<Text className="company">{electricity}</Text>分析结果为</Text>
