@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:13:09 
  * @Description: 简单版 -- 第二步 -- 购电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-12-05 20:06:17
+ * @Last Modified time: 2018-12-06 16:17:28
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -20,7 +20,7 @@ import inject from '../../../../utils/inject'
 import Input from '../../../../components/Input'
 import './index.less'
 
-@inject('newestCataloguePrice', 'newestTransmissionPrice', 'firePrice', 'buyPowerCostData')
+@inject('newestCataloguePrice', 'newestTransmissionPrice', 'firePrice', 'buyPowerCostData', 'reLocateButton')
 export default class BuyPowerCost extends Component {
     // 初始化的state要从redux中获取，以便点了“上一步”或者“下一步”再回来时数据还在
     state = {
@@ -63,7 +63,9 @@ export default class BuyPowerCost extends Component {
             }
         }
     }
-
+    componentDidUpdate(){
+        this.props.reLocateButton()
+    }
 
     /**
      * @description 组件卸载时，需要将报告中需要的数据存在powerCosts中

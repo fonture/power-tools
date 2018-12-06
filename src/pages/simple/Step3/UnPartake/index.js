@@ -14,7 +14,7 @@ import inject from '../../../../utils/inject'
 import reduxHelper from '../../../../utils/reduxHelper'
 import { validate } from '../../../../utils'
 
-@inject('powerExpect', 'firePrice', 'newestTransmissionPrice', 'newestCataloguePrice', 'next', 'powerCosts')
+@inject('powerExpect', 'firePrice', 'newestTransmissionPrice', 'newestCataloguePrice', 'next', 'powerCosts', 'reLocateButton')
 class UnPartake extends Component {
     state = {
         checkedList: this.props.powerExpect.checkedList || [],
@@ -38,6 +38,9 @@ class UnPartake extends Component {
                 url: 'pages/index'
             });
         }
+    }
+    componentDidUpdate(){
+        this.props.reLocateButton()
     }
     handleCheckBoxChange = () => {
         this.setState({
