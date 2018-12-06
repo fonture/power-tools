@@ -44,10 +44,23 @@ export default class Form extends Component {
     }
 
     preStep = () => {
-        this.state.step === 1 ?
-            Taro.redirectTo({ url: 'pages/index' }) :
-            this.setState({ step: this.state.step - 1, action: 'back' });
-        reduxHelper('stepInfo', { current: this.state.step - 2, items: ['基础信息', '用电成本', '购电计算'] })
+        // this.state.step === 1 ?
+        //     Taro.redirectTo({ url: 'pages/index' }) :
+        //     this.setState({ step: this.state.step - 1, action: 'back' });
+        // reduxHelper('stepInfo', { current: this.state.step - 2 , items: ['基础信息', '用电成本', '购电计算'] })
+        const { step } = this.state;
+        let nextCurrent = 0;
+        if(step ===  1) {
+            Taro.redirectTo({ url: 'pages/index' });
+        } else {
+            this.setState({
+                step: step - 1,
+                action: 'back'
+            });
+            nextCurrent = step -2;
+        }
+        reduxHelper('stepInfo', { current: nextCurrent , items: ['基础信息', '用电成本', '购电计算'] })
+
     }
     nextStep = () => {
         this.state.step === 3 ?
