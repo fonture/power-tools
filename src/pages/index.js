@@ -18,6 +18,7 @@ export default class Index extends Component {
       method: 'get',
       url: '/wechat/kit/thermal/price',
     });
+    // document.body.addEventListener
     reduxHelper('firePrice', this.props.firePrice || data.thermalPrice || 0.4025);
     this.setState({
       firePrice: data.thermalPrice,
@@ -154,7 +155,7 @@ export default class Index extends Component {
             closeOnClickOverlay='false'
             className='loadingNode'
           >
-            <Image src={require('../assets/loading.gif')} />
+            <Image src={require('../assets/loading.svg')} />
           </AtModal>
         </View>
       </View>
