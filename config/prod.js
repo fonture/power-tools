@@ -1,7 +1,7 @@
 module.exports = {
   env: {
     NODE_ENV: '"production"',
-    baseUrl: ''
+    baseUrl: '/api/v1/sell-electricity'
   },
   defineConstants: {
   },
