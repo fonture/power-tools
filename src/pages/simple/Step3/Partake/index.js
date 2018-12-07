@@ -204,7 +204,7 @@ class Partake extends Component {
                                         <AtListItem title="平时用电" onClick={this.onListClick}
                                             extraText={
                                                 <View className="at-row at-row__justify--center at-row__align--center">
-                                                    <Input type="number" digit={5} className="power-input" border={false} value={medium} onChange={this.onChangeValue.bind(this, 'medium')} />
+                                                    <Input type="number" digit={4} className="power-input" border={false} value={medium} onChange={this.onChangeValue.bind(this, 'medium')} />
                                                     <div className="power-result-unit">万千瓦时</div>
                                                 </View>
                                             }
@@ -212,7 +212,7 @@ class Partake extends Component {
                                         <AtListItem title="谷时用电" onClick={this.onListClick}
                                             extraText={
                                                 <View className="at-row at-row__justify--center at-row__align--center">
-                                                    <Input type="number" digit={5} className="power-input" border={false} value={low} onChange={this.onChangeValue.bind(this, 'low')} />
+                                                    <Input type="number" digit={4} className="power-input" border={false} value={low} onChange={this.onChangeValue.bind(this, 'low')} />
                                                     <div className="power-result-unit">万千瓦时</div>
                                                 </View>
                                             }
