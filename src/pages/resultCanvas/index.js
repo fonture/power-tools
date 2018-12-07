@@ -12,21 +12,23 @@ import { gethighDryProportion, getKvalue } from '../../utils/formula'
 
 const cryImage = require('../../assets/images/cry.png');
 const smlieImage = require('../../assets/images/smile.png');
-const base64ToBlob = (urlData, type) => {
-    let arr = urlData.split(',');
-    let mime = arr[0].match(/:(.*?);/)[1] || type;
-    // 去掉url的头，并转化为byte
-    let bytes = window.atob(arr[1]);
-    // 处理异常,将ascii码小于0的转换为大于0
-    let ab = new ArrayBuffer(bytes.length);
-    // 生成视图（直接针对内存）：8位无符号整数，长度1个字节
-    let ia = new Uint8Array(ab);
-    for (let i = 0; i < bytes.length; i++) {
-        ia[i] = bytes.charCodeAt(i);
+function getOperationSys() {
+    var OS = '';
+    var OSArray = {};
+    var UserAgent = navigator.userAgent.toLowerCase();
+    OSArray.Windows = (navigator.platform == 'Win32') || (navigator.platform == 'Windows');
+    OSArray.Mac = (navigator.platform == 'Mac68K') || (navigator.platform == 'MacPPC')
+        || (navigator.platform == 'Macintosh') || (navigator.platform == 'MacIntel');
+    OSArray.iphone = UserAgent.indexOf('iPhone') > -1;
+    OSArray.ipod = UserAgent.indexOf('iPod') > -1;
+    OSArray.ipad = UserAgent.indexOf('iPad') > -1;
+    OSArray.Android = UserAgent.indexOf('Android') > -1;
+    for (var i in OSArray) {
+        if (OSArray[i]) {
+            OS = i;
+        }
     }
-    return new Blob([ab], {
-        type: mime
-    });
+    return OS;
 }
 const saveFile = (data) => {
     var link = document.createElement('a');
@@ -77,12 +79,11 @@ class ResultCanvas extends Component {
                 // resultWrp.style.padding = 0;
                 // resultWrp.innerHTML = '';
                 // resultWrp.appendChild(canvas);
-                // this.canvasImg.style.height = `${document.body.scrollHeight}px`;
-                //this.canvasImg.src = canvas.toDataURL('image/png');
-                saveFile(canvas.toDataURL('image/png'));
-                this.setState({
-                    isOpened: true
-                })
+                this.canvasImg.style.height = `${document.body.scrollHeight}px`;
+                this.canvasImg.src = canvas.toDataURL('image/png');
+                if (getOperationSys() === 'iphone') {
+                    saveFile(canvas.toDataURL('image/png'));
+                }
             });
         }, 0)
 
@@ -192,9 +193,6 @@ class ResultCanvas extends Component {
         return (
             <ScrollView className='result page'>
                 <img className="canvasImg" src="" ref={dom => this.canvasImg = dom} />
-                <AtToast
-                    isOpened={this.state.isOpened}
-                    text={'已保存长图'}></AtToast>
                 <View className='result-wrp'>
                     <View className="result-header">
                         <Text className="title">针对<Text className="company">{electricity}</Text>分析结果为</Text>
