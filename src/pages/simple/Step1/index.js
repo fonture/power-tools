@@ -48,6 +48,9 @@ export default class Step1 extends Component {
     })
     this.setNextTrue(this.state);
     reduxHelper("baseMessage", { address, adsWord, sort: sortValue, sortValue: sort, mart });
+    if(adsWord && sortValue && sortValue.length == 2) {
+      this.fetchData({adsWord, sort: sortValue})
+    }
   };
 
   // componentWillUpdate(nextProps, nextState) {
@@ -177,24 +180,11 @@ export default class Step1 extends Component {
       });
     }
   };
-  pickerChange = e => {
-    
-    const { value } = e.detail;
-    const { resorts } = this;
-    this.setState(
-      {
-        sort: [
-          resorts[value[0]]["categoryName"],
-          resorts[value[0]]["voltageLevelVOList"][value[1]]["voltageName"]
-        ]
-      },
-      this.storeData
-    );
 
+  fetchData = (data) => {
     // 每次更改后要去重新请求值，以便拿到最新数据
-    const { adsWord } = this.props.baseMessage 
-    if(!adsWord) return
-    const sort = [ resorts[value[0]].categoryIdentify, resorts[value[0]].voltageLevelVOList[value[1]].voltageIdentify ]
+    const { adsWord, sort } = data
+    // const sort = [ resorts[value[0]].categoryIdentify, resorts[value[0]].voltageLevelVOList[value[1]].voltageIdentify ]
     // 请求基金、峰平谷电价
     request({
       method: 'GET',
@@ -221,7 +211,21 @@ export default class Step1 extends Component {
     }).then(data => {
       reduxHelper('newestTransmissionPrice', data.data.newestTransmissionPrice)
       reduxHelper('transmissionprice', data.data)
-    })  
+    }) 
+  }
+  pickerChange = e => {
+    
+    const { value } = e.detail;
+    const { resorts } = this;
+    this.setState(
+      {
+        sort: [
+          resorts[value[0]]["categoryName"],
+          resorts[value[0]]["voltageLevelVOList"][value[1]]["voltageName"]
+        ]
+      },
+      this.storeData
+    ); 
   };
   handleClose = () => {
     this.setState({

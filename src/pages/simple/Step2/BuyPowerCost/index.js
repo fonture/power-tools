@@ -2,8 +2,13 @@
  * @Author: ouyangdc 
  * @Date: 2018-11-23 16:13:09 
  * @Description: 简单版 -- 第二步 -- 购电成本
+<<<<<<< HEAD
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-12-07 10:36:16
+ * @Last Modified time: 2018-12-07 15:33:02
+=======
+ * @Last Modified by: mikey.zhaopeng
+ * @Last Modified time: 2018-12-07 15:15:51
+>>>>>>> a8856feb3b866d490ee684325aada3b66d04bb88
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
