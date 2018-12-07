@@ -69,7 +69,9 @@ class ResultCanvas extends Component {
         }).filter(Boolean);
         const expectValue = this.props.powerCalc[this.props.powerCalc.type].monthlyPower.data.map(item => {
             if (item.finished) {
-                return [item.month, Number(item.data.powerVolume.value)]
+                let num = Number(deepExtract(item, 'data.powerVolume.value'));
+                !!deepExtract(item, 'data.surplusPowerVolume.value') && (num += Number(deepExtract(item, 'data.surplusPowerVolume.value')));
+                return [item.month, num]
             }
         }).filter(Boolean);
         this.setState({
