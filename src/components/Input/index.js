@@ -16,6 +16,10 @@ const keepDecimalOfString = (str, digit = 4) => {
 }
 class Input extends Component {
     onChange = (value, event) => {
+        // 将最前面的连续0截掉
+        if(value.indexOf('0') === 0 && value.indexOf('.') != 1 && value.length != 1) {
+            value = value.substring(1, value.length)
+        }
         // 对整数位进行判断，如果超过了12位，则直接返回上一次的旧值
         const dotIndex = value.indexOf('.')
         if(dotIndex == -1 && value.length > 12) {
