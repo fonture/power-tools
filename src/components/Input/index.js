@@ -16,6 +16,14 @@ const keepDecimalOfString = (str, digit = 4) => {
 }
 class Input extends Component {
     onChange = (value, event) => {
+        // 对整数位进行判断，如果超过了12位，则直接返回上一次的旧值
+        const dotIndex = value.indexOf('.')
+        if(dotIndex == -1 && value.length > 12) {
+            value = this.props.value
+        }
+        if(dotIndex != -1 && value.substring(0, dotIndex).length > 12) {
+            value = this.props.value
+        }
         this.props.onChange(keepDecimalOfString(value, this.props.digit));
     }
     componentDidMount() {
@@ -28,7 +36,7 @@ class Input extends Component {
     render() {
         const { onChange, ...porps } = this.props;
         return (
-            <AtInput {...porps} onChange={this.onChange} maxlength='12' />
+            <AtInput {...porps} onChange={this.onChange}/>
         )
     }
 }
