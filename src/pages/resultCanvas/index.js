@@ -55,9 +55,9 @@ class ResultCanvas extends Component {
                 // resultWrp.innerHTML = '';
                 // resultWrp.appendChild(canvas);
                 this.canvasImg.style.height = `${document.body.scrollHeight}px`;
-                this.canvasImg.src = canvas.toDataURL();
+                this.canvasImg.appendChild(canvas);
             });
-        },0)
+        }, 0)
 
     }
 
@@ -116,11 +116,11 @@ class ResultCanvas extends Component {
                     electricity, selling,
                     isMonthlyFill
                 }
-            }            
+            }
         } catch (error) {
             Taro.redirectTo({
                 url: 'pages/index'
-            });            
+            });
         }
 
     }
@@ -163,7 +163,7 @@ class ResultCanvas extends Component {
         const { step2Ratio, step3Ratio, Kvalue } = this.getRatio();
         return (
             <ScrollView className='result page'>
-                <img className="canvasImg" src="" ref={dom=>this.canvasImg=dom}/>
+                <div className="canvasImg" src="" ref={dom => this.canvasImg = dom} ></div>
                 <View className='result-wrp'>
                     <View className="result-header">
                         <Text className="title">针对<Text className="company">{electricity}</Text>分析结果为</Text>
@@ -197,12 +197,12 @@ class ResultCanvas extends Component {
                             {
                                 mart === '参与' ?
                                     <Text className="wenan">
-                                        <p>用户属于电压等级为<span style={{color:'#24FCFF'}}>{sortValue[1]}</span>的<span style={{color:'#24FCFF'}}>{sortValue[0]}</span>用户，当前<span style={{color:'#24FCFF'}}>已参加</span>市场化交易，购买<span style={{color:'#24FCFF'}}>{buyType}</span>，年度用电均价为<span style={{color:'#24FCFF'}}>{step2av}元/千瓦时</span>。</p>
-                                        <p>如果不参与市场化交易，根据其峰平谷比例，预估购电均价为<span style={{color:'#24FCFF'}}>{step3av}元/千瓦时</span>，平均每度电预计将<span style={{ color: ap > 0 ? '#27F47A' : '#F85A24' }}>{ap > 0 ? '节约' : '亏损'}{Math.abs(ap)}元</span>。根据预估的购电量情况，年度电费预计<span style={{ color: tp > 0 ? '#27F47A' : '#F85A24' }}>{tp > 0 ? '节约' : '亏损'}{toThousands(Math.abs(tp))}元</span>。</p>
+                                        <p>用户属于电压等级为<span style={{ color: '#24FCFF' }}>{sortValue[1]}</span>的<span style={{ color: '#24FCFF' }}>{sortValue[0]}</span>用户，当前<span style={{ color: '#24FCFF' }}>已参加</span>市场化交易，购买<span style={{ color: '#24FCFF' }}>{buyType}</span>，年度用电均价为<span style={{ color: '#24FCFF' }}>{step2av}元/千瓦时</span>。</p>
+                                        <p>如果不参与市场化交易，根据其峰平谷比例，预估购电均价为<span style={{ color: '#24FCFF' }}>{step3av}元/千瓦时</span>，平均每度电预计将<span style={{ color: ap > 0 ? '#27F47A' : '#F85A24' }}>{ap > 0 ? '节约' : '亏损'}{Math.abs(ap)}元</span>。根据预估的购电量情况，年度电费预计<span style={{ color: tp > 0 ? '#27F47A' : '#F85A24' }}>{tp > 0 ? '节约' : '亏损'}{toThousands(Math.abs(tp))}元</span>。</p>
                                     </Text> :
                                     <Text className="wenan">
-                                        <p>用户属于电压等级为<span style={{color:'#24FCFF'}}>{sortValue[1]}</span>的<span style={{color:'#24FCFF'}}>{sortValue[0]}</span>用户，当前<span style={{color:'#24FCFF'}}>没有参加</span>市场化交易，年度用电均价为<span style={{color:'#24FCFF'}}>{step2av}元/千瓦时</span>。</p>
-                                        <p>如果参与市场化交易，购买<span style={{color:'#24FCFF'}}>{buyType}</span>，预估购电均价为<span style={{color:'#24FCFF'}}>{step3av}元/千瓦时</span>，平均每度电预计将<span style={{ color: ap > 0 ? '#27F47A' : '#F85A24' }}>{ap > 0 ? '节约' : '亏损'}{Math.abs(ap)}元</span>。根据预估的购电量情况，年度电费预计<span style={{ color: tp > 0 ? '#27F47A' : '#F85A24' }}>{tp > 0 ? '节约' : '亏损'}{toThousands(Math.abs(tp))}元</span>。</p>
+                                        <p>用户属于电压等级为<span style={{ color: '#24FCFF' }}>{sortValue[1]}</span>的<span style={{ color: '#24FCFF' }}>{sortValue[0]}</span>用户，当前<span style={{ color: '#24FCFF' }}>没有参加</span>市场化交易，年度用电均价为<span style={{ color: '#24FCFF' }}>{step2av}元/千瓦时</span>。</p>
+                                        <p>如果参与市场化交易，购买<span style={{ color: '#24FCFF' }}>{buyType}</span>，预估购电均价为<span style={{ color: '#24FCFF' }}>{step3av}元/千瓦时</span>，平均每度电预计将<span style={{ color: ap > 0 ? '#27F47A' : '#F85A24' }}>{ap > 0 ? '节约' : '亏损'}{Math.abs(ap)}元</span>。根据预估的购电量情况，年度电费预计<span style={{ color: tp > 0 ? '#27F47A' : '#F85A24' }}>{tp > 0 ? '节约' : '亏损'}{toThousands(Math.abs(tp))}元</span>。</p>
                                     </Text>
                             }
                         </View>
@@ -222,7 +222,7 @@ class ResultCanvas extends Component {
                         <View className="container">
                             <Text>总用电量（万千瓦时）：</Text>
                             <View className='at-row'>
-                                <View className='at-col at-col-1 at-col--auto'>
+                                <View className='at-col at-col-6 '>
                                     <div className="rangefull" >
                                         <div className="range" style={{ width: (step2yp > step3yp ? 1 : (step2yp / step3yp)) * 100 + '%' }}></div>
                                     </div>
@@ -230,7 +230,7 @@ class ResultCanvas extends Component {
                                 <View className='at-col rangeText'>实际用量<Text className={`rangeNum ${step2yp < step3yp && 'pra'}`}>{step2yp}</Text></View>
                             </View>
                             <View className='at-row'>
-                                <View className='at-col at-col-1 at-col--auto rangefull'>
+                                <View className='at-col at-col-6 '>
                                     <div className="rangefull" >
                                         <div className="range" style={{ width: (step3yp > step2yp ? 1 : (step3yp / step2yp)) * 100 + '%' }}></div>
                                     </div>
@@ -258,15 +258,12 @@ class ResultCanvas extends Component {
                             </View>
                         }
                         <View className="result-footer dash-border">
-                            <View className='at-row '>
-                                <View className='at-col at-col-7'>
-                                    <p>长按识别二维码</p>
-                                    <p>生成我的购电报告</p>
-                                    <p>由<Text className="blue">{selling}</Text>提供本方案</p>
-                                </View>
-                                <View className='at-col at-col-5'>
-                                    <img src={require('../../assets/erweima.png')} className="erweima" />
-                                </View>
+                            <View className='erweima'>
+                                <img src={require('../../assets/erweima.png')} className="erweima" />
+                            </View>
+                            <AtDivider height="30" lineColor="#888888"/>
+                            <View>
+                                <p>由<Text className="blue">{selling}</Text>提供本方案</p>
                             </View>
                         </View>
                     </View>
