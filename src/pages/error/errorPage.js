@@ -1,18 +1,7 @@
 import taro, { Component } from "@tarojs/taro";
 import { View } from "@tarojs/components";
-
-const parent = {
-  position: 'relative',
-  height: '100%'
-}
-
-const child = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  fontSize: '28px'
-}
+import { AtButton } from 'taro-ui'
+import './errorPage.less';
 
 export default class ErrorPage extends Component {
 
@@ -21,12 +10,24 @@ export default class ErrorPage extends Component {
   }
 
   render() {
-
     return (
-      <View style={parent} onClick={this.redirect}>
-        <div style={child}>
-          加载失败了，点击重新加载
-        </div>
+      <View className="error-page">
+        <View className='parent' >
+          <div className='child'>
+            <div>
+              <img src={require('../../assets/error@1x.png')} />
+            </div>
+            <p>
+              您的网络不太顺畅
+            </p>
+            <p>
+              请检查网络后重试
+             </p>
+            <div>
+              <AtButton className="button-error" type='primary' size='small' onClick={this.redirect}>重新加载</AtButton>
+            </div>
+          </div>
+        </View>
       </View>
     )
   }
