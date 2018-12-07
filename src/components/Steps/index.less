@@ -1,0 +1,48 @@
+.flex-wrap{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    background: #262828;
+    height: 40pt;
+    padding-left: 15pt;
+    padding-right: 15pt;
+    .flex-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 120px;
+        /*无状态圆样式*/
+        circle {
+            stroke: #EDFAFA;
+            stroke-width: 1pt;
+        }
+        /*已完成步骤的圆样式*/
+        .active{
+            circle {
+                stroke: #636465;
+                stroke-width: 1pt
+            }
+        }
+        /*当前步骤的圆样式*/
+        .current{
+            .innerCircle{
+                fill: #1BDCE3;
+                stroke-width: 0;
+            }
+        }
+        /*勾勾样式*/
+        .hook{
+            fill:#28EA76;
+            transform: translate(-5pt,-8pt);
+        }
+
+    }
+    /*横线样式*/
+    hr{
+        width: 20%;
+        border-top-width: 1px;
+        border-top-style: solid;
+    }
+}

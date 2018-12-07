@@ -1,4 +1,6 @@
 const config = {
+  // 修改配置文件需要重启。
+  // 如果重启出现 端口占用情况，可以先查下进程号然后kill掉，不建议修改 devServer的端口号，以免影响到别人。
   projectName: 'power-tools',
   date: '2018-11-14',
   designWidth: 750,
@@ -9,7 +11,6 @@ const config = {
   },
   sourceRoot: 'src',
   outputRoot: 'dist',
-  baseUrl: '',
   plugins: {
     babel: {
       sourceMap: true,
@@ -45,15 +46,6 @@ const config = {
     }
   },
   h5: {
-    publicPath: '/',
-    staticDirectory: 'static',
-    module: {
-      postcss: {
-        autoprefixer: {
-          enable: true
-        }
-      }
-    }
   }
 }
 

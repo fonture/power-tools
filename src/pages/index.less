@@ -1,0 +1,214 @@
+
+#app{
+    .page{
+        &.indexPage{
+            position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: 1208px;
+            background-color: #111516;
+            box-sizing: border-box;
+            border-top: 1PX solid #1BDCE3;
+        }
+        .index{
+            width: 750px;
+            height: 1208px;
+            // background-size: 100%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-top: -604px;
+            margin-left: -375px;
+        }
+    }
+}
+.index{
+    position: relative;
+    width: 750px;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-image: url(../assets/images/index_bg.jpg);
+	display: flex;
+	flex-flow: column wrap;
+    justify-content:center;
+    align-items: center;
+    align-content: center;
+    .BoxAvatar{
+	    flex: 0 1 auto;
+        position: absolute;
+        margin: 25px auto;
+        cursor: pointer;
+        width: 272px;
+        height: 272px;
+        background-size: 100%;
+        background-repeat: no-repeat;
+        background-image: url(../assets/images/loading_bg.png);
+        left: 239px;
+        &.simple{
+            top: 258px;
+        }
+        &.higher{
+            top: 630px;
+        }
+        &.acShow{
+            // 可能不是很居中，是设计图背景是包含了头部的，具体情况需要根据手机显示情况进行调整。1208
+            top: 408px;
+            transition: top 0.3s ease-in 0.3s;
+            animation: RotateBox 3s linear 0.3s infinite;
+            .indexAtAvatar{
+                animation: ReverseBox 3s linear 0.3s infinite;
+            }
+        }
+        &.acHide{
+            // animation: animationFrames linear 0.3s;
+            // animation-fill-mode:linear;
+            // transform: scale(0);
+            animation: hideBox 0.3s ease-in forwards;
+        }
+    }
+    .indexAtAvatar{
+        width: 120px;
+        height: 120px;
+        position: absolute;
+        top: 76px;
+        left: 76px;
+        img{
+            width: auto;
+            min-width: auto;
+        }
+    }
+    .frieImage{
+        display: inline-block;
+        position: absolute;
+        bottom: 79px;
+        left: 263px;
+        width: 223px;
+        height: 47px;
+        img{
+            position: absolute;
+            display: inline-block;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            width: 173px;
+            height: 30px;
+        }
+    }
+    .formBoder{
+        padding-top: 0.8em;
+        .at-input{
+            color: #fff;
+            // &::after{
+            //     border-bottom: none;
+            // }
+            input{
+                &::placeholder{
+                    color: #666;
+                }
+            }
+        }
+        &:after{
+            border: none;
+        }
+    }
+    .sumitButton{
+        margin-top: 2em;
+        width: 6em;
+        color: #1BDCE3;
+        background: #262828;
+        font-size: 28px;
+        padding: 0;
+        border: 1PX solid #1BDCE3;
+        border-radius: 0px;
+    }
+}
+@keyframes hideBox {
+    0% {
+        transform: rotate(1);
+        opacity: 1;
+    }
+    100% {
+        transform: rotate(0);
+        opacity: 0;
+    }
+}
+
+@keyframes RotateBox{
+    0% {
+        transform: rotate(0deg)
+    }
+    50%{
+        transform: rotate(180deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes ReverseBox {
+    0% {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(-180deg);
+    }
+    100% {
+        transform: rotate(-360deg)
+    }
+}
+.inputTitle{
+    font-size: 28px;
+    color: #fff;
+    text-align: center;
+}
+.formContent .at-modal__container, .formContent .at-form{
+    background-color: rgba(0,0,0,.6);
+}
+.indexPage .formContent .at-modal__container, .formContent .at-form{
+    background-color: rgba(0,0,0,.8);
+}
+.formContent .at-input {
+    background-color: transparent;
+}
+.formContent .at-input .at-input__input{
+    font-size: 24px;
+    padding-right: 0;
+    text-align: center;
+}
+.indexPage .formContent .at-modal__container{
+    border: none;
+    border-radius: 0;
+    box-shadow: 0px 0px 20px 0px rgba(36,252,255,0.25);
+}
+.indexPage .loadingNode{
+    .at-modal__container{
+        // background-color: rgba(0,0,0,.8);
+        background-color: transparent;
+    }
+    .taro-img{
+        width: 100%;
+    }
+    img{
+        width: auto;
+        height: auto;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+    }
+}
+/*右箭头的颜色*/
+.at-icon-chevron-right::before{
+    color: #1BDCE3;
+    font-weight: 100;
+}
+
+.btn-group {
+    padding: 32px;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+}

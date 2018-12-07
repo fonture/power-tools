@@ -1,15 +1,23 @@
 import Taro from '@tarojs/taro';
-import config from '../../config';
-
-const { baseUrl, noConsole } = config;
+const config = require('../../config');
+const { noConsole, env } = config(Object.assign);
 const request_data = {};
 
+const events = new Taro.Events();
+
+events.on('error', (arg) => {
+  Taro.redirectTo({
+    url: 'pages/error/errorPage'
+  })
+})
+
 export default (options = { method: 'GET', data: {} }) => {
+
   if (!noConsole) {
     console.log(`${new Date().toLocaleString()}【 M=${options.url} 】P=${JSON.stringify(options.data)}`);
   }
   return Taro.request({
-    url: baseUrl + options.url,
+    url: env.baseUrl + options.url,
     data: {
       ...request_data,
       ...options.data
@@ -18,22 +26,27 @@ export default (options = { method: 'GET', data: {} }) => {
       'Content-Type': 'application/json',
     },
     method: options.method.toUpperCase(),
-  }).then((res) => {
+    dataType: 'json',
+  })
+  .then((res) => {
     const { statusCode, data } = res;
     if (statusCode >= 200 && statusCode < 300) {
       if (!noConsole) {
         console.log(`${new Date().toLocaleString()}【 M=${options.url} 】【接口响应：】`,res.data);
       }
-      if (data.status !== 'ok') {
-        Taro.showToast({
-          title: `${res.data.error.message}~` || res.data.error.code,
-          icon: 'none',
-          mask: true,
-        });
-      }
+      // if (data.status !== 'ok') {
+      //   Taro.showToast({
+      //     title: `${res.data.error.message}~` || res.data.error.code,
+      //     icon: 'none',
+      //     mask: true,
+      //   });
+      // }
       return data;
     } else {
       throw new Error(`网络请求错误，状态码${statusCode}`);
     }
+  })
+  .catch((err) => {
+    events.trigger('error', err)
   })
 }

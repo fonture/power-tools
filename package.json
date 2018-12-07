@@ -18,6 +18,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@tarojs/async-await": "^1.1.8",
     "@tarojs/components": "^1.1.4",
     "@tarojs/redux": "^1.1.7",
     "@tarojs/redux-h5": "^1.1.7",
@@ -27,16 +28,21 @@
     "@tarojs/taro-h5": "^1.1.4",
     "@tarojs/taro-swan": "^1.1.4",
     "@tarojs/taro-weapp": "^1.1.4",
+    "echarts": "^4.2.0-rc.2",
+    "html2canvas": "^1.0.0-alpha.12",
     "nervjs": "^1.3.5",
+    "now": "12.1.3",
     "react-router-redux": "^4.0.8",
     "redux": "^4.0.1",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "taro-ui": "^1.4.0"
   },
   "devDependencies": {
     "@tarojs/plugin-babel": "^1.1.4",
     "@tarojs/plugin-csso": "^1.1.4",
     "@tarojs/plugin-less": "^1.1.4",
+    "@tarojs/plugin-sass": "^1.1.9",
     "@tarojs/plugin-uglifyjs": "^1.1.4",
     "@tarojs/webpack-runner": "^1.1.4",
     "@types/react": "^16.4.6",
@@ -51,6 +57,7 @@
     "eslint-config-taro": "^1.1.4",
     "eslint-plugin-import": "^2.12.0",
     "eslint-plugin-react": "^7.8.2",
-    "eslint-plugin-taro": "^1.1.4"
+    "eslint-plugin-taro": "^1.1.4",
+    "jest": "^23.6.0"
   }
 }
