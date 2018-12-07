@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Button, Form, Image } from '@tarojs/components'
-import { AtModal, AtInput, AtModalContent } from "taro-ui"
+import { AtModal, AtInput, AtModalContent, AtToast } from "taro-ui"
 import reduxHelper from '../utils/reduxHelper'
 import './index.less'
 import request from '../utils/request';
@@ -12,7 +12,6 @@ export default class Index extends Component {
   config = {
     navigationBarTitleText: '首页'
   }
-
   async componentDidMount(){
     // 请求火电价格
     const {data} = await request({
@@ -22,12 +21,14 @@ export default class Index extends Component {
     reduxHelper('firePrice', this.props.firePrice || data.thermalPrice || 0.4025);
     this.setState({
       firePrice: data.thermalPrice,
+      loading: false,
     })
   }
   state = {
     activeNode: null,
     modelVis: false,
     showFirePrice: null,
+    loading: true,
   }
   editions= [
     {
@@ -98,7 +99,7 @@ export default class Index extends Component {
   }
 
   render() {
-    const { activeNode, modelVis, firePrice = 0.4025, showFirePrice } = this.state;
+    const { activeNode, modelVis, firePrice = 0.4025, showFirePrice,loading } = this.state;
     const {firePrice: setFirePrice} = this.props;
     return (
       <View className='page indexPage'>
@@ -147,6 +148,13 @@ export default class Index extends Component {
                 <Button formType='submit' className='sumitButton' >确定</Button>
               </Form>
             </AtModalContent>
+          </AtModal>
+          <AtModal
+            isOpened={loading}
+            closeOnClickOverlay='false'
+            className='loadingNode'
+          >
+            <Image src={require('../assets/loading.gif')} />
           </AtModal>
         </View>
       </View>
