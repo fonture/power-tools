@@ -3,7 +3,7 @@
  * @Date: 2018-11-23 16:11:35 
  * @Description: 简单版 -- 第二步 -- 用电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-12-06 16:18:02
+ * @Last Modified time: 2018-12-06 19:16:43
  */
 
 import Taro, { Component } from '@tarojs/taro'
@@ -19,9 +19,10 @@ import { powerAveragePriceOfNotJoin } from '../../../../utils/formula'
 import reduxHelper from '../../../../utils/reduxHelper'
 import inject from '../../../../utils/inject'
 import Input from '../../../../components/Input'
+import {reLocateButton} from '../../../../utils'
 import './index.less'
 
-@inject('newestCataloguePrice', 'electricityCostData', 'firePrice', 'reLocateButton')
+@inject('newestCataloguePrice', 'electricityCostData', 'firePrice')
 export default class ElectricityCost extends Component {
     // 初始化的state要从redux中获取，以便点了“上一步”或者“下一步”再回来时数据还在
     state = {
@@ -37,6 +38,14 @@ export default class ElectricityCost extends Component {
     }
     componentWillMount() {
         const { high, medium, low, method, inputAveragePrice, inputYearPower } = this.state
+        if(this.props.newestCataloguePrice) {
+            const { newestCataloguePrice: {cataloguePriceVoMap: {peak, plain, valley}, collectionFund} } = this.props
+            let { high, medium, low } = this.state 
+            const result = powerAveragePriceOfNotJoin(high, medium, low, peak.price, plain.price, valley.price, collectionFund)
+            this.setState({
+                ...result
+            })
+        }
         /**
          * 判断初始化时组件中的数据是否为有效数据。如果有效，则“下一步”按钮默认可点击，否则不可点击
          * 如果当前的输入方式是年度用电量，则需要判断峰、平、谷的值是否有效
@@ -57,7 +66,7 @@ export default class ElectricityCost extends Component {
         }
     }
     componentDidUpdate(){
-        this.props.reLocateButton()
+        reLocateButton()
     }
     /**
      * @description 组件卸载时，需要将报告中需要的数据存在powerCosts中

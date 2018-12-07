@@ -14,10 +14,11 @@ import {
 } from '../../../../utils/formula'
 import inject from '../../../../utils/inject';
 import reduxHelper from '../../../../utils/reduxHelper';
+import {reLocateButton} from '../../../../utils'
 import '../index.less';
 import { validate } from '../../../../utils'
 
-@inject('powerExpect', 'newestCataloguePrice', 'firePrice', 'next', 'powerCosts', 'reLocateButton')
+@inject('powerExpect', 'newestCataloguePrice', 'firePrice', 'next', 'powerCosts')
 class Partake extends Component {
     state = {
         isOpened: false,
@@ -36,7 +37,7 @@ class Partake extends Component {
         this.props.powerExpect.method==='用电量'&&this.getCompData();
     }
     componentDidUpdate(){
-        this.props.reLocateButton()
+        reLocateButton()
     }
 
     /**
@@ -203,7 +204,7 @@ class Partake extends Component {
                                         <AtListItem title="平时用电" onClick={this.onListClick}
                                             extraText={
                                                 <View className="at-row at-row__justify--center at-row__align--center">
-                                                    <Input type="number" digit={5} className="power-input" border={false} value={medium} onChange={this.onChangeValue.bind(this, 'medium')} />
+                                                    <Input type="number" digit={4} className="power-input" border={false} value={medium} onChange={this.onChangeValue.bind(this, 'medium')} />
                                                     <div className="power-result-unit">万千瓦时</div>
                                                 </View>
                                             }
@@ -211,7 +212,7 @@ class Partake extends Component {
                                         <AtListItem title="谷时用电" onClick={this.onListClick}
                                             extraText={
                                                 <View className="at-row at-row__justify--center at-row__align--center">
-                                                    <Input type="number" digit={5} className="power-input" border={false} value={low} onChange={this.onChangeValue.bind(this, 'low')} />
+                                                    <Input type="number" digit={4} className="power-input" border={false} value={low} onChange={this.onChangeValue.bind(this, 'low')} />
                                                     <div className="power-result-unit">万千瓦时</div>
                                                 </View>
                                             }

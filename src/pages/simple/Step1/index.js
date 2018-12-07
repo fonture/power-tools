@@ -43,6 +43,9 @@ export default class Step1 extends Component {
         fistItem.voltageLevelVOList.find(item => item.voltageName === sort[1])["voltageIdentify"]
       ];
     }
+    this.setState({
+      adsWord
+    })
     this.setNextTrue(this.state);
     reduxHelper("baseMessage", { address, adsWord, sort: sortValue, sortValue: sort, mart });
   };
@@ -175,6 +178,7 @@ export default class Step1 extends Component {
     }
   };
   pickerChange = e => {
+    
     const { value } = e.detail;
     const { resorts } = this;
     this.setState(
@@ -186,12 +190,45 @@ export default class Step1 extends Component {
       },
       this.storeData
     );
+
+    // 每次更改后要去重新请求值，以便拿到最新数据
+    const { adsWord } = this.props.baseMessage 
+    if(!adsWord) return
+    const sort = [ resorts[value[0]].categoryIdentify, resorts[value[0]].voltageLevelVOList[value[1]].voltageIdentify ]
+    // 请求基金、峰平谷电价
+    request({
+      method: 'GET',
+      url: '/wechat/kit/catalogueprice/year',
+      data: {
+          tradeCenter: adsWord, 
+          category: sort[0],
+          voltage: sort[1]
+      }
+    }).then(data => {
+      reduxHelper('newestCataloguePrice', data.data.newestCataloguePrice)
+      reduxHelper('catalogueprice', data.data)
+    })
+    
+    // 请求输配电价
+    request({
+        method: 'GET',
+        url: '/wechat/kit/transmissionprice/year',
+        data: {
+            tradeCenter: adsWord, 
+            category: sort[0],
+            voltage: sort[1]
+        }
+    }).then(data => {
+      reduxHelper('newestTransmissionPrice', data.data.newestTransmissionPrice)
+      reduxHelper('transmissionprice', data.data)
+    })  
   };
   handleClose = () => {
     this.setState({
       sheetShow: false
     });
   };
+
   render() {
     // const addressList = ['四川地区', '重庆地区']; // 由于重庆地区暂未开放，所以只有四川地区
     const addressList = ["四川地区"];
@@ -281,7 +318,7 @@ export default class Step1 extends Component {
             <Picker
               mode='multiSelector'
               range={sorts}
-              onChange={this.pickerChange}
+              onChange={this.pickerChange.bind(this)}
               onColumnchange={this.pickerColumnChange}
             >
               {renderSort()}

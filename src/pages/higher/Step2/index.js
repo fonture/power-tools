@@ -3,7 +3,7 @@
  * @Date: 2018-11-28 13:47:30 
  * @Description: 高级版第二步用电成本
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-12-06 16:14:35
+ * @Last Modified time: 2018-12-06 19:29:03
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -17,12 +17,13 @@ import inject from '../../../utils/inject'
 import reduxHelper from '../../../utils/reduxHelper'
 import { computePowerOfHigh } from '../../../utils/formula'
 import { keepDecimal } from '../../../utils'
+import { reLocateButton } from '../../../utils'
 import Proportion from '../../../components/Proportion'
 import MonthPlugin from '../MonthPlugin'
 import Input from '../../../components/Input'
 import './index.less'
 
-@inject('baseMessage', 'catalogueprice', 'powerCostsOfHigh', 'reLocateButton')
+@inject('baseMessage', 'catalogueprice', 'powerCostsOfHigh')
 export default class Step2 extends Component {
     state = {
         currMonth: this.props.powerCostsOfHigh.currMonth,
@@ -36,41 +37,22 @@ export default class Step2 extends Component {
     componentWillMount() {
         const next = this.state.monthPowerList.find(item => item.finished)
         reduxHelper('next', next ? true : false)  
+        // 如果第一步改了选项，则需要重新计算均价和总电量
+        if(this.props.catalogueprice) {
+            const  { yearCataloguePriceMap } = this.props.catalogueprice
+            const { monthPowerList } = this.state
+            const result = computePowerOfHigh(monthPowerList, yearCataloguePriceMap)
+            this.setState({
+                ...result
+            })        
+        }
     }
     async componentDidMount(){
-        const { baseMessage } = this.props
-        const { adsWord, sort } = baseMessage
-
         // 将焦点聚焦到第一个输入框
         this._rendered.dom.querySelector('.power-input').querySelector('input').focus()
-
-        // 请求基金、峰平谷电价
-        const catalogueprice = await request({
-            method: 'GET',
-            url: '/wechat/kit/catalogueprice/year',
-            data: {
-                tradeCenter: adsWord, 
-                category: sort[0],
-                voltage: sort[1]
-            }
-        })
-        // 请求输配电价
-        const transmissionprice = await request({
-            method: 'GET',
-            url: '/wechat/kit/transmissionprice/year',
-            data: {
-                tradeCenter: adsWord, 
-                category: sort[0],
-                voltage: sort[1]
-            }
-        })
-        // 基金、峰平谷电价
-        catalogueprice && catalogueprice.data && reduxHelper('catalogueprice', catalogueprice.data)
-        // 输配电价
-        transmissionprice && transmissionprice.data && reduxHelper('transmissionprice', transmissionprice.data)
     }
     componentDidUpdate() {
-        this.props.reLocateButton()
+        reLocateButton()
     }
     componentWillUnmount() {
         reduxHelper('powerCostsOfHigh', this.state)

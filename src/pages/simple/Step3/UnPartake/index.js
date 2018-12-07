@@ -12,9 +12,10 @@ import {
 } from '../../../../utils/formula';
 import inject from '../../../../utils/inject'
 import reduxHelper from '../../../../utils/reduxHelper'
+import {reLocateButton} from '../../../../utils'
 import { validate } from '../../../../utils'
 
-@inject('powerExpect', 'firePrice', 'newestTransmissionPrice', 'newestCataloguePrice', 'next', 'powerCosts', 'reLocateButton')
+@inject('powerExpect', 'firePrice', 'newestTransmissionPrice', 'newestCataloguePrice', 'next', 'powerCosts')
 class UnPartake extends Component {
     state = {
         checkedList: this.props.powerExpect.checkedList || [],
@@ -40,7 +41,7 @@ class UnPartake extends Component {
         }
     }
     componentDidUpdate(){
-        this.props.reLocateButton()
+        reLocateButton()
     }
     handleCheckBoxChange = () => {
         this.setState({

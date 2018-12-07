@@ -28,15 +28,13 @@ export default class Form extends Component {
                 url: 'pages/index'
             }); 
         }
-        
-        reduxHelper('reLocateButton', reLocateButton.bind(this))
+        reduxHelper('stepInfo', { current: 0, items: ['基础信息', '第二步', '第三步'] })
         // 绑定window的resize事件，如果窗口发生了变化，要重新计算“上一步”“下一步”按钮的位置
-        reLocateButton.call(this)
         window.onresize = reLocateButton
     }
 
     componentDidUpdate() {
-        reLocateButton.call(this)
+        reLocateButton()
     }
 
     componentWillUnmount() {

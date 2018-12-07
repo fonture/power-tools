@@ -3,7 +3,7 @@
  * @Date: 2018-12-02 15:46:21 
  * @Description: 只有5个月的月份面板
  * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-12-06 16:38:34
+ * @Last Modified time: 2018-12-06 16:58:03
  */
 import { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -16,10 +16,6 @@ export default class MonthButton extends Component {
     const type = data.type
     data[type].surplus.current = month
     this.props.updateData()
-    this._rendered.dom.parentNode.parentNode.parentNode.parentNode.nextSibling.querySelector('input').focus()
-  }
-  componentDidMount() {
-    this._rendered.dom.parentNode.parentNode.parentNode.parentNode.nextSibling.querySelector('input').focus()
   }
   
   render() {
