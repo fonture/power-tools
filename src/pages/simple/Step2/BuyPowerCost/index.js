@@ -2,8 +2,8 @@
  * @Author: ouyangdc 
  * @Date: 2018-11-23 16:13:09 
  * @Description: 简单版 -- 第二步 -- 购电成本
- * @Last Modified by: ouyangdc
- * @Last Modified time: 2018-12-06 19:06:38
+ * @Last Modified by: mikey.zhaopeng
+ * @Last Modified time: 2018-12-07 13:52:15
  */
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -236,7 +236,7 @@ export default class BuyPowerCost extends Component {
                             <AtListItem title="年度偏差考核费用" onClick={this.onListClick}
                                 extraText={
                                     <View className="at-row at-row__justify--center at-row__align--center">
-                                        <Input type="number" digit={5} className="power-input" border={false} value={deviationCost} onChange={this.onChangeValue.bind(this, 'deviationCost')}/>
+                                        <Input type="number" digit={0} className="power-input" border={false} value={deviationCost} onChange={this.onChangeValue.bind(this, 'deviationCost')}/>
                                         <div className="power-result-unit">元</div>
                                     </View>
                                 } 
