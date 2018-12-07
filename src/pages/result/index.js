@@ -133,6 +133,8 @@ export default class Result extends Component {
         let { ch, powerChange } = this.getPowerChange(step3yp);
         this.data = { ap, tp, ch, powerChange, step3yp }
 
+        console.log('+++++++', smlieImage, cryImage);
+
         const { modelVis } = this.state;
         return (
             <View className='result page'>
