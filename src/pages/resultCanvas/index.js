@@ -12,8 +12,30 @@ import { gethighDryProportion, getKvalue } from '../../utils/formula'
 
 const cryImage = require('../../assets/images/cry.png');
 const smlieImage = require('../../assets/images/smile.png');
-
-
+const base64ToBlob = (urlData, type) => {
+    let arr = urlData.split(',');
+    let mime = arr[0].match(/:(.*?);/)[1] || type;
+    // 去掉url的头，并转化为byte
+    let bytes = window.atob(arr[1]);
+    // 处理异常,将ascii码小于0的转换为大于0
+    let ab = new ArrayBuffer(bytes.length);
+    // 生成视图（直接针对内存）：8位无符号整数，长度1个字节
+    let ia = new Uint8Array(ab);
+    for (let i = 0; i < bytes.length; i++) {
+        ia[i] = bytes.charCodeAt(i);
+    }
+    return new Blob([ab], {
+        type: mime
+    });
+}
+const saveFile = (data) => {
+    var link = document.createElement('a');
+    link.href = data;
+    link.download = 'result.png';
+    var event = document.createEvent('MouseEvents');
+    event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+    link.dispatchEvent(event);
+}
 const monthToNum = (str) => str.split('月')[0] - 1
 const _extractDryAndHighData = (data) => {
     const extra = (item, index) => {
@@ -54,13 +76,15 @@ class ResultCanvas extends Component {
                 // resultWrp.style.padding = 0;
                 // resultWrp.innerHTML = '';
                 // resultWrp.appendChild(canvas);
-                this.canvasImg.style.height = `${document.body.scrollHeight}px`;
-                this.canvasImg.appendChild(canvas);
+                // this.canvasImg.style.height = `${document.body.scrollHeight}px`;
+                this.canvasImg.src = canvas.toDataURL('image/png');
             });
         }, 0)
 
     }
-
+    handleDownload = () => {
+        saveFile(this.canvasImg.src);
+    }
     componentWillMount() {
         const actualValue = this.props.powerCostsOfHigh.monthPowerList.map(item => {
             if (item.finished) {
@@ -163,7 +187,8 @@ class ResultCanvas extends Component {
         const { step2Ratio, step3Ratio, Kvalue } = this.getRatio();
         return (
             <ScrollView className='result page'>
-                <div className="canvasImg" src="" ref={dom => this.canvasImg = dom} ></div>
+                <img className="canvasImg" src="" ref={dom => this.canvasImg = dom} />
+                <AtIcon value='download' size='24' color='#ccc' className="downloadIcon" onClick={this.handleDownload}></AtIcon>
                 <View className='result-wrp'>
                     <View className="result-header">
                         <Text className="title">针对<Text className="company">{electricity}</Text>分析结果为</Text>
@@ -261,7 +286,7 @@ class ResultCanvas extends Component {
                             <View className='erweima'>
                                 <img src={require('../../assets/erweima.png')} className="erweima" />
                             </View>
-                            <AtDivider height="30" lineColor="#888888"/>
+                            <AtDivider height="30" lineColor="#888888" />
                             <View>
                                 <p>由<Text className="blue">{selling}</Text>提供本方案</p>
                             </View>
