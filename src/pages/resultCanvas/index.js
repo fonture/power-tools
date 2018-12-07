@@ -3,7 +3,7 @@ import { View, Text, ScrollView } from '@tarojs/components'
 import Proportion from '../../components/Proportion';
 import reduxHelper from '../../utils/reduxHelper'
 import inject from '../../utils/inject'
-import { AtList, AtListItem, AtDivider, AtIcon } from 'taro-ui';
+import { AtList, AtListItem, AtDivider, AtToast } from 'taro-ui';
 import ReCharts from './ReCharts';
 import html2canvas from 'html2canvas';
 import './index.less'
@@ -64,7 +64,8 @@ class ResultCanvas extends Component {
     state = {
         actualValue: [],
         expectValue: [],
-        monthList: []
+        monthList: [],
+        isOpened: false
     }
     onClose = () => {
         Taro.redirectTo({ url: 'pages/result/index' })
@@ -77,13 +78,16 @@ class ResultCanvas extends Component {
                 // resultWrp.innerHTML = '';
                 // resultWrp.appendChild(canvas);
                 // this.canvasImg.style.height = `${document.body.scrollHeight}px`;
-                this.canvasImg.src = canvas.toDataURL('image/png');
+                //this.canvasImg.src = canvas.toDataURL('image/png');
+                saveFile(canvas.toDataURL('image/png'));
+                this.setState({
+                    isOpened: true
+                })
             });
         }, 0)
 
     }
     handleDownload = () => {
-        saveFile(this.canvasImg.src);
     }
     componentWillMount() {
         const actualValue = this.props.powerCostsOfHigh.monthPowerList.map(item => {
@@ -188,7 +192,9 @@ class ResultCanvas extends Component {
         return (
             <ScrollView className='result page'>
                 <img className="canvasImg" src="" ref={dom => this.canvasImg = dom} />
-                <AtIcon value='download' size='24' color='#ccc' className="downloadIcon" onClick={this.handleDownload}></AtIcon>
+                <AtToast
+                    isOpened={this.state.isOpened}
+                    text={'已保存长图'}></AtToast>
                 <View className='result-wrp'>
                     <View className="result-header">
                         <Text className="title">针对<Text className="company">{electricity}</Text>分析结果为</Text>
